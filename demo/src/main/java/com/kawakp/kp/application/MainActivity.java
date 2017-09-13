@@ -2,22 +2,23 @@ package com.kawakp.kp.application;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.kawakp.kp.application.databinding.ActivityMainBinding;
 import com.kawakp.kp.kernel.KernelJNI;
+import com.kawakp.kp.kernel.base.BaseBindingActivity;
 
-public class MainActivity extends AppCompatActivity {
+import org.jetbrains.annotations.NotNull;
+
+public class MainActivity extends BaseBindingActivity<ActivityMainBinding> {
+
+	@NotNull
+	@Override
+	public ActivityMainBinding createDataBinding(Bundle savedInstanceState) {
+		return DataBindingUtil.setContentView(this, R.layout.activity_main);
+	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_main);
-
-		ActivityMainBinding mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-		// Example of a call to a native method
-//		TextView tv = (TextView) findViewById(R.id.sample_text);
+	public void initView() {
 		mBinding.testText.setText(KernelJNI.stringFromJNI());
 	}
 }

@@ -43,34 +43,8 @@ dependencies {
 
 	def dependencies = rootProject.ext.dependencies
 
-	compile dependencies.supportAppCompat
-	compile dependencies.supportDesign
-	compile dependencies.supportAnnotations
-	compile dependencies.supportRecyclerview
-	compile dependencies.supportCardView
-	compile dependencies.supportMultidex
-
-	//Dagger2
-	compile dependencies.dagger
-	kapt dependencies.daggerCompiler
-	provided dependencies.javaxAnnotation
-
-	//RX
-	compile dependencies.rxJava2
-	compile dependencies.rxkotlin
-	compile dependencies.rxAndroid
-
 	//Kotlin
-	compile dependencies.kotlinStdlib
-	compile dependencies.kotlinReflect
 	kapt dependencies.databindingCompiler
-
-	//rxLifecycle
-	compile dependencies.rxLifecycle
-	compile dependencies.rxLifecycleAndroid
-	compile dependencies.rxLifecycleComponents
-	compile dependencies.rxLifecycleKotlin
-//	compile dependencies.rxLifecycleAndroidKotlin
 
 	compile project(':kernel')
 }
