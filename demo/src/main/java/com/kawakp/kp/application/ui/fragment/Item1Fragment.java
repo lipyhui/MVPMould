@@ -76,7 +76,6 @@ public class Item1Fragment extends BaseBingingFragment<FragmentOneBinding> {
         Log.e("ItemFragment", "Item1Fragment one");
         init();
         initChart1();
-        initChart2();
         new ChartThread().start();
 
 
@@ -103,66 +102,6 @@ public class Item1Fragment extends BaseBingingFragment<FragmentOneBinding> {
         });
     }
 
-    private void initChart2() {
-        //无数据时显示的字
-        mBinding.charts2.setNoDataText("暂时尚无数据");
-        mBinding.charts2.setTouchEnabled(true);
-        // 可拖曳
-        mBinding.charts2.setDragEnabled(true);
-        // 可缩放
-        mBinding.charts2.setScaleEnabled(true);
-        mBinding.charts2.setDrawGridBackground(false);
-        mBinding.charts2.setPinchZoom(true);
-        // 设置图表的背景颜色
-        mBinding.charts1.setBackgroundColor(Color.parseColor("#00000000"));
-        LineData data = new LineData();
-        // 数据显示的颜色
-        data.setValueTextColor(Color.BLACK);
-        // 先增加一个空的数据，随后往里面动态添加
-        mBinding.charts1.setData(data);
-        // 图表的注解(只有当数据集存在时候才生效)
-        Legend l = mBinding.charts1.getLegend();
-        // 可以修改图表注解部分的位置
-        l.setPosition(Legend.LegendPosition.LEFT_OF_CHART);
-        // 线性，也可是圆
-        l.setForm(Legend.LegendForm.LINE);
-        // 颜色
-        l.setTextColor(Color.WHITE);
-        // x坐标轴
-        XAxis xl = mBinding.charts1.getXAxis();
-        // x轴字体颜色
-        xl.setTextColor(Color.parseColor(color_text));
-        //是否显示x轴背景线
-        xl.setDrawGridLines(true);
-        //x轴背景线的颜色
-        xl.setGridColor(Color.parseColor(color_grid));
-        xl.setAvoidFirstLastClipping(true);
-        // x轴的数量
-        xl.setLabelCount(5);
-        // 如果false，那么x坐标轴将不可见
-        xl.setEnabled(true);
-        // 将X坐标轴放置在底部，默认是在顶部。
-        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
-        // 图表左边的y坐标轴线
-        YAxis leftAxis = mBinding.charts1.getAxisLeft();
-        // Y轴字体颜色
-        leftAxis.setTextColor(Color.parseColor(color_text));
-        // y轴数量
-        leftAxis.setLabelCount(5);
-        // 最大值
-        leftAxis.setAxisMaxValue(90f);
-        // 最小值
-        leftAxis.setAxisMinValue(40f);
-        // 不一定要从0开始
-        leftAxis.setStartAtZero(true);
-        //是否显示Y轴的背景线
-        leftAxis.setDrawGridLines(true);
-        //Y轴背景线的颜色
-        leftAxis.setGridColor(Color.parseColor(color_grid));
-        YAxis rightAxis = mBinding.charts1.getAxisRight();
-        // 不显示图表的右边y坐标轴线
-        rightAxis.setEnabled(false);
-    }
 
     private void initChart1() {
         mBinding.charts1.setNoDataText("暂时尚无数据");
