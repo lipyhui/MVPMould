@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- 侧边栏 -->
+	<dimen name="side_width">160dp</dimen>
+	<dimen name="side_logo_height">60dp</dimen>
+
+</resources>
