@@ -8,4 +8,5 @@
 
 	<!-- 侧边栏 -->
 	<color name="colorSideBg">#484D5e</color>
+	<color name="colorSideItemText">#FFFFFF</color>
 </resources>

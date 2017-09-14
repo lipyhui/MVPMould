@@ -27,28 +27,16 @@
 				android:paddingBottom="16dp"
 				android:src="@drawable/side_logo"/>
 
-			<TextView
-				android:id="@+id/item1"
+			<android.support.v7.widget.RecyclerView
+				android:id="@+id/side_lists"
 				android:layout_width="match_parent"
-				android:layout_height="50dp"
-				android:gravity="center"
-				android:textSize="14dp"
-				android:textColor="#fff"
-				android:text="折线图"/>
-
-			<TextView
-				android:id="@+id/item2"
-				android:layout_width="match_parent"
-				android:layout_height="50dp"
-				android:gravity="center"
-				android:textSize="14dp"
-				android:textColor="#fff"
-				android:text="等待动画"/>
+				android:layout_height="wrap_content"
+				android:layout_weight="1"/>
 
 		</LinearLayout>
 
 		<com.kawakp.kp.kernel.widget.NoScrollViewPager
-			android:id="@+id/viewPager"
+			android:id="@+id/view_pager"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
