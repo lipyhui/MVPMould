@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				  android:layout_width="match_parent"
-				  android:layout_height="match_parent">
 
-		<TextView android:layout_width="match_parent" android:layout_height="match_parent"
-				  android:textColor="@color/colorAccent"
-				  android:gravity="center"
-				  android:textSize="50dp"
-				  android:text="fragment1"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-	</LinearLayout>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/charts_1"
+            android:layout_width="match_parent"
+            android:layout_height="185dp" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/btn"
+                android:text="切换线性" />
+
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="切换圆形" />
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn"
+                android:text="切换方形" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 </layout>
