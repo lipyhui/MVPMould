@@ -2,8 +2,7 @@ package com.kawakp.kp.application.router;
 
 import android.support.v4.app.Fragment;
 
-import com.kawakp.kp.application.ui.fragment.Item1Fragment;
-import com.kawakp.kp.application.ui.fragment.Item2Fragment;
+import com.kawakp.kp.application.ui.fragment.MainFragment;
 
 /**
  * 创建人: penghui.li
@@ -16,15 +15,15 @@ import com.kawakp.kp.application.ui.fragment.Item2Fragment;
  */
 
 public enum SideItemRouter {
-	CHART("折线图", new Item1Fragment()),
-	ANIM("动画", new Item2Fragment());
+	CHART(1, "折线图"),
+	ANIM(2, "动画");
 
-	private String mSideName;
-	private Fragment mFragment;
+	private int mType = 1;
+	private String mSideName = "折线图";
 
-	SideItemRouter(String name, Fragment fragment){
+	SideItemRouter(int type, String name){
 		mSideName = name;
-		mFragment = fragment;
+		mType = type;
 	}
 
 	public String getSideName() {
@@ -32,6 +31,6 @@ public enum SideItemRouter {
 	}
 
 	public Fragment getFragment() {
-		return mFragment;
+		return MainFragment.Companion.newInstance(mType);
 	}
 }

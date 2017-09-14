@@ -35,7 +35,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
         mBinding.sideLists.adapter = mAdapter
         mBinding.sideLists.layoutManager = LinearLayoutManager(this)
 
-        initFragments()
+        initSideFragments()
 
         mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
@@ -53,7 +53,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
 
     }
 
-    private fun initFragments() {
+    private fun initSideFragments() {
         mFragments = ArrayList()
 
         for (item in SideItemRouter.values()){
