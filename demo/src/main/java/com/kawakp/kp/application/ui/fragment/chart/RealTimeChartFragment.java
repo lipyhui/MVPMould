@@ -55,7 +55,6 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
                     @Override
                     public void run() {
                         addEntry();
-
                     }
                 });
             }
@@ -63,10 +62,11 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
     }
 
     private Disposable dis;
+
     @NotNull
     @Override
     public FragmentChartRealTimeBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
-                                                Bundle savedInstanceState) {
+                                                          Bundle savedInstanceState) {
         return FragmentChartRealTimeBinding.inflate(inflater, container, false);
     }
 
@@ -78,6 +78,10 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
 //        new ChartThread().start();
 
         if (dis == null) {
+            dis = Observable.interval(1, TimeUnit.SECONDS).compose(this.bindToLifecycle())
+                    .subscribe(it -> addEntry());
+        } else {
+            dis.dispose();
             dis = Observable.interval(1, TimeUnit.SECONDS).compose(this.bindToLifecycle())
                     .subscribe(it -> addEntry());
         }
@@ -93,12 +97,6 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
             @Override
             public void onClick(View view) {
                 mode = LineDataSet.Mode.HORIZONTAL_BEZIER;
-            }
-        });
-        mBinding.btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mode = LineDataSet.Mode.CUBIC_BEZIER;
             }
         });
         mBinding.btn2.setOnClickListener(new View.OnClickListener() {
@@ -204,7 +202,7 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
         // 将坐标移动到最新
         // 此代码将刷新图表的绘图
 //        mBinding.charts1.moveViewToX(data.getEntryCount());
-        mBinding.charts1.moveViewToAnimated(data.getEntryCount(), 0, YAxis.AxisDependency.LEFT, 1000);
+        mBinding.charts1.moveViewToAnimated(data.getEntryCount(), 0, YAxis.AxisDependency.LEFT, 500);
         // mBinding.charts1.moveViewTo(data.getXValCount()-7, 55f,
         // AxisDependency.LEFT);
         // y轴显示多少个点

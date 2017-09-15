@@ -31,12 +31,6 @@
                 android:layout_height="wrap_content"
                 android:text="切换圆形" />
 
-            <Button
-                android:id="@+id/btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btn"
-                android:text="切换方形" />
         </RelativeLayout>
 
 
