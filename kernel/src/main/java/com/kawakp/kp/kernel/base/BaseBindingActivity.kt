@@ -2,6 +2,8 @@ package com.kawakp.kp.kernel.base
 
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.view.WindowManager
+import com.kawakp.kp.kernel.KpApplication
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 
 /**
@@ -19,6 +21,10 @@ abstract class BaseBindingActivity<B : ViewDataBinding> : RxAppCompatActivity() 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (KpApplication.isScreenOn()){
+            window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
 
         mBinding = createDataBinding(savedInstanceState)
 
