@@ -3,10 +3,48 @@
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		xmlns:tools="http://schemas.android.com/tools">
 
-	<android.support.constraint.ConstraintLayout
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:orientation="vertical"
 	>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/title_height"
+			android:orientation="horizontal"
+			android:background="@color/colorTitleBg"
+			android:gravity="center_vertical"
+		>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:layout_marginLeft="@dimen/title_project_margin_left"
+				android:textColor="@color/colorText"
+				android:text="@string/project_name"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="@dimen/title_user_margin_right"
+				android:textColor="@color/colorText"
+				android:text="@string/user_name"/>
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="@dimen/title_user_margin_right"
+				android:src="@drawable/icon_user"/>
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="@dimen/title_arrow_margin_right"
+				android:src="@drawable/icon_down"/>
+
+		</LinearLayout>
 
 		<android.support.v7.widget.RecyclerView
 			android:id="@+id/fragment_main_lists"
@@ -14,6 +52,6 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"/>
 
-	</android.support.constraint.ConstraintLayout>
+	</LinearLayout>
 
 </layout>

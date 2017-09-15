@@ -1,3 +1,7 @@
 <resources>
 	<string name="app_name">KPMouldDemo</string>
+
+	<!-- 顶部title -->
+	<string name="project_name">换热站智能监控系统</string>
+	<string name="user_name">管理员</string>
 </resources>
