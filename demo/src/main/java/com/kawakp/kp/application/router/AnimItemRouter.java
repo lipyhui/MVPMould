@@ -9,7 +9,7 @@ import com.kawakp.kp.application.ui.activity.AnimActivity;
  * 修改时间:2017/9/14
  * 修改内容:
  *
- * 功能描述:侧边栏fragment功能列表配置
+ * 功能描述:动画列表配置
  */
 
 public enum AnimItemRouter {

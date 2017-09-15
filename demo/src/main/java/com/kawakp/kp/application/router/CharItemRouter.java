@@ -9,7 +9,7 @@ import com.kawakp.kp.application.ui.activity.RealTimeChartActivity;
  * 修改时间:2017/9/14
  * 修改内容:
  *
- * 功能描述:侧边栏fragment功能列表配置
+ * 功能描述:折线图功能列表配置
  */
 
 public enum CharItemRouter{

@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.kawakp.kp.application.bean.SideItem
+import com.kawakp.kp.application.bean.MainListItem
 import com.kawakp.kp.application.databinding.FragmentMainBinding
 import com.kawakp.kp.application.router.AnimItemRouter
 import com.kawakp.kp.application.router.CharItemRouter
-import com.kawakp.kp.application.ui.adapter.SideItemAdapter
+import com.kawakp.kp.application.ui.adapter.MainListAdapter
 import com.kawakp.kp.kernel.base.BaseBingingFragment
 import java.util.*
 
@@ -23,8 +23,8 @@ import java.util.*
  * 功能描述:
  */
 class MainFragment private constructor(): BaseBingingFragment<FragmentMainBinding>() {
-    private val mList = ArrayList<SideItem>()
-    private lateinit var mAdapter: SideItemAdapter
+    private val mList = ArrayList<MainListItem>()
+    private lateinit var mAdapter: MainListAdapter
     private lateinit var mTarget: MutableList<String>
 
     override fun createDataBinding(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): FragmentMainBinding {
@@ -32,7 +32,7 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
     }
 
     override fun initView() {
-        mAdapter = SideItemAdapter(mList)
+        mAdapter = MainListAdapter(mList)
         mBinding.fragmentMainLists.adapter = mAdapter
         mBinding.fragmentMainLists.layoutManager = LinearLayoutManager(context)
 
@@ -56,7 +56,7 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
         mTarget = ArrayList()
 
         for (item in CharItemRouter.values()){
-            mList.add(SideItem(item.itemName))
+            mList.add(MainListItem(item.itemName))
             mTarget.add(item.className)
         }
 
@@ -70,7 +70,7 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
         mTarget = ArrayList()
 
         for (item in AnimItemRouter.values()){
-            mList.add(SideItem(item.itemName))
+            mList.add(MainListItem(item.itemName))
             mTarget.add(item.className)
         }
 
