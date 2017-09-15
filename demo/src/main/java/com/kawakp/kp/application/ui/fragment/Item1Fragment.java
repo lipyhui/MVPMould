@@ -28,6 +28,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+
 
 /**
  * 创建人: penghui.li
@@ -64,6 +70,7 @@ public class Item1Fragment extends BaseBingingFragment<FragmentOneBinding> {
         }
     }
 
+    private Disposable dis;
     @NotNull
     @Override
     public FragmentOneBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
@@ -76,9 +83,17 @@ public class Item1Fragment extends BaseBingingFragment<FragmentOneBinding> {
         Log.e("ItemFragment", "Item1Fragment one");
         init();
         initChart1();
-        new ChartThread().start();
+//        new ChartThread().start();
 
+        if (dis == null) {
+            dis = Observable.interval(1, TimeUnit.SECONDS).compose(this.bindToLifecycle())
+                    .subscribe(it -> addEntry());
+        }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     private void init() {
