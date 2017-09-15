@@ -9,8 +9,11 @@ import com.kawakp.kp.application.bean.MainListItem
 import com.kawakp.kp.application.databinding.FragmentMainBinding
 import com.kawakp.kp.application.router.AnimItemRouter
 import com.kawakp.kp.application.router.CharItemRouter
+import com.kawakp.kp.application.router.FunRouter
+import com.kawakp.kp.application.ui.activity.DemoActivity
 import com.kawakp.kp.application.ui.adapter.MainListAdapter
 import com.kawakp.kp.kernel.base.BaseBingingFragment
+import java.io.Serializable
 import java.util.*
 
 /**
@@ -25,7 +28,7 @@ import java.util.*
 class MainFragment private constructor(): BaseBingingFragment<FragmentMainBinding>() {
     private val mList = ArrayList<MainListItem>()
     private lateinit var mAdapter: MainListAdapter
-    private lateinit var mTarget: MutableList<String>
+    private lateinit var mTarget: MutableList<FunRouter>
 
     override fun createDataBinding(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): FragmentMainBinding {
         return FragmentMainBinding.inflate(inflater, container, false)
@@ -38,7 +41,10 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
 
         checkSideFragment()
 
-        mAdapter.setOnItemClickListener { startActivity(Intent(context, (Class.forName(mTarget[it])))) }
+        mAdapter.setOnItemClickListener {
+            var intent =Intent(context, DemoActivity::class.java)
+            intent.putExtra("TARGET_ROUTER", mTarget[it] as Serializable)
+            startActivity(intent) }
     }
 
     private fun checkSideFragment(){
@@ -57,7 +63,7 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
 
         for (item in CharItemRouter.values()){
             mList.add(MainListItem(item.itemName))
-            mTarget.add(item.className)
+            mTarget.add(item)
         }
 
         mAdapter.notifyDataSetChanged()
@@ -71,7 +77,7 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
 
         for (item in AnimItemRouter.values()){
             mList.add(MainListItem(item.itemName))
-            mTarget.add(item.className)
+            mTarget.add(item)
         }
 
         mAdapter.notifyDataSetChanged()

@@ -1,6 +1,8 @@
 package com.kawakp.kp.application.router;
 
-import com.kawakp.kp.application.ui.activity.AnimActivity;
+import android.support.v4.app.Fragment;
+
+import com.kawakp.kp.application.ui.fragment.Item2Fragment;
 
 /**
  * 创建人: penghui.li
@@ -12,13 +14,13 @@ import com.kawakp.kp.application.ui.activity.AnimActivity;
  * 功能描述:动画列表配置
  */
 
-public enum AnimItemRouter {
-	CHART("响应动画", AnimActivity.class);
+public enum AnimItemRouter implements FunRouter {
+	CHART("响应动画", new Item2Fragment());
 
 	private String mItemName;
-	private Class mTarget;
+	private Fragment mTarget;
 
-	AnimItemRouter(String name, Class target){
+	AnimItemRouter(String name, Fragment target){
 		mItemName = name;
 		mTarget = target;
 	}
@@ -27,7 +29,7 @@ public enum AnimItemRouter {
 		return mItemName;
 	}
 
-	public String getClassName() {
-		return mTarget.getName();
+	public Fragment getTarget() {
+		return mTarget;
 	}
 }

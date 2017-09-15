@@ -1,6 +1,8 @@
 package com.kawakp.kp.application.router;
 
-import com.kawakp.kp.application.ui.activity.RealTimeChartActivity;
+import android.support.v4.app.Fragment;
+
+import com.kawakp.kp.application.ui.fragment.Item1Fragment;
 
 /**
  * 创建人: penghui.li
@@ -12,13 +14,13 @@ import com.kawakp.kp.application.ui.activity.RealTimeChartActivity;
  * 功能描述:折线图功能列表配置
  */
 
-public enum CharItemRouter{
-	CHART("实时曲线", RealTimeChartActivity.class);
+public enum CharItemRouter implements FunRouter {
+	CHART("实时曲线", new Item1Fragment());
 
 	private String mItemName;
-	private Class mTarget;
+	private Fragment mTarget;
 
-	CharItemRouter(String name, Class target){
+	CharItemRouter(String name, Fragment target){
 		mItemName = name;
 		mTarget = target;
 	}
@@ -27,7 +29,7 @@ public enum CharItemRouter{
 		return mItemName;
 	}
 
-	public String getClassName() {
-		return mTarget.getName();
+	public Fragment getTarget() {
+		return mTarget;
 	}
 }
