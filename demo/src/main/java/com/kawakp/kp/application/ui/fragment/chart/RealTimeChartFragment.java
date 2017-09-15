@@ -1,38 +1,30 @@
 package com.kawakp.kp.application.ui.fragment.chart;
 
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.Utils;
-import com.kawakp.kp.application.R;
-import com.kawakp.kp.application.databinding.FragmentOneBinding;
+import com.kawakp.kp.application.databinding.FragmentChartRealTimeBinding;
 import com.kawakp.kp.kernel.base.BaseBingingFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 
 /**
@@ -45,7 +37,7 @@ import io.reactivex.functions.Consumer;
  * 功能描述:折线图的展示
  */
 
-public class RealTimeChartFragment extends BaseBingingFragment<FragmentOneBinding> {
+public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartRealTimeBinding> {
     private final String color_line = "#1976D2";
     private final String color_text = "#666666";
     private final String color_grid = "#e4e5e8";
@@ -73,9 +65,9 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentOneBindin
     private Disposable dis;
     @NotNull
     @Override
-    public FragmentOneBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
+    public FragmentChartRealTimeBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
                                                 Bundle savedInstanceState) {
-        return FragmentOneBinding.inflate(inflater, container, false);
+        return FragmentChartRealTimeBinding.inflate(inflater, container, false);
     }
 
     @Override

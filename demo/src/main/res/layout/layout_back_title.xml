@@ -19,11 +19,19 @@
 			android:src="@drawable/icon_down"/>
 
 		<TextView
+			android:id="@+id/name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/title_text_size"
+			android:textColor="@color/colorText"/>
+
+		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:gravity="right"
 			android:layout_marginRight="@dimen/title_user_margin_right"
+			android:textSize="@dimen/title_text_size"
 			android:textColor="@color/colorText"
 			android:text="@string/user_name"/>
 

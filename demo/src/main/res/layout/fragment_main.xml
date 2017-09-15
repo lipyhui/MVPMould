@@ -23,6 +23,7 @@
 				android:layout_weight="1"
 				android:layout_marginLeft="@dimen/title_project_margin_left"
 				android:textColor="@color/colorText"
+				android:textSize="@dimen/title_text_size"
 				android:text="@string/project_name"/>
 
 			<TextView
@@ -30,6 +31,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginRight="@dimen/title_user_margin_right"
 				android:textColor="@color/colorText"
+				android:textSize="@dimen/title_text_size"
 				android:text="@string/user_name"/>
 
 			<ImageView

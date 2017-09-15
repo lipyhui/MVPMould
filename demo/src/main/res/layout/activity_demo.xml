@@ -10,7 +10,7 @@
 	>
 
 		<include
-			android:id="@+id/back_layout"
+			android:id="@+id/title"
 			layout="@layout/layout_back_title"/>
 
 		<FrameLayout

@@ -1,11 +1,11 @@
-package com.kawakp.kp.application.ui.fragment;
+package com.kawakp.kp.application.ui.fragment.anim;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.kawakp.kp.application.databinding.FragmentTwoBinding;
+import com.kawakp.kp.application.databinding.FragmentAnimResponseBinding;
 import com.kawakp.kp.kernel.base.BaseBingingFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,15 +17,15 @@ import org.jetbrains.annotations.NotNull;
  * 修改时间:2017/9/14
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:响应动画
  */
 
-public class Item2Fragment extends BaseBingingFragment<FragmentTwoBinding>{
+public class ResponseAnimFragment extends BaseBingingFragment<FragmentAnimResponseBinding>{
 	@NotNull
 	@Override
-	public FragmentTwoBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
+	public FragmentAnimResponseBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return FragmentTwoBinding.inflate(inflater, container, false);
+		return FragmentAnimResponseBinding.inflate(inflater, container, false);
 	}
 
 	@Override

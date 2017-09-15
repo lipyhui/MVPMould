@@ -36,6 +36,8 @@ public class DemoActivity extends BaseBindingActivity<ActivityDemoBinding> {
 				.replace(R.id.fragment, funRouter.getTarget())
 				.commit();
 
+		mBinding.title.name.setText(funRouter.getItemName());
+
 		initBack();
 	}
 
@@ -43,6 +45,6 @@ public class DemoActivity extends BaseBindingActivity<ActivityDemoBinding> {
 	 * 初始化返回
 	 */
 	private void initBack() {
-		mBinding.backLayout.back.setOnClickListener(view -> onBackPressed());
+		mBinding.title.back.setOnClickListener(view -> onBackPressed());
 	}
 }
