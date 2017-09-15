@@ -2,4 +2,9 @@
 
 	<style name="AppTheme" parent="BaseTheme" />
 
+	<style name="Theme.Launch" parent="@style/BaseTheme">
+		<item name="android:windowBackground">@drawable/welcome</item>
+		<item name="android:windowContentOverlay">@null</item>
+	</style>
+
 </resources>
