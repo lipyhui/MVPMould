@@ -1,4 +1,4 @@
-package com.kawakp.kp.application.ui.fragment;
+package com.kawakp.kp.application.ui.fragment.chart;
 
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -45,7 +45,7 @@ import io.reactivex.functions.Consumer;
  * 功能描述:折线图的展示
  */
 
-public class Item1Fragment extends BaseBingingFragment<FragmentOneBinding> {
+public class RealTimeChartFragment extends BaseBingingFragment<FragmentOneBinding> {
     private final String color_line = "#1976D2";
     private final String color_text = "#666666";
     private final String color_grid = "#e4e5e8";

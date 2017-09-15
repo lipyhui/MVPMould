@@ -2,7 +2,7 @@ package com.kawakp.kp.application.router;
 
 import android.support.v4.app.Fragment;
 
-import com.kawakp.kp.application.ui.fragment.Item1Fragment;
+import com.kawakp.kp.application.ui.fragment.chart.RealTimeChartFragment;
 
 /**
  * 创建人: penghui.li
@@ -15,7 +15,7 @@ import com.kawakp.kp.application.ui.fragment.Item1Fragment;
  */
 
 public enum CharItemRouter implements FunRouter {
-	CHART("实时曲线", new Item1Fragment());
+	CHART("实时曲线", new RealTimeChartFragment());
 
 	private String mItemName;
 	private Fragment mTarget;
