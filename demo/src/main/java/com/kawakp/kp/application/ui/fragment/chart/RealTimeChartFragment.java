@@ -1,8 +1,10 @@
 package com.kawakp.kp.application.ui.fragment.chart;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +45,7 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
     private final String color_grid = "#e4e5e8";
     private int count = 0;
     private LineDataSet.Mode mode = LineDataSet.Mode.LINEAR;
+    private String TAG = RealTimeChartFragment.class.getSimpleName();
 
     private class ChartThread extends Thread {
         @Override
@@ -198,17 +201,66 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
         mBinding.charts1.setVisibleXRangeMaximum(5);
         // y坐标轴线最大值,文字的位置
         mBinding.charts1.setVisibleYRange(5, 25, YAxis.AxisDependency.LEFT);
-//        mBinding.charts1.setVisibleYRangeMaximum(5, YAxis.AxisDependency.LEFT);
-        // 将坐标移动到最新
-        // 此代码将刷新图表的绘图
-//        mBinding.charts1.moveViewToX(data.getEntryCount());
-        mBinding.charts1.moveViewToAnimated(data.getEntryCount(), 0, YAxis.AxisDependency.LEFT, 500);
-        // mBinding.charts1.moveViewTo(data.getXValCount()-7, 55f,
-        // AxisDependency.LEFT);
         // y轴显示多少个点
         mBinding.charts1.getAxisLeft().setLabelCount(6);
+        mBinding.charts1.setVisibleYRangeMaximum(5, YAxis.AxisDependency.LEFT);
+        // 将坐标移动到最新
+        // 此代码将刷新图表的绘图
+        mBinding.charts1.moveViewToX(data.getEntryCount());
+//        mBinding.charts1.moveViewToAnimated(data.getEntryCount(), 0, YAxis.AxisDependency.LEFT, 800);
+        // mBinding.charts1.moveViewTo(data.getXValCount()-7, 55f,
+        // AxisDependency.LEFT);
         set.setMode(mode);
+    }
 
+    @Override
+    public void onAttach(Activity activity) {
+        Log.i(TAG, "onAttach: ---------------");
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate: ---------------");
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        Log.i(TAG, "onStart: ---------------");
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.i(TAG, "onResume: ---------------");
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        Log.i(TAG, "onStop: ---------------");
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.i(TAG, "onDestroyView: ---------------");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.i(TAG, "onDestroy: ---------------");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.i(TAG, "onDetach: ---------------");
+        count = 0;
+        dis.dispose();
+        super.onDetach();
     }
 
     // 初始化数据集，添加一条统计折线，可以简单的理解是初始化y坐标轴线上点的表征
