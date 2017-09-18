@@ -1,7 +1,5 @@
 package com.kawakp.kp.application
 
-import android.databinding.DataBindingUtil
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.LinearLayoutManager
@@ -22,13 +20,12 @@ import java.util.*
  * 功能描述:侧边栏动态匹配
  */
 class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
+
     private val mList = ArrayList<SideItem>()
     private lateinit var mAdapter: SideItemAdapter
     private lateinit var mFragments: MutableList<Fragment>
 
-    override fun createDataBinding(savedInstanceState: Bundle?): ActivityMainBinding {
-        return DataBindingUtil.setContentView(this, R.layout.activity_main)
-    }
+    override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun initView() {
         mAdapter = SideItemAdapter(mList)

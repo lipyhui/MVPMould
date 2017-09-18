@@ -17,10 +17,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class StartActivity extends BaseBindingActivity<ActivityLaunchBinding> {
 
-    @NotNull
     @Override
-    public ActivityLaunchBinding createDataBinding(Bundle savedInstanceState) {
-        return DataBindingUtil.setContentView(this, R.layout.activity_launch);
+    public int getLayoutId() {
+        return R.layout.activity_launch;
     }
 
     @Override

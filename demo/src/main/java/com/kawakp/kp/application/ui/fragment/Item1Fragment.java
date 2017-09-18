@@ -1,14 +1,10 @@
 package com.kawakp.kp.application.ui.fragment;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
+import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentOneBinding;
 import com.kawakp.kp.kernel.base.BaseBingingFragment;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 创建人: penghui.li
@@ -21,15 +17,14 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class Item1Fragment extends BaseBingingFragment<FragmentOneBinding>{
-	@NotNull
+
 	@Override
-	public FragmentOneBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return FragmentOneBinding.inflate(inflater, container, false);
+	public int getLayoutId() {
+		return R.layout.fragment_one;
 	}
 
 	@Override
-	public void initView() {
-		Log.e("ItemFragment", "Item1Fragment one");
+	protected void onFirstUserVisible() {
+		Log.e("ItemFragment", "Item1Fragment onFirstUserVisible");
 	}
 }
