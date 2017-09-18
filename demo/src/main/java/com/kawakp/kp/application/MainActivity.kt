@@ -47,16 +47,22 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
             }
         }
 
-        mBinding.viewPager.offscreenPageLimit = 2
+        val limitPage = if (mFragments.size < 8) mFragments.size else 8
+        mBinding.viewPager.offscreenPageLimit = limitPage - 1
 
-        mAdapter.setOnItemClickListener { mBinding.viewPager.currentItem = it }
+        mAdapter.setOnItemClickListener {
+/*            Log.e("ItemFragment", "************************************\n " +
+                    "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
+                    ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************")*/
+            mBinding.viewPager.currentItem = it
+        }
 
     }
 
     private fun initFragments() {
         mFragments = ArrayList()
 
-        for (item in SideItemRouter.values()){
+        for (item in SideItemRouter.values()) {
             mList.add(SideItem(item.sideName))
             mFragments.add(item.fragment)
         }
