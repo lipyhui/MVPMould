@@ -1,12 +1,8 @@
 package com.kawakp.kp.application.ui.fragment.chart;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -15,10 +11,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentChartRealTimeBinding;
 import com.kawakp.kp.kernel.base.BaseBingingFragment;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +38,7 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
     private final String color_grid = "#e4e5e8";
     private int count = 0;
     private LineDataSet.Mode mode = LineDataSet.Mode.LINEAR;
+    private Disposable dis;
 
     private class ChartThread extends Thread {
         @Override
@@ -61,18 +57,15 @@ public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartReal
         }
     }
 
-    private Disposable dis;
 
-    @NotNull
+
     @Override
-    public FragmentChartRealTimeBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
-                                                          Bundle savedInstanceState) {
-        return FragmentChartRealTimeBinding.inflate(inflater, container, false);
+    public int getLayoutId() {
+        return R.layout.fragment_chart_real_time;
     }
 
     @Override
-    public void initView() {
-        Log.e("ItemFragment", "Item1Fragment one");
+    protected void onFirstUserVisible() {
         init();
         initChart1();
 //        new ChartThread().start();

@@ -1,14 +1,9 @@
 package com.kawakp.kp.application.ui.activity;
 
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
-
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.ActivityDemoBinding;
 import com.kawakp.kp.application.router.FunRouter;
 import com.kawakp.kp.kernel.base.BaseBindingActivity;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 创建人: penghui.li
@@ -22,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class DemoActivity extends BaseBindingActivity<ActivityDemoBinding> {
 
-	@NotNull
 	@Override
-	public ActivityDemoBinding createDataBinding(Bundle savedInstanceState) {
-		return DataBindingUtil.setContentView(this, R.layout.activity_demo);
+	public int getLayoutId() {
+		return R.layout.activity_demo;
 	}
 
 	@Override

@@ -1,16 +1,11 @@
 package com.kawakp.kp.application.ui.fragment.anim;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentAnimResponseBinding;
 import com.kawakp.kp.kernel.base.BaseBingingFragment;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 创建人: penghui.li
@@ -23,17 +18,34 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public class ResponseAnimFragment extends BaseBingingFragment<FragmentAnimResponseBinding> {
-    @NotNull
+
     @Override
-    public FragmentAnimResponseBinding createDataBinding(LayoutInflater inflater, ViewGroup container,
-                                                         Bundle savedInstanceState) {
-        return FragmentAnimResponseBinding.inflate(inflater, container, false);
+    public int getLayoutId() {
+        return R.layout.fragment_anim_response;
     }
 
     @Override
-    public void initView() {
-        Log.e("ItemFragment", "Item2Fragment two");
+    public void onFirstUserInvisible() {
+        Log.e("Test", "onFirstUserInvisible");
+        super.onFirstUserInvisible();
+    }
+
+    @Override
+    protected void onFirstUserVisible() {
+        Log.e("Test", "onFirstUserVisible");
         init();
+    }
+
+    @Override
+    public void onUserVisible() {
+        Log.e("Test", "onUserVisible");
+        super.onUserVisible();
+    }
+
+    @Override
+    public void onUserInvisible() {
+        Log.e("Test", "onUserInvisible");
+        super.onUserInvisible();
     }
 
     private void init() {

@@ -3,8 +3,7 @@ package com.kawakp.kp.application.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import com.kawakp.kp.application.R
 import com.kawakp.kp.application.bean.MainListItem
 import com.kawakp.kp.application.databinding.FragmentMainBinding
 import com.kawakp.kp.application.router.AnimItemRouter
@@ -26,15 +25,14 @@ import java.util.*
  * 功能描述:
  */
 class MainFragment private constructor(): BaseBingingFragment<FragmentMainBinding>() {
+
     private val mList = ArrayList<MainListItem>()
     private lateinit var mAdapter: MainListAdapter
     private lateinit var mTarget: MutableList<FunRouter>
 
-    override fun createDataBinding(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): FragmentMainBinding {
-        return FragmentMainBinding.inflate(inflater, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.fragment_main
 
-    override fun initView() {
+    override fun onFirstUserVisible() {
         mAdapter = MainListAdapter(mList)
         mBinding.fragmentMainLists.adapter = mAdapter
         mBinding.fragmentMainLists.layoutManager = LinearLayoutManager(context)
@@ -42,11 +40,14 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
         checkSideFragment()
 
         mAdapter.setOnItemClickListener {
-            var intent =Intent(context, DemoActivity::class.java)
+            var intent = Intent(context, DemoActivity::class.java)
             intent.putExtra("TARGET_ROUTER", mTarget[it] as Serializable)
             startActivity(intent) }
     }
 
+    /**
+     * 匹配侧边分类列表对应的fragment
+     */
     private fun checkSideFragment(){
         when(arguments.getInt("MAIN_FRAGMENT_TYPE")){
             1 -> initChartList()

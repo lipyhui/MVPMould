@@ -1,13 +1,9 @@
 package com.kawakp.kp.application;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 
 import com.kawakp.kp.application.databinding.ActivityLaunchBinding;
 import com.kawakp.kp.kernel.base.BaseBindingActivity;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,10 +13,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class StartActivity extends BaseBindingActivity<ActivityLaunchBinding> {
 
-    @NotNull
     @Override
-    public ActivityLaunchBinding createDataBinding(Bundle savedInstanceState) {
-        return DataBindingUtil.setContentView(this, R.layout.activity_launch);
+    public int getLayoutId() {
+        return R.layout.activity_launch;
     }
 
     @Override

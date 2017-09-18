@@ -36,15 +36,13 @@ import java.util.ArrayList;
 
 public class HistoryPieChartFragment extends BaseBingingFragment<FragmentPieChartHistoryBinding> implements SeekBar.OnSeekBarChangeListener {
 
-
-    @NotNull
     @Override
-    public FragmentPieChartHistoryBinding createDataBinding(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return FragmentPieChartHistoryBinding.inflate(inflater, container, false);
+    public int getLayoutId() {
+        return R.layout.fragment_pie_chart_history;
     }
 
     @Override
-    public void initView() {
+    protected void onFirstUserVisible() {
         initPie();
     }
 
