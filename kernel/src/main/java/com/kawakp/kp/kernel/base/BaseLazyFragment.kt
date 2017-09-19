@@ -1,7 +1,6 @@
 package com.kawakp.kp.kernel.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.trello.rxlifecycle2.components.support.RxFragment
 
@@ -15,13 +14,11 @@ abstract class BaseLazyFragment : RxFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.e("ItemFragment", "onViewCreated *****************************")
         initPrepare()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e("ItemFragment", "onResume *****************************")
         if (isFirstResume) {
             isFirstResume = false
             return@onResume
@@ -68,7 +65,6 @@ abstract class BaseLazyFragment : RxFragment() {
     }
 
     @Synchronized private fun initPrepare() {
-        Log.e("ItemFragment", "initPrepare isUserVisibleHint = $isUserVisibleHint, isPrepared = $isPrepared")
         if (isUserVisibleHint) {
             if (isPrepared) {
                 onFirstUserVisible()
