@@ -5,7 +5,7 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentAnimResponseBinding;
-import com.kawakp.kp.kernel.base.BaseBingingFragment;
+import com.kawakp.kp.kernel.base.BaseBindingFragment;
 
 /**
  * 创建人: penghui.li
@@ -17,7 +17,7 @@ import com.kawakp.kp.kernel.base.BaseBingingFragment;
  * 功能描述:响应动画
  */
 
-public class ResponseAnimFragment extends BaseBingingFragment<FragmentAnimResponseBinding> {
+public class ResponseAnimFragment extends BaseBindingFragment<FragmentAnimResponseBinding> {
 
     @Override
     public int getLayoutId() {

@@ -11,7 +11,7 @@ import com.kawakp.kp.application.router.CharItemRouter
 import com.kawakp.kp.application.router.FunRouter
 import com.kawakp.kp.application.ui.activity.DemoActivity
 import com.kawakp.kp.application.ui.adapter.MainListAdapter
-import com.kawakp.kp.kernel.base.BaseBingingFragment
+import com.kawakp.kp.kernel.base.BaseBindingFragment
 import java.io.Serializable
 import java.util.*
 
@@ -24,7 +24,7 @@ import java.util.*
  *
  * 功能描述:
  */
-class MainFragment private constructor(): BaseBingingFragment<FragmentMainBinding>() {
+class MainFragment private constructor(): BaseBindingFragment<FragmentMainBinding>() {
 
     private val mList = ArrayList<MainListItem>()
     private lateinit var mAdapter: MainListAdapter

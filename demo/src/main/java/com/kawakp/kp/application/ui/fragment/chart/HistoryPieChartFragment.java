@@ -2,18 +2,13 @@ package com.kawakp.kp.application.ui.fragment.chart;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -23,10 +18,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentPieChartHistoryBinding;
-import com.kawakp.kp.kernel.base.BaseBindingActivity;
-import com.kawakp.kp.kernel.base.BaseBingingFragment;
-
-import org.jetbrains.annotations.NotNull;
+import com.kawakp.kp.kernel.base.BaseBindingFragment;
 
 import java.util.ArrayList;
 
@@ -34,7 +26,7 @@ import java.util.ArrayList;
  * Created by sheng.qi on 2017/9/15.
  */
 
-public class HistoryPieChartFragment extends BaseBingingFragment<FragmentPieChartHistoryBinding> implements SeekBar.OnSeekBarChangeListener {
+public class HistoryPieChartFragment extends BaseBindingFragment<FragmentPieChartHistoryBinding> implements SeekBar.OnSeekBarChangeListener {
 
     @Override
     public int getLayoutId() {

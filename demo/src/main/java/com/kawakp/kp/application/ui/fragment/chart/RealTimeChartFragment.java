@@ -1,9 +1,7 @@
 package com.kawakp.kp.application.ui.fragment.chart;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
@@ -16,7 +14,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentChartRealTimeBinding;
-import com.kawakp.kp.kernel.base.BaseBingingFragment;
+import com.kawakp.kp.kernel.base.BaseBindingFragment;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +33,7 @@ import io.reactivex.disposables.Disposable;
  * 功能描述:折线图的展示
  */
 
-public class RealTimeChartFragment extends BaseBingingFragment<FragmentChartRealTimeBinding> {
+public class RealTimeChartFragment extends BaseBindingFragment<FragmentChartRealTimeBinding> {
     private final String color_line = "#1976D2";
     private final String color_text = "#666666";
     private final String color_grid = "#e4e5e8";

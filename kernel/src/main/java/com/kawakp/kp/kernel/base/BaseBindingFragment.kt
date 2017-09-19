@@ -16,7 +16,7 @@ import android.view.ViewGroup
  *
  * 功能描述:该基类进行Fragment的View绑定，所有Fragment继承该类。
  */
-abstract class BaseBingingFragment<B: ViewDataBinding> : BaseLazyFragment(){
+abstract class BaseBindingFragment<B: ViewDataBinding> : BaseLazyFragment(){
 
     lateinit var mBinding : B
 
