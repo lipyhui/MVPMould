@@ -8,6 +8,7 @@ import com.kawakp.kp.application.databinding.ActivityMainBinding
 import com.kawakp.kp.application.router.SideItemRouter
 import com.kawakp.kp.application.ui.adapter.SideItemAdapter
 import com.kawakp.kp.kernel.base.BaseBindingActivity
+import com.kawakp.kp.kernel.base.defaults.EmptyPresenter
 import java.util.*
 
 /**
@@ -19,7 +20,7 @@ import java.util.*
  *
  * 功能描述:侧边栏动态匹配
  */
-class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
+class MainActivity : BaseBindingActivity<EmptyPresenter, ActivityMainBinding>() {
 
     private val mList = ArrayList<SideItem>()
     private lateinit var mAdapter: SideItemAdapter

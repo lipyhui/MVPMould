@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentTwoBinding;
-import com.kawakp.kp.kernel.base.BaseBingingFragment;
+import com.kawakp.kp.kernel.base.BaseBindingFragment;
 
 /**
  * 创建人: penghui.li
@@ -16,7 +16,7 @@ import com.kawakp.kp.kernel.base.BaseBingingFragment;
  * 功能描述:
  */
 
-public class Item2Fragment extends BaseBingingFragment<FragmentTwoBinding>{
+public class Item2Fragment extends BaseBindingFragment<FragmentTwoBinding>{
 
 	@Override
 	public int getLayoutId() {

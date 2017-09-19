@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.databinding.FragmentOneBinding;
-import com.kawakp.kp.kernel.base.BaseBingingFragment;
+import com.kawakp.kp.kernel.base.BaseBindingFragment;
 
 /**
  * 创建人: penghui.li
@@ -16,7 +16,7 @@ import com.kawakp.kp.kernel.base.BaseBingingFragment;
  * 功能描述:
  */
 
-public class Item1Fragment extends BaseBingingFragment<FragmentOneBinding>{
+public class Item1Fragment extends BaseBindingFragment<FragmentOneBinding>{
 
 	@Override
 	public int getLayoutId() {
