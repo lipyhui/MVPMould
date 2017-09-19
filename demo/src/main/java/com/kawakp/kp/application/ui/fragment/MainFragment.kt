@@ -40,7 +40,7 @@ class MainFragment private constructor(): BaseBingingFragment<FragmentMainBindin
         checkSideFragment()
 
         mAdapter.setOnItemClickListener {
-            var intent = Intent(context, DemoActivity::class.java)
+            val intent = Intent(context, DemoActivity::class.java)
             intent.putExtra("TARGET_ROUTER", mTarget[it] as Serializable)
             startActivity(intent) }
     }

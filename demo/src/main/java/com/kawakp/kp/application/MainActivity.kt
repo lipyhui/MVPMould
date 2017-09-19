@@ -35,13 +35,9 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
         initSideFragments()
 
         mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
-            override fun getItem(position: Int): Fragment {
-                return mFragments[position]
-            }
+            override fun getItem(position: Int): Fragment = mFragments[position]
 
-            override fun getCount(): Int {
-                return mFragments.size
-            }
+            override fun getCount(): Int = mFragments.size
         }
 
         val limitPage = if (mFragments.size < 8) mFragments.size else 8
