@@ -5,7 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.kawakp.kp.application.StartActivity;
+import com.kawakp.kp.application.ui.StartActivity;
 
 /**
  * 创建人: penghui.li

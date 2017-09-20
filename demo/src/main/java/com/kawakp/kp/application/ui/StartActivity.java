@@ -1,7 +1,8 @@
-package com.kawakp.kp.application;
+package com.kawakp.kp.application.ui;
 
 import android.content.Intent;
 
+import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityLaunchBinding;
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;

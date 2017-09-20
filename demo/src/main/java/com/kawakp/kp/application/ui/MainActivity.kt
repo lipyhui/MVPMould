@@ -1,8 +1,9 @@
-package com.kawakp.kp.application
+package com.kawakp.kp.application.ui
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.LinearLayoutManager
+import com.kawakp.kp.application.R
 import com.kawakp.kp.application.base.BaseActivity
 import com.kawakp.kp.application.bean.SideItem
 import com.kawakp.kp.application.databinding.ActivityMainBinding
