@@ -55,6 +55,9 @@ dependencies {
 	//chart
 	compile dependencies.mpChart
 
+	//gif
+	compile dependencies.gif
+
 	//img
 	compile dependencies.glide
 
