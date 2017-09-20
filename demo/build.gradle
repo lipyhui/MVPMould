@@ -43,14 +43,20 @@ dependencies {
 
 	def dependencies = rootProject.ext.dependencies
 
+	//stateView
 	compile dependencies.multiStateView
+
+	//anko
 	compile dependencies.ankoCommons
 	compile dependencies.ankoSdk25
 	compile dependencies.ankoAppcompatV7
 	compile dependencies.ankoSupportV4
 
-	compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-	compile 'com.github.bumptech.glide:glide:3.7.0'
+	//chart
+	compile dependencies.mpChart
+
+	//img
+	compile dependencies.glide
 
 	//Kotlin
 	kapt dependencies.databindingCompiler
