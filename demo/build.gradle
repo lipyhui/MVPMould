@@ -43,6 +43,12 @@ dependencies {
 
 	def dependencies = rootProject.ext.dependencies
 
+	compile dependencies.multiStateView
+	compile dependencies.ankoCommons
+	compile dependencies.ankoSdk25
+	compile dependencies.ankoAppcompatV7
+	compile dependencies.ankoSupportV4
+
 	//Kotlin
 	kapt dependencies.databindingCompiler
 

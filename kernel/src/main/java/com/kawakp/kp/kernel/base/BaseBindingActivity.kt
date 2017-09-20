@@ -32,13 +32,9 @@ abstract class BaseBindingActivity<T : BasePresenter<*>, B : ViewDataBinding> : 
 
         mBinding = createViewDataBinding()
         mPresenter = PresenterFactory.createPresenter(this)
-
-        initView()
     }
 
     private fun createViewDataBinding(): B = DataBindingUtil.setContentView(this, getLayoutId())
 
     abstract fun getLayoutId(): Int
-
-    abstract fun initView()
 }

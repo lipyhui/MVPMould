@@ -1,18 +1,10 @@
-package com.kawakp.kp.application.ui;
+package com.kawakp.kp.application.ui.acitvity.main;
 
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityMainBinding;
-import com.kawakp.kp.kernel.KernelJNI;
-import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-public class MainActivity extends BaseActivity<EmptyPresenter, ActivityMainBinding> {
+public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBinding> implements MainAble {
 
 	@Override
 	public int getLayoutId() {
@@ -20,21 +12,16 @@ public class MainActivity extends BaseActivity<EmptyPresenter, ActivityMainBindi
 	}
 
 	@Override
-	public void onStateViewRetryListener() {
-		showContent();
+	public void init() {
 	}
 
 	@Override
-	public void init() {
-		Observable.timer(3, TimeUnit.SECONDS)
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(l -> {
-					//					hideLoading();
-//					showContent();
-					stateViewError("error", "this is error");
-					//showMessage("this is a test msg");
-					mBinding.testText.setText(KernelJNI.stringFromJNI());
-				});
+	public void setData(String data) {
+		mBinding.testText.setText(data);
+	}
+
+	@Override
+	public void onStateViewRetryListener() {
+		showContent();
 	}
 }
