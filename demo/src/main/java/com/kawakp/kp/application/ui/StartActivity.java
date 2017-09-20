@@ -1,9 +1,10 @@
-package com.kawakp.kp.application;
+package com.kawakp.kp.application.ui;
 
 import android.content.Intent;
 
+import com.kawakp.kp.application.R;
+import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityLaunchBinding;
-import com.kawakp.kp.kernel.base.BaseBindingActivity;
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 
 import java.util.concurrent.TimeUnit;
@@ -12,7 +13,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 
-public class StartActivity extends BaseBindingActivity<EmptyPresenter, ActivityLaunchBinding> {
+public class StartActivity extends BaseActivity<EmptyPresenter, ActivityLaunchBinding> {
 
     @Override
     public int getLayoutId() {
@@ -20,7 +21,7 @@ public class StartActivity extends BaseBindingActivity<EmptyPresenter, ActivityL
     }
 
     @Override
-    public void initView() {
+    public void init() {
         redirectTo();
     }
 

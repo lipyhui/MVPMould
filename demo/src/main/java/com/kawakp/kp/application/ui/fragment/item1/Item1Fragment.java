@@ -1,10 +1,11 @@
-package com.kawakp.kp.application.ui.fragment;
+package com.kawakp.kp.application.ui.fragment.item1;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.kawakp.kp.application.R;
+import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentOneBinding;
-import com.kawakp.kp.kernel.base.BaseBindingFragment;
 
 /**
  * 创建人: penghui.li
@@ -16,7 +17,7 @@ import com.kawakp.kp.kernel.base.BaseBindingFragment;
  * 功能描述:
  */
 
-public class Item1Fragment extends BaseBindingFragment<FragmentOneBinding>{
+public class Item1Fragment extends BaseFragment<Item1Presenter, FragmentOneBinding> implements Item1Able {
 
 	@Override
 	public int getLayoutId() {
@@ -26,5 +27,15 @@ public class Item1Fragment extends BaseBindingFragment<FragmentOneBinding>{
 	@Override
 	protected void onFirstUserVisible() {
 		Log.e("ItemFragment", "Item1Fragment onFirstUserVisible");
+	}
+
+	@Override
+	public void setText(@NonNull String data) {
+		mBinding.setTextOne(data);
+	}
+
+	@Override
+	public void onStateViewRetryListener() {
+		showContent();
 	}
 }

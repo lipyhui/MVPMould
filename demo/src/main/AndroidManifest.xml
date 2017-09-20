@@ -14,7 +14,7 @@
 		android:theme="@style/AppTheme">
 		<activity
 			android:configChanges="keyboardHidden|orientation|screenSize|locale|screenLayout|mcc|mnc"
-			android:name=".StartActivity"
+			android:name=".ui.StartActivity"
 			android:theme="@style/Theme.Launch"
 			android:launchMode="singleTask"
 			android:clearTaskOnLaunch="true">
@@ -28,7 +28,7 @@
 		</activity>
 		<activity
 			android:configChanges="keyboardHidden|orientation|screenSize|locale|screenLayout|mcc|mnc"
-			android:name=".MainActivity"/>
+			android:name=".ui.MainActivity"/>
 	</application>
 
 </manifest>

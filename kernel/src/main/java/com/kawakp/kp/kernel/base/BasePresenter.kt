@@ -19,6 +19,7 @@ import com.trello.rxlifecycle2.components.support.RxFragment
  * Coordinate with RxLifeCycle
  *
  */
+@Suppress("UNCHECKED_CAST")
 abstract class BasePresenter<V : IView> : RxFragment() {
     lateinit var mView: V
 

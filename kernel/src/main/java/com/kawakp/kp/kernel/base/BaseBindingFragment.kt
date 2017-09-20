@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kawakp.kp.kernel.base.interfaces.IView
 import com.kawakp.kp.kernel.utils.PresenterFactory
 
 /**
@@ -17,7 +18,7 @@ import com.kawakp.kp.kernel.utils.PresenterFactory
  *
  * 功能描述:该基类进行Fragment的View绑定，所有Fragment继承该类。
  */
-abstract class BaseBindingFragment<T : BasePresenter<*>, B: ViewDataBinding>: BaseLazyFragment(){
+abstract class BaseBindingFragment<T : BasePresenter<*>, B: ViewDataBinding>: BaseLazyFragment(), IView{
 
     protected lateinit var mBinding: B
     protected lateinit var mPresenter: T
