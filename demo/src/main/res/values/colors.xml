@@ -7,6 +7,8 @@
 	<color name="colorMainBg">#F0F1F4</color>
 
 	<!-- 侧边栏 -->
-	<color name="colorSideBg">#484D5e</color>
+	<color name="colorSideBg">#484D5E</color>
+	<color name="colorSideItemLeft">#42A5F5</color>
+	<color name="colorSideItem">#5B6074</color>
 	<color name="colorSideItemText">#FFFFFF</color>
 </resources>

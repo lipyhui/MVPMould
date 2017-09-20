@@ -23,6 +23,8 @@ import java.util.*
  */
 class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
 
+    private var selected = 0
+
     private val mList = ArrayList<SideItem>()
     private lateinit var mAdapter: SideItemAdapter
     private lateinit var mFragments: MutableList<Fragment>
@@ -49,6 +51,8 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
 /*            Log.e("ItemFragment", "************************************\n " +
                     "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
                     ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************")*/
+
+            mAdapter.notifyItemChanged(it)
             mBinding.viewPager.currentItem = it
         }
 
