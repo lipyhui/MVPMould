@@ -2,6 +2,7 @@ package com.kawakp.kp.application.router;
 
 import android.support.v4.app.Fragment;
 
+import com.kawakp.kp.application.ui.fragment.anim.GifFragment;
 import com.kawakp.kp.application.ui.fragment.anim.ResponseAnimFragment;
 
 /**
@@ -15,7 +16,9 @@ import com.kawakp.kp.application.ui.fragment.anim.ResponseAnimFragment;
  */
 
 public enum AnimItemRouter implements FunRouter {
-	RESPONSE("响应动画", new ResponseAnimFragment());
+	RESPONSE("响应动画", new ResponseAnimFragment()),
+	GIF("GIF图片", new GifFragment()),
+	;
 
 	private String mItemName;
 	private Fragment mTarget;
