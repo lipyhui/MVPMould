@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.kawakp.kp.application.R
 import com.kawakp.kp.application.base.BaseFragment
 import com.kawakp.kp.application.databinding.FragmentMainBinding
-import com.kawakp.kp.application.ui.activity.DemoActivity
+import com.kawakp.kp.application.ui.activity.demo.DemoActivity
 import com.kawakp.kp.application.ui.adapter.MainListAdapter
 import java.io.Serializable
 

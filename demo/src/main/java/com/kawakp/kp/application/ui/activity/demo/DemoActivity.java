@@ -1,10 +1,8 @@
-package com.kawakp.kp.application.ui.activity;
+package com.kawakp.kp.application.ui.activity.demo;
 
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityDemoBinding;
-import com.kawakp.kp.application.router.FunRouter;
-import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 
 /**
  * 创建人: penghui.li
@@ -16,7 +14,7 @@ import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
  * 功能描述:列表功能实现页面
  */
 
-public class DemoActivity extends BaseActivity<EmptyPresenter, ActivityDemoBinding> {
+public class DemoActivity extends BaseActivity<DemoPresenter, ActivityDemoBinding> implements DemoAble {
 
 	@Override
 	public int getLayoutId() {
@@ -25,15 +23,12 @@ public class DemoActivity extends BaseActivity<EmptyPresenter, ActivityDemoBindi
 
 	@Override
 	public void init() {
-		FunRouter funRouter = (FunRouter) getIntent().getSerializableExtra("TARGET_ROUTER");
-		getSupportFragmentManager()
-				.beginTransaction()
-				.replace(R.id.fragment, funRouter.getTarget())
-				.commit();
-
-		mBinding.title.name.setText(funRouter.getItemName());
-
 		initBack();
+	}
+
+	@Override
+	public void initTitle(String name) {
+		mBinding.title.name.setText(name);
 	}
 
 	/**
