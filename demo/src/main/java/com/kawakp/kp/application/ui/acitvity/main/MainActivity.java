@@ -17,7 +17,7 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 
 	@Override
 	public void setData(String data) {
-		mBinding.testText.setText(data);
+		mBinding.setHello(data);
 	}
 
 	@Override

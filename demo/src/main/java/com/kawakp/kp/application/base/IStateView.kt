@@ -60,9 +60,9 @@ interface IStateView {
                 val stateView = MultiStateView(targetRoot.context).apply {
                     id = R.id.multiStateView
                     setViewForState(targetContent, MultiStateView.VIEW_STATE_CONTENT)
-                    setViewForState(R.layout.error_view, MultiStateView.VIEW_STATE_ERROR)
-                    setViewForState(R.layout.empty_view, MultiStateView.VIEW_STATE_EMPTY)
-                    setViewForState(R.layout.loading_view, MultiStateView.VIEW_STATE_LOADING)
+                    setViewForState(R.layout.view_error, MultiStateView.VIEW_STATE_ERROR)
+                    setViewForState(R.layout.view_empty, MultiStateView.VIEW_STATE_EMPTY)
+                    setViewForState(R.layout.view_loading, MultiStateView.VIEW_STATE_LOADING)
                     setAnimateLayoutChanges(true)
                     viewState = MultiStateView.VIEW_STATE_LOADING
                 }
