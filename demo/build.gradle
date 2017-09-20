@@ -6,55 +6,62 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
-    defaultConfig {
-        applicationId "com.kawakp.kp.kotlin"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+	compileSdkVersion rootProject.ext.compileSdkVersion
+	buildToolsVersion rootProject.ext.buildToolsVersion
+	defaultConfig {
+		applicationId "com.kawakp.kp.kotlin"
+		minSdkVersion rootProject.ext.minSdkVersion
+		targetSdkVersion rootProject.ext.targetSdkVersion
+		versionCode rootProject.ext.versionCode
+		versionName rootProject.ext.versionName
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+	}
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
 
-    dataBinding {
-        enabled = true
-    }
+	dataBinding {
+		enabled = true
+	}
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
-//折线图
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    def dependencies = rootProject.ext.dependencies
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+	androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+		exclude group: 'com.android.support', module: 'support-annotations'
+	})
+	compile 'com.android.support.constraint:constraint-layout:1.0.2'
+	testCompile 'junit:junit:4.12'
 
-    //Kotlin
-    kapt dependencies.databindingCompiler
+	def dependencies = rootProject.ext.dependencies
 
-    compile project(':kernel')
+	compile dependencies.multiStateView
+	compile dependencies.ankoCommons
+	compile dependencies.ankoSdk25
+	compile dependencies.ankoAppcompatV7
+	compile dependencies.ankoSupportV4
+
+	compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+	compile 'com.github.bumptech.glide:glide:3.7.0'
+
+	//Kotlin
+	kapt dependencies.databindingCompiler
+
+	compile project(':kernel')
 }
 
 kapt {
-    generateStubs = true
+	generateStubs = true
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }

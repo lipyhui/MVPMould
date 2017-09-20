@@ -17,8 +17,9 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.kawakp.kp.application.R;
+import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentPieChartHistoryBinding;
-import com.kawakp.kp.kernel.base.BaseBindingFragment;
+import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  * Created by sheng.qi on 2017/9/15.
  */
 
-public class HistoryPieChartFragment extends BaseBindingFragment<FragmentPieChartHistoryBinding> implements SeekBar.OnSeekBarChangeListener {
+public class HistoryPieChartFragment extends BaseFragment<EmptyPresenter, FragmentPieChartHistoryBinding> implements SeekBar.OnSeekBarChangeListener {
 
     @Override
     public int getLayoutId() {

@@ -13,8 +13,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.kawakp.kp.application.R;
+import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentChartRealTimeBinding;
-import com.kawakp.kp.kernel.base.BaseBindingFragment;
+import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ import io.reactivex.disposables.Disposable;
  * 功能描述:折线图的展示
  */
 
-public class RealTimeChartFragment extends BaseBindingFragment<FragmentChartRealTimeBinding> {
+public class RealTimeChartFragment extends BaseFragment<EmptyPresenter, FragmentChartRealTimeBinding> {
     private final String color_line = "#1976D2";
     private final String color_text = "#666666";
     private final String color_grid = "#e4e5e8";

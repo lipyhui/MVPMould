@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.kawakp.kp.application.R
+import com.kawakp.kp.application.base.BaseFragment
 import com.kawakp.kp.application.bean.MainListItem
 import com.kawakp.kp.application.databinding.FragmentMainBinding
 import com.kawakp.kp.application.router.AnimItemRouter
@@ -11,7 +12,7 @@ import com.kawakp.kp.application.router.CharItemRouter
 import com.kawakp.kp.application.router.FunRouter
 import com.kawakp.kp.application.ui.activity.DemoActivity
 import com.kawakp.kp.application.ui.adapter.MainListAdapter
-import com.kawakp.kp.kernel.base.BaseBindingFragment
+import com.kawakp.kp.kernel.base.defaults.EmptyPresenter
 import java.io.Serializable
 import java.util.*
 
@@ -22,9 +23,9 @@ import java.util.*
  * 修改时间:2017/9/14
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:主fragment适配
  */
-class MainFragment private constructor(): BaseBindingFragment<FragmentMainBinding>() {
+class MainFragment private constructor(): BaseFragment<EmptyPresenter, FragmentMainBinding>() {
 
     private val mList = ArrayList<MainListItem>()
     private lateinit var mAdapter: MainListAdapter

@@ -3,11 +3,12 @@ package com.kawakp.kp.application
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.LinearLayoutManager
+import com.kawakp.kp.application.base.BaseActivity
 import com.kawakp.kp.application.bean.SideItem
 import com.kawakp.kp.application.databinding.ActivityMainBinding
 import com.kawakp.kp.application.router.SideItemRouter
 import com.kawakp.kp.application.ui.adapter.SideItemAdapter
-import com.kawakp.kp.kernel.base.BaseBindingActivity
+import com.kawakp.kp.kernel.base.defaults.EmptyPresenter
 import java.util.*
 
 /**
@@ -19,7 +20,7 @@ import java.util.*
  *
  * 功能描述:侧边栏动态匹配
  */
-class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
+class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
 
     private val mList = ArrayList<SideItem>()
     private lateinit var mAdapter: SideItemAdapter
@@ -27,7 +28,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
 
     override fun getLayoutId(): Int = R.layout.activity_main
 
-    override fun initView() {
+    override fun init() {
         mAdapter = SideItemAdapter(mList)
         mBinding.sideLists.adapter = mAdapter
         mBinding.sideLists.layoutManager = LinearLayoutManager(this)
