@@ -27,6 +27,8 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
     private lateinit var mAdapter: SideItemAdapter
     private lateinit var mFragments: MutableList<Fragment>
 
+    private var selected = 0
+
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun init() {
@@ -49,6 +51,17 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
 /*            Log.e("ItemFragment", "************************************\n " +
                     "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
                     ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************")*/
+
+            if (pos == selected)
+                return@setOnItemClickListener
+
+            mList[selected].selected = false
+            mList[pos].selected = true
+
+            mAdapter.notifyItemChanged(selected)
+            mAdapter.notifyItemChanged(pos)
+            selected = pos
+
             mBinding.viewPager.currentItem = pos
         }
 
@@ -61,6 +74,8 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
             mList.add(SideItem(item.sideName))
             mFragments.add(item.fragment)
         }
+
+        mList[0].selected = true
 
         mAdapter.notifyDataSetChanged()
     }
