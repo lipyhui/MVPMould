@@ -14,15 +14,15 @@ import android.support.v7.widget.RecyclerView
  */
 abstract class BaseBindingAdapter<B : ViewDataBinding> : RecyclerView.Adapter<DataBoundViewHolder<B>>() {
 
-    var mListener: ((pos: Int) -> Unit)? = null
+    var mListener: ((binding: B, pos: Int) -> Unit)? = null
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<B>, position: Int) {
         holder.binding.root.setOnClickListener {
-            mListener?.invoke(holder.adapterPosition)
+            mListener?.invoke(holder.binding, holder.adapterPosition)
         }
     }
 
-    fun setOnItemClickListener(listener: ((pos: Int) -> Unit)) {
+    fun setOnItemClickListener(listener: ((binding: B, pos: Int) -> Unit)) {
         mListener = listener
     }
 

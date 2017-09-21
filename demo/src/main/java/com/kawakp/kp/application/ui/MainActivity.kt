@@ -45,11 +45,11 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
         val limitPage = if (mFragments.size < 8) mFragments.size else 8
         mBinding.viewPager.offscreenPageLimit = limitPage - 1
 
-        mAdapter.setOnItemClickListener {
+        mAdapter.setOnItemClickListener {binding, pos ->
 /*            Log.e("ItemFragment", "************************************\n " +
                     "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
                     ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************")*/
-            mBinding.viewPager.currentItem = it
+            mBinding.viewPager.currentItem = pos
         }
 
     }

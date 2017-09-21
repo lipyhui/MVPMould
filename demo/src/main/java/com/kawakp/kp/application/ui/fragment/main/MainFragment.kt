@@ -32,9 +32,9 @@ class MainFragment private constructor(): BaseFragment<MainPresenter, FragmentMa
 
         mPresenter.checkSideFragment()
 
-        mAdapter.setOnItemClickListener {
+        mAdapter.setOnItemClickListener {binding, pos ->
             val intent = Intent(context, DemoActivity::class.java)
-            intent.putExtra("TARGET_ROUTER", mPresenter.getTarget()[it] as Serializable)
+            intent.putExtra("TARGET_ROUTER", mPresenter.getTarget()[pos] as Serializable)
             startActivity(intent) }
     }
 
