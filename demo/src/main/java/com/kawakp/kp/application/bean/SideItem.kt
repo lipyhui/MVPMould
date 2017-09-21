@@ -9,4 +9,4 @@ package com.kawakp.kp.application.bean
  *
  * 功能描述:侧边栏数据项
  */
-data class SideItem(val name: String)
+data class SideItem(val name: String, var selected: Boolean = false)
