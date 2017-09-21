@@ -2,7 +2,6 @@ package com.kawakp.kp.kernel.base
 
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
-import android.view.View
 
 /**
  * 创建人: penghui.li
@@ -15,15 +14,15 @@ import android.view.View
  */
 abstract class BaseBindingAdapter<B : ViewDataBinding> : RecyclerView.Adapter<DataBoundViewHolder<B>>() {
 
-    var mListener: ((v: View, pos: Int) -> Unit)? = null
+    var mListener: ((binding: B, pos: Int) -> Unit)? = null
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<B>, position: Int) {
         holder.binding.root.setOnClickListener {
-            mListener?.invoke(holder.binding.root, holder.adapterPosition)
+            mListener?.invoke(holder.binding, holder.adapterPosition)
         }
     }
 
-    fun setOnItemClickListener(listener: ((v: View, pos: Int) -> Unit)) {
+    fun setOnItemClickListener(listener: ((binding: B, pos: Int) -> Unit)) {
         mListener = listener
     }
 
