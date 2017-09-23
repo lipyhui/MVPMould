@@ -13,14 +13,15 @@
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/side_item_height">
 
-		<TextView
+		<com.kawakp.kp.kernel.widget.IconFontTextView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:textSize="@dimen/side_item_text_size"
 			android:background="@{item.selected ? @drawable/side_selected:@drawable/side_normal}"
 			android:textColor="@{item.selected ? @color/colorSideItemText:@color/colorSideText}"
 			android:gravity="center"
-			android:text="@{item.name}"/>
+			android:text="@{item.name}"
+			app:fontAssetsPath="iconfont/iconfont.ttf"/>
 
 	</LinearLayout>
 

@@ -1,3 +1,7 @@
 <resources>
 	<string name="app_name">KPMouldDemo</string>
+
+	<!-- 侧边栏 -->
+	<string name="side_char">&#xe606; 折线图</string>
+	<string name="side_anim">&#xe603; 动画</string>
 </resources>
