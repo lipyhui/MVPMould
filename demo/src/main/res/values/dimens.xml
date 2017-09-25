@@ -3,8 +3,10 @@
 	<!-- 侧边栏 -->
 	<dimen name="side_width">160dp</dimen>
 	<dimen name="side_logo_height">60dp</dimen>
+	<dimen name="side_item_margin_left">20dp</dimen>
+	<dimen name="side_item_margin_left_img">10dp</dimen>
+	<dimen name="side_item_img_size">25dp</dimen>
 	<dimen name="side_item_text_size">14dp</dimen>
-	<dimen name="side_item_img_size">14dp</dimen>
 	<dimen name="side_item_left">5dp</dimen>
 	<dimen name="side_item_height">50dp</dimen>
 

@@ -19,15 +19,21 @@ import com.kawakp.kp.application.ui.fragment.item2.Item2Fragment;
  */
 
 public enum SideItemRouter {
-	CHART(R.string.side_char, new Item1Fragment()),
-	ANIM(R.string.side_anim, new Item2Fragment());
+	CHART(R.string.side_char_img, R.string.side_char, new Item1Fragment()),
+	ANIM(R.string.side_anim_img, R.string.side_anim, new Item2Fragment());
 
+	private String mSideImg;
 	private String mSideName;
 	private Fragment mFragment;
 
-	SideItemRouter(@StringRes int nameId, Fragment fragment){
+	SideItemRouter(@StringRes int imgId, @StringRes int nameId, Fragment fragment){
+		mSideImg = KawakpApplication.getContext().getResources().getString(imgId);
 		mSideName = KawakpApplication.getContext().getResources().getString(nameId);
 		mFragment = fragment;
+	}
+
+	public String getSideImg() {
+		return mSideImg;
 	}
 
 	public String getSideName() {

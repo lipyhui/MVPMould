@@ -36,48 +36,48 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
         mBinding.sideLists.adapter = mAdapter
         mBinding.sideLists.layoutManager = LinearLayoutManager(this)
 
-        initFragments()
+    initFragments()
 
-        mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
-            override fun getItem(position: Int): Fragment = mFragments[position]
+    mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
+        override fun getItem(position: Int): Fragment = mFragments[position]
 
-            override fun getCount(): Int = mFragments.size
-        }
+        override fun getCount(): Int = mFragments.size
+    }
 
-        val limitPage = if (mFragments.size < 8) mFragments.size else 8
-        mBinding.viewPager.offscreenPageLimit = limitPage - 1
+    val limitPage = if (mFragments.size < 8) mFragments.size else 8
+    mBinding.viewPager.offscreenPageLimit = limitPage - 1
 
 
-        mAdapter.setOnItemClickListener { binding, pos ->
+    mAdapter.setOnItemClickListener { binding, pos ->
 /*            Log.e("ItemFragment", "************************************\n " +
                     "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
                     ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************"
 )*/
 
-            if (pos == selected)
-                return@setOnItemClickListener
+        if (pos == selected)
+            return@setOnItemClickListener
 
-            mList[selected].selected = false
-            mList[pos].selected = true
+        mList[selected].selected = false
+        mList[pos].selected = true
 
-            mAdapter.notifyItemChanged(selected)
-            mAdapter.notifyItemChanged(pos)
-            selected = pos
+        mAdapter.notifyItemChanged(selected)
+        mAdapter.notifyItemChanged(pos)
+        selected = pos
 
-            mBinding.viewPager.currentItem = pos
-        }
+        mBinding.viewPager.currentItem = pos
+    }
+}
+
+private fun initFragments() {
+    mFragments = ArrayList()
+
+    for (item in SideItemRouter.values()) {
+        mList.add(SideItem(item.sideImg, item.sideName))
+        mFragments.add(item.fragment)
     }
 
-    private fun initFragments() {
-        mFragments = ArrayList()
+    mList[0].selected = true
 
-        for (item in SideItemRouter.values()) {
-            mList.add(SideItem(item.sideName))
-            mFragments.add(item.fragment)
-        }
-
-        mList[0].selected = true
-
-        mAdapter.notifyDataSetChanged()
-    }
+    mAdapter.notifyDataSetChanged()
+}
 }

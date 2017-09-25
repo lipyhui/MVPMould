@@ -11,15 +11,27 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/side_item_height">
+		android:layout_height="@dimen/side_item_height"
+		android:orientation="horizontal"
+		android:background="@{item.selected ? @drawable/side_selected:@drawable/side_normal}">
+
+		<com.kawakp.kp.kernel.widget.IconFontTextView
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:textSize="@dimen/side_item_img_size"
+			android:textColor="@{item.selected ? @color/colorSideItemText:@color/colorSideText}"
+			android:gravity="center_vertical"
+			android:layout_marginLeft="@dimen/side_item_margin_left"
+			android:text="@{item.img}"
+			app:fontAssetsPath="iconfont/iconfont.ttf"/>
 
 		<com.kawakp.kp.kernel.widget.IconFontTextView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:textSize="@dimen/side_item_text_size"
-			android:background="@{item.selected ? @drawable/side_selected:@drawable/side_normal}"
 			android:textColor="@{item.selected ? @color/colorSideItemText:@color/colorSideText}"
-			android:gravity="center"
+			android:gravity="center_vertical"
+			android:layout_marginLeft="@dimen/side_item_margin_left_img"
 			android:text="@{item.name}"
 			app:fontAssetsPath="iconfont/iconfont.ttf"/>
 
