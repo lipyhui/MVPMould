@@ -1,6 +1,12 @@
 <resources>
 	<string name="app_name">KPMouldDemo</string>
 
+	<!-- 侧边栏 -->
+	<string name="side_char_img">&#xe606;</string>
+	<string name="side_char">折线图</string>
+	<string name="side_anim_img">&#xe603; </string>
+	<string name="side_anim">动画</string>
+
 	<!-- 顶部title -->
 	<string name="project_name">换热站智能监控系统</string>
 	<string name="user_name">管理员</string>

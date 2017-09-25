@@ -1,7 +1,10 @@
 package com.kawakp.kp.application.router;
 
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 
+import com.kawakp.kp.application.R;
+import com.kawakp.kp.application.app.KawakpApplication;
 import com.kawakp.kp.application.ui.fragment.main.MainFragment;
 
 /**
@@ -15,22 +18,28 @@ import com.kawakp.kp.application.ui.fragment.main.MainFragment;
  */
 
 public enum SideItemRouter {
-	CHART(1, "折线图"),
-	ANIM(2, "动画");
+	CHART(1, R.string.side_char_img, R.string.side_char),
+	ANIM(2, R.string.side_anim_img, R.string.side_anim);
 
 	private int mType = 1;
+	private String mSideImg;
 	private String mSideName = "折线图";
 
-	SideItemRouter(int type, String name){
-		mSideName = name;
+	SideItemRouter(int type, @StringRes int imgId, @StringRes int nameId){
+		mSideImg = KawakpApplication.getContext().getResources().getString(imgId);
+		mSideName = KawakpApplication.getContext().getResources().getString(nameId);
 		mType = type;
-	}
-
-	public String getSideName() {
-		return mSideName;
 	}
 
 	public Fragment getFragment() {
 		return MainFragment.Companion.newInstance(mType);
+	}
+
+	public String getSideImg() {
+		return mSideImg;
+	}
+
+	public String getSideName() {
+		return mSideName;
 	}
 }

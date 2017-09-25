@@ -71,7 +71,7 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
         mFragments = ArrayList()
 
         for (item in SideItemRouter.values()) {
-            mList.add(SideItem(item.sideName))
+            mList.add(SideItem(item.sideImg, item.sideName))
             mFragments.add(item.fragment)
         }
 
