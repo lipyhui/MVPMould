@@ -1,8 +1,11 @@
 package com.kawakp.kp.application.ui
 
+import android.graphics.Color
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
+import android.widget.TextView
 import com.kawakp.kp.application.R
 import com.kawakp.kp.application.base.BaseActivity
 import com.kawakp.kp.application.bean.SideItem
@@ -10,6 +13,8 @@ import com.kawakp.kp.application.databinding.ActivityMainBinding
 import com.kawakp.kp.application.router.SideItemRouter
 import com.kawakp.kp.application.ui.adapter.SideItemAdapter
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter
+import com.kawakp.shengqi.kputilslib.guide.Direction
+import com.kawakp.shengqi.kputilslib.guide.GuidesView
 import java.util.*
 
 /**
@@ -35,9 +40,7 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
         mAdapter = SideItemAdapter(mList)
         mBinding.sideLists.adapter = mAdapter
         mBinding.sideLists.layoutManager = LinearLayoutManager(this)
-
         initSideFragments()
-
         mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment = mFragments[position]
 
@@ -47,10 +50,10 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
         val limitPage = if (mFragments.size < 8) mFragments.size else 8
         mBinding.viewPager.offscreenPageLimit = limitPage - 1
 
-        mAdapter.setOnItemClickListener {binding, pos ->
-/*            Log.e("ItemFragment", "************************************\n " +
-                    "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
-                    ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************")*/
+        mAdapter.setOnItemClickListener { binding, pos ->
+            /*            Log.e("ItemFragment", "************************************\n " +
+                                "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
+                                ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************")*/
 
             if (pos == selected)
                 return@setOnItemClickListener
@@ -64,7 +67,6 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
 
             mBinding.viewPager.currentItem = pos
         }
-
     }
 
     private fun initSideFragments() {
@@ -79,4 +81,5 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
 
         mAdapter.notifyDataSetChanged()
     }
+
 }

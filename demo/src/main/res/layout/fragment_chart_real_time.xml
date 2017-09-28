@@ -8,7 +8,7 @@
         android:orientation="vertical">
 
 
-        <com.github.mikephil.charting.charts.LineChart
+        <com.kawakp.shengqi.kpchartlibrary.KPLineChart
             android:id="@+id/charts_1"
             android:layout_width="match_parent"
             android:layout_height="300dp" />

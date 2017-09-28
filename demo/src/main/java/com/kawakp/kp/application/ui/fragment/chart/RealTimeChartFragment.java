@@ -61,7 +61,6 @@ public class RealTimeChartFragment extends BaseFragment<EmptyPresenter, Fragment
     }
 
 
-
     @Override
     public int getLayoutId() {
         return R.layout.fragment_chart_real_time;

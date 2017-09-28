@@ -10,7 +10,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath "com.android.tools.build:gradle:$android_plugin_version"
+		classpath 'com.android.tools.build:gradle:2.3.2'
 		classpath 'me.tatarka:gradle-retrolambda:3.7.0'
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 		classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
