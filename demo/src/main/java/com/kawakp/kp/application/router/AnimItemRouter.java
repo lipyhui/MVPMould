@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import com.kawakp.kp.application.ui.fragment.anim.GifFragment;
 import com.kawakp.kp.application.ui.fragment.anim.GuideFragment;
 import com.kawakp.kp.application.ui.fragment.anim.ResponseAnimFragment;
+import com.kawakp.kp.application.ui.fragment.anim.SimpleAnimFragment;
+import com.kawakp.kp.application.ui.fragment.anim.ToastFragment;
 
 /**
  * 创建人: penghui.li
@@ -19,7 +21,9 @@ import com.kawakp.kp.application.ui.fragment.anim.ResponseAnimFragment;
 public enum AnimItemRouter implements FunRouter {
     RESPONSE("响应动画", new ResponseAnimFragment()),
     GIF("GIF图片", new GifFragment()),
-    PUSH("使用引导", new GuideFragment());
+    PUSH("使用引导", new GuideFragment()),
+    TOAST("信息提示", new ToastFragment()),
+    ANIM("简单流程动画", new SimpleAnimFragment());
 
     private String mItemName;
     private Fragment mTarget;

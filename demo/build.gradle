@@ -66,6 +66,7 @@ dependencies {
     compile project(':kernel')
     compile project(':kpchartlibrary')
     compile project(':kputilslib')
+    compile project(':animationlib')
 }
 
 kapt {

@@ -20,20 +20,13 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 /**
- * 参考了https://github.com/laxian/GuideView  现在性能和功能完爆它
+ * 创建人: qi
+ * 创建时间: 2017/9/21
+ * 修改人:qi
+ * 修改时间:2017/9/21
+ * 修改内容:
  * <p>
- * 方法回调：创建GuideView -- initParams(初始化参数) -- getTargetViewPosition(获取TargetView位置核心方法) -- addHintView --
- * show(添加GuideView进DecorView) -- GuideView.onMeasure -- GuideView.onLayout -- GuideView.Draw -- drawMaskLayer(绘制完毕)
- * <p>
- * view.post(new Runnable(){
- * public void run(){
- * new GuideView.Builder()
- * .setTargetView()
- * .create().show();
- * }
- * });
- * <p>
- * Created by linlongxin on 2016/7/22.
+ * 功能描述:操作引导
  */
 
 public class GuidesView extends RelativeLayout {

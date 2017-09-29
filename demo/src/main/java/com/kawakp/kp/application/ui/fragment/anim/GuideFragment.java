@@ -1,9 +1,6 @@
 package com.kawakp.kp.application.ui.fragment.anim;
 
 import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,8 +10,8 @@ import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentPushBinding;
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 import com.kawakp.shengqi.kputilslib.guide.Direction;
-import com.kawakp.shengqi.kputilslib.guide.GuideView;
 import com.kawakp.shengqi.kputilslib.guide.GuidesView;
+import com.kawakp.shengqi.kputilslib.toast.MyToast;
 
 /**
  * 创建人: qi
@@ -51,6 +48,12 @@ public class GuideFragment extends BaseFragment<EmptyPresenter, FragmentPushBind
                 showGuideViews();
             }
         });
+        mBinding.btnToast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyToast.info(getContext(), "出现了错误", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -60,11 +63,11 @@ public class GuideFragment extends BaseFragment<EmptyPresenter, FragmentPushBind
         mHintViewOne.setTextSize(20f);
         mHintViewOne.setTextColor(Color.WHITE);
         TextView mHintView2 = new TextView(getActivity());
-        mHintView2.setText("这是一条提示你点击的文字");
+        mHintView2.setText("这是第二条提示你点击的文字");
         mHintView2.setTextSize(20f);
         mHintView2.setTextColor(Color.WHITE);
         TextView mHintView3 = new TextView(getActivity());
-        mHintView3.setText("这是一条提示你点击的文字");
+        mHintView3.setText("这是第三条提示你点击的文字");
         mHintView3.setTextSize(20f);
         mHintView3.setTextColor(Color.WHITE);
         mGVOne = new GuidesView.Builder(getActivity())

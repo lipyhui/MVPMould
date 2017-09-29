@@ -1,8 +1,16 @@
 package com.kawakp.shengqi.kputilslib.guide;
 
+
 /**
- * Created by linlongxin on 2016/7/22.
+ * 创建人: qi
+ * 创建时间: 2017/9/21
+ * 修改人:qi
+ * 修改时间:2017/9/21
+ * 修改内容:
+ * <p>
+ * 功能描述:操作引导的一些默认位置
  */
+
 
 public interface Direction {
 

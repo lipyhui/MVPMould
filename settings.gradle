@@ -1,1 +1,1 @@
-include ':demo', ':kernel', ':kpchartlibrary', ':kputilslib'
+include ':demo', ':kernel', ':kpchartlibrary', ':kputilslib', ':animationlib'
