@@ -1,6 +1,7 @@
 package com.kawakp.kp.application.ui.fragment.anim;
 
 import android.animation.Animator;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
@@ -64,11 +65,9 @@ public class SimpleAnimFragment extends BaseFragment<EmptyPresenter, FragmentSim
             @Override
             public void onClick(View view) {
                 if (rope != null) {
-                    rope.stop(true);
-                } else {
+                    rope.stop();
                     rope = Play.with(Techniques.RotateIn)
                             .duration(1200)
-                            .repeat(Play.INFINITE)
                             .pivot(Play.CENTER_PIVOT, Play.CENTER_PIVOT)
                             .interpolate(new AccelerateDecelerateInterpolator())
                             .withListener(new Animator.AnimatorListener() {
@@ -79,7 +78,33 @@ public class SimpleAnimFragment extends BaseFragment<EmptyPresenter, FragmentSim
 
                                 @Override
                                 public void onAnimationEnd(Animator animator) {
-                                    playAmin(Techniques.ZoomOutLeft);
+                                    Play.with(Techniques.ZoomOutLeft).duration(1500).playOn(mBinding.mTarget);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animator) {
+
+                                }
+                            }).playOn(mBinding.mTarget);
+                } else {
+                    rope = Play.with(Techniques.RotateIn)
+                            .duration(1200)
+                            .pivot(Play.CENTER_PIVOT, Play.CENTER_PIVOT)
+                            .interpolate(new AccelerateDecelerateInterpolator())
+                            .withListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animator) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animator) {
+                                    Play.with(Techniques.ZoomOutLeft).duration(1500).playOn(mBinding.mTarget);
                                 }
 
                                 @Override
@@ -99,13 +124,10 @@ public class SimpleAnimFragment extends BaseFragment<EmptyPresenter, FragmentSim
 
     private void playAmin(Techniques amin) {
         if (rope != null) {
-            rope.stop(true);
+            rope.stop();
+            rope = Play.with(amin).duration(1200).playOn(mBinding.mTarget);
         } else {
-            rope = Play.with(amin)
-                    .duration(1200)
-                    .repeat(Play.INFINITE)
-                    .pivot(Play.CENTER_PIVOT, Play.CENTER_PIVOT)
-                    .interpolate(new AccelerateDecelerateInterpolator()).playOn(mBinding.mTarget);
+            rope = Play.with(amin).duration(1200).playOn(mBinding.mTarget);
         }
     }
 
