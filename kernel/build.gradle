@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
@@ -22,6 +23,11 @@ android {
 			}
 		}
 	}
+
+	configurations.all {
+		resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+	}
+
 	buildTypes {
 		release {
 			minifyEnabled false
@@ -87,6 +93,10 @@ dependencies {
 
 kapt {
 	generateStubs = true
+}
+
+realm {
+	syncEnabled = true;
 }
 
 repositories {
