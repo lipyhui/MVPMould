@@ -12,6 +12,7 @@ buildscript {
 	dependencies {
 		classpath "com.android.tools.build:gradle:$android_plugin_version"
 		classpath 'me.tatarka:gradle-retrolambda:3.7.0'
+		classpath "io.realm:realm-gradle-plugin:3.7.2"
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 		classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
 		classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
