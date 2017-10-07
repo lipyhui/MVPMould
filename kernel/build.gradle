@@ -24,7 +24,6 @@ android {
 		}
 
 		multiDexEnabled true
-		vectorDrawables.useSupportLibrary = true
 	}
 
 	buildTypes {

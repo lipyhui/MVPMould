@@ -18,7 +18,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -66,7 +65,7 @@ dependencies {
     compile dependencies.ankoSupportV4
 
     //img
-//    compile dependencies.glide
+    compile dependencies.glide
     compile dependencies.gif
 
     //Kotlin
