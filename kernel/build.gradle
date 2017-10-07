@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
@@ -21,7 +22,11 @@ android {
 				cppFlags "-frtti -fexceptions"
 			}
 		}
+
+		multiDexEnabled true
+		vectorDrawables.useSupportLibrary = true
 	}
+
 	buildTypes {
 		release {
 			minifyEnabled false
@@ -32,6 +37,14 @@ android {
 	compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_8
 		targetCompatibility JavaVersion.VERSION_1_8
+	}
+
+	lintOptions {
+		abortOnError false
+	}
+
+	dexOptions {
+		preDexLibraries = false
 	}
 
 	dataBinding {

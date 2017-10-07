@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
@@ -15,7 +16,11 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -26,6 +31,14 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    dexOptions {
+        preDexLibraries = false
     }
 
     dataBinding {
@@ -52,17 +65,14 @@ dependencies {
     compile dependencies.ankoAppcompatV7
     compile dependencies.ankoSupportV4
 
-    //chart
-    compile dependencies.mpChart
-
-    //gif
-    compile dependencies.gif
-
     //img
-    compile dependencies.glide
+//    compile dependencies.glide
+    compile dependencies.gif
 
     //Kotlin
     kapt dependencies.databindingCompiler
+
+    //lib
     compile project(':kernel')
     compile project(':kpchartlibrary')
     compile project(':kputilslib')
