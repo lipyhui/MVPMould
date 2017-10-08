@@ -17,4 +17,14 @@
 	<dimen name="side_item_left">5dp</dimen>
 	<dimen name="side_item_height">50dp</dimen>
 
+	<!-- 表格 -->
+	<dimen name="form_search_margin_top">26dp</dimen>
+	<dimen name="form_search_margin_left">114dp</dimen>
+	<dimen name="form_search_btn_margin_left">30dp</dimen>
+	<dimen name="form_search_space">8dp</dimen>
+	<dimen name="form_search_height">34dp</dimen>
+	<dimen name="form_search_width">118dp</dimen>
+	<dimen name="form_search_text_size">16dp</dimen>
+	<dimen name="form_title_margin_top">26dp</dimen>
+
 </resources>

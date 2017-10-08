@@ -8,7 +8,55 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+    >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_search_margin_top"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+        >
+
+            <TextView
+                android:layout_width="@dimen/form_search_width"
+                android:layout_height="@dimen/form_search_height"
+                android:gravity="center"
+                android:background="@drawable/search_select"
+                android:textColor="@color/colorFormSelect"
+                android:textSize="@dimen/form_search_text_size"
+                android:text="@string/form_search_start"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/form_search_height"
+                android:layout_marginLeft="@dimen/form_search_space"
+                android:gravity="center"
+                android:textColor="@color/colorFormTo"
+                android:textSize="@dimen/form_search_text_size"
+                android:text="至"/>
+
+            <TextView
+                android:layout_width="@dimen/form_search_width"
+                android:layout_height="@dimen/form_search_height"
+                android:layout_marginLeft="@dimen/form_search_space"
+                android:gravity="center"
+                android:background="@drawable/search_select"
+                android:textColor="@color/colorFormSelect"
+                android:textSize="@dimen/form_search_text_size"
+                android:text="@string/form_search_end"/>
+
+            <TextView
+                android:layout_width="@dimen/form_search_width"
+                android:layout_height="@dimen/form_search_height"
+                android:layout_marginLeft="@dimen/form_search_btn_margin_left"
+                android:gravity="center"
+                android:background="@drawable/search_btn"
+                android:textColor="@color/colorFormSearch"
+                android:textSize="@dimen/form_search_text_size"
+                android:text="@string/form_search"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

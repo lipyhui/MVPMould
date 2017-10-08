@@ -12,4 +12,9 @@
 	<!-- 顶部title -->
 	<string name="project_name">换热站智能监控系统</string>
 	<string name="user_name">管理员</string>
+
+	<!-- 表格 -->
+	<string name="form_search_start">起始日期</string>
+	<string name="form_search_end">结束日期</string>
+	<string name="form_search">搜索</string>
 </resources>

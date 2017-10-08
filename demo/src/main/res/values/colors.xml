@@ -16,4 +16,9 @@
 	<color name="colorSideItemLeft">#42A5F5</color>
 	<color name="colorSideItem">#5B6074</color>
 	<color name="colorSideItemText">#FFFFFF</color>
+
+	<!-- 表格 -->
+	<color name="colorFormSearch">#FFFFFF</color>
+	<color name="colorFormSelect">#999999</color>
+	<color name="colorFormTo">#333333</color>
 </resources>
