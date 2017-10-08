@@ -21,4 +21,6 @@
 	<color name="colorFormSearch">#FFFFFF</color>
 	<color name="colorFormSelect">#999999</color>
 	<color name="colorFormTo">#333333</color>
+	<color name="colorFormBgOne">#C2BEBE</color>
+	<color name="colorFormBgTwo">#00C2BEBE</color>
 </resources>
