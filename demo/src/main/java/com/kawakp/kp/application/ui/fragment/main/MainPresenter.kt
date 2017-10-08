@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.kawakp.kp.application.bean.MainListItem
 import com.kawakp.kp.application.router.AnimItemRouter
 import com.kawakp.kp.application.router.CharItemRouter
+import com.kawakp.kp.application.router.DataItemRouter
 import com.kawakp.kp.application.router.FunRouter
 import com.kawakp.kp.kernel.base.BasePresenter
 
@@ -39,6 +40,7 @@ class MainPresenter : BasePresenter<MainAble>() {
         when(arguments.getInt("MAIN_FRAGMENT_TYPE")){
             1 -> initChartList()
             2 -> initAnimList()
+            3 -> initFormList()
             else -> initChartList()
         }
     }
@@ -65,6 +67,20 @@ class MainPresenter : BasePresenter<MainAble>() {
         mTarget = java.util.ArrayList()
 
         for (item in AnimItemRouter.values()){
+            mList.add(MainListItem(item.itemName))
+            mTarget.add(item)
+        }
+
+        view().updateList()
+    }
+
+    /**
+     * 初始化动画列表
+     */
+    private fun initFormList() {
+        mTarget = java.util.ArrayList()
+
+        for (item in DataItemRouter.values()){
             mList.add(MainListItem(item.itemName))
             mTarget.add(item)
         }

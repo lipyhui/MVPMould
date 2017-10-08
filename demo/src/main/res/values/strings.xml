@@ -4,8 +4,10 @@
 	<!-- 侧边栏 -->
 	<string name="side_char_img">&#xe606;</string>
 	<string name="side_char">折线图</string>
-	<string name="side_anim_img">&#xe603; </string>
+	<string name="side_anim_img">&#xe602; </string>
 	<string name="side_anim">动画</string>
+	<string name="side_data_img">&#xe603; </string>
+	<string name="side_data">数据</string>
 
 	<!-- 顶部title -->
 	<string name="project_name">换热站智能监控系统</string>

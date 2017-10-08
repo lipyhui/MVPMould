@@ -19,7 +19,8 @@ import com.kawakp.kp.application.ui.fragment.main.MainFragment;
 
 public enum SideItemRouter {
 	CHART(1, R.string.side_char_img, R.string.side_char),
-	ANIM(2, R.string.side_anim_img, R.string.side_anim);
+	ANIM(2, R.string.side_anim_img, R.string.side_anim),
+	FORM(3, R.string.side_data_img, R.string.side_data);
 
 	private int mType = 1;
 	private String mSideImg;
