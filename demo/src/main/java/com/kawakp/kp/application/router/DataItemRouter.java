@@ -2,7 +2,7 @@ package com.kawakp.kp.application.router;
 
 import android.support.v4.app.Fragment;
 
-import com.kawakp.kp.application.ui.fragment.form.FormFragment;
+import com.kawakp.kp.application.ui.fragment.data.FormFragment;
 
 /**
  * 创建人: penghui.li

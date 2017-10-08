@@ -1,4 +1,4 @@
-package com.kawakp.kp.application.ui.fragment.form;
+package com.kawakp.kp.application.ui.fragment.data;
 
 import android.support.v7.widget.LinearLayoutManager;
 
