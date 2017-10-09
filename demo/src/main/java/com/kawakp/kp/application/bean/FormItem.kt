@@ -9,7 +9,7 @@ import io.realm.RealmObject
  * 修改时间:2017/9/14
  * 修改内容:
  *
- * 功能描述:表格列表数据项
+ * 功能描述:表格列表数据项。注意所有变量都需要初始化默认值，就算是null也需要初始化
  */
 open class FormItem(
         open var bg: Boolean = false,
