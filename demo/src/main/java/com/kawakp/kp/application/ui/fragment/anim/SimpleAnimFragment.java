@@ -1,7 +1,6 @@
 package com.kawakp.kp.application.ui.fragment.anim;
 
 import android.animation.Animator;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
@@ -9,7 +8,7 @@ import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentSimpleAnimBinding;
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
-import com.kawakp.shengqi.animationlib.Play;
+import com.kawakp.kp.animationlib.Play;
 import com.kawakp.shengqi.animationlib.Techniques;
 
 /**

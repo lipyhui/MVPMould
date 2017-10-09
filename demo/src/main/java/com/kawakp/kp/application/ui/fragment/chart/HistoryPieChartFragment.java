@@ -24,7 +24,13 @@ import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 import java.util.ArrayList;
 
 /**
- * Created by sheng.qi on 2017/9/15.
+ * 创建人: penghui.li
+ * 创建时间: 2017/9/14
+ * 修改人:  QS
+ * 修改时间:2017/9/14
+ * 修改内容: 折线图的添加
+ * <p>
+ * 功能描述:饼状图
  */
 
 public class HistoryPieChartFragment extends BaseFragment<EmptyPresenter, FragmentPieChartHistoryBinding> implements SeekBar.OnSeekBarChangeListener {

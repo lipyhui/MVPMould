@@ -1,11 +1,8 @@
 package com.kawakp.kp.application.ui
 
-import android.graphics.Color
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import android.widget.TextView
 import com.kawakp.kp.application.R
 import com.kawakp.kp.application.base.BaseActivity
 import com.kawakp.kp.application.bean.SideItem
@@ -13,8 +10,6 @@ import com.kawakp.kp.application.databinding.ActivityMainBinding
 import com.kawakp.kp.application.router.SideItemRouter
 import com.kawakp.kp.application.ui.adapter.SideItemAdapter
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter
-import com.kawakp.shengqi.kputilslib.guide.Direction
-import com.kawakp.shengqi.kputilslib.guide.GuidesView
 import java.util.*
 
 /**

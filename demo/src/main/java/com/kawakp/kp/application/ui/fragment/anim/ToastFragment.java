@@ -7,7 +7,7 @@ import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentToastBinding;
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
-import com.kawakp.shengqi.kputilslib.toast.MyToast;
+import com.kawakp.kp.kputilslib.toast.MyToast;
 
 /**
  * 创建人: qi
