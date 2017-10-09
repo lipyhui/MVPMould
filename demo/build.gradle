@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -59,7 +59,6 @@ dependencies {
     compile dependencies.gif
 
     //Kotlin
-    compile dependencies.kotlinReflect
     kapt dependencies.databindingCompiler
 
     //lib
