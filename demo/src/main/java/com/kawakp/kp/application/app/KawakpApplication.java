@@ -18,7 +18,7 @@ public class KawakpApplication extends KpApplication {
 		super.onCreate();
 
 		//异常捕获初始化
-		CrashHandler.getInstance().initCrashHandler(this); // 一定要先初始化
-		Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance());
+/*		CrashHandler.getInstance().initCrashHandler(this); // 一定要先初始化
+		Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance());*/
 	}
 }

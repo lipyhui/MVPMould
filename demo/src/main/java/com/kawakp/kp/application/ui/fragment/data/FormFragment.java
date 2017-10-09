@@ -3,11 +3,13 @@ package com.kawakp.kp.application.ui.fragment.data;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.kawakp.kp.application.R;
+import com.kawakp.kp.application.app.KawakpApplication;
 import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.bean.FormItem;
 import com.kawakp.kp.application.databinding.FragmentFormBinding;
 import com.kawakp.kp.application.ui.adapter.FormAdapter;
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
+import com.kawakp.kp.kernel.utils.RealmManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +41,17 @@ public class FormFragment extends BaseFragment<EmptyPresenter, FragmentFormBindi
 		mBinding.data.setAdapter(mAdapter);
 		mBinding.data.setLayoutManager(new LinearLayoutManager(getContext()));
 
+		List<FormItem> list = new ArrayList<FormItem>();
 		for (int i = 0; i < 10; i++) {
-			mList.add(new FormItem(false, "2017-04-07 03:00:0" + i, "12.0" + i, "13.0" + i,
+			list.add(new FormItem(false, "2017-04-07 03:00:0" + i, "12.0" + i, "13.0" + i,
 					"14.0" + i,  "15.0" + i));
 		}
 		for (int i = 10; i < 20; i++) {
-			mList.add(new FormItem(false, "2017-04-07 03:00:" + i, "12." + i, "13." + i,
+			list.add(new FormItem(false, "2017-04-07 03:00:" + i, "12." + i, "13." + i,
 					"14." + i,  "15." + i));
 		}
-		mAdapter.notifyDataSetChanged();
+
+		RealmManager.getInstance(KawakpApplication.getRealmInstance()).add(list);
+//		mAdapter.notifyDataSetChanged();
 	}
 }
