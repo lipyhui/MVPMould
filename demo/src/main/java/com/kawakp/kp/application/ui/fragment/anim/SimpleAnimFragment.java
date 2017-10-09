@@ -4,12 +4,13 @@ import android.animation.Animator;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.kawakp.kp.animationlib.Techniques;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentSimpleAnimBinding;
 import com.kawakp.kp.kernel.base.defaults.EmptyPresenter;
 import com.kawakp.kp.animationlib.Play;
-import com.kawakp.shengqi.animationlib.Techniques;
+
 
 /**
  * Created by sheng.qi on 2017/9/29.
