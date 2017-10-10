@@ -31,7 +31,7 @@ ext {
   anko_version = "0.10.1"
 
   //kotlin and gradle plugin
-  kotlinVersion = "1.1.4-3"
+  kotlinVersion = "1.1.51"
   androidPluginVersion = "2.3.3"
 
   dependencies = [
