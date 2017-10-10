@@ -3,12 +3,9 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-
 android {
-	compileSdkVersion rootProject.ext.compileSdkVersion
-	buildToolsVersion rootProject.ext.buildToolsVersion
+	compileSdkVersion 26
+	buildToolsVersion "26.0.1"
 
 	defaultConfig {
 		minSdkVersion rootProject.ext.minSdkVersion
@@ -22,8 +19,6 @@ android {
 				cppFlags "-frtti -fexceptions"
 			}
 		}
-
-		multiDexEnabled true
 	}
 
 	buildTypes {
@@ -36,14 +31,6 @@ android {
 	compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_8
 		targetCompatibility JavaVersion.VERSION_1_8
-	}
-
-	lintOptions {
-		abortOnError false
-	}
-
-	dexOptions {
-		preDexLibraries = false
 	}
 
 	dataBinding {
@@ -95,12 +82,4 @@ dependencies {
 	compile dependencies.rxLifecycleComponents
 	compile dependencies.rxLifecycleKotlin
 //	compile dependencies.rxLifecycleAndroidKotlin
-}
-
-kapt {
-	generateStubs = true
-}
-
-repositories {
-	mavenCentral()
 }
