@@ -1,6 +1,7 @@
 package com.kawakp.kp.application.bean
 
 import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
 
 /**
  * 创建人: penghui.li
@@ -13,7 +14,7 @@ import io.realm.RealmObject
  */
 open class FormItem(
         open var bg: Boolean = false,
-        open var time: String = "2017-04-07 03:00:00",
+        @PrimaryKey open var time: String = "2017-04-07 03:00:00",
         open var oneP: String = "0",
         open var twoP: String = "0",
         open var oneW: String = "0",

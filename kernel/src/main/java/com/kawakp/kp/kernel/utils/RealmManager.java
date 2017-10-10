@@ -1,5 +1,7 @@
 package com.kawakp.kp.kernel.utils;
 
+import android.util.Log;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -67,7 +69,10 @@ public class RealmManager {
      * @param beans 数据集合，其中元素必须继承了RealmObject
      */
     public void add(final List<? extends RealmObject> beans) {
-        mRealm.executeTransaction(realm -> realm.copyToRealmOrUpdate(beans));
+        mRealm.executeTransaction(realm -> {
+            Log.e("RealmTest", "exe realm is !!!" + (realm == null ? "NULL":"NO NULL, beans size " + beans.size()));
+            realm.copyToRealmOrUpdate(beans);
+        });
     }
 
     /**

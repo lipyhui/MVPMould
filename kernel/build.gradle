@@ -75,9 +75,9 @@ dependencies {
 	compile dependencies.supportMultidex
 
 	//Dagger2
-	compile dependencies.dagger
-	kapt dependencies.daggerCompiler
-	provided dependencies.javaxAnnotation
+//	compile dependencies.dagger
+//	kapt dependencies.daggerCompiler
+//	provided dependencies.javaxAnnotation
 
 	//RX
 	compile dependencies.rxJava2

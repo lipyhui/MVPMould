@@ -1,6 +1,7 @@
 package com.kawakp.kp.application.ui.fragment.data;
 
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.app.KawakpApplication;
@@ -13,6 +14,8 @@ import com.kawakp.kp.kernel.utils.RealmManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * 创建人: penghui.li
@@ -51,7 +54,14 @@ public class FormFragment extends BaseFragment<EmptyPresenter, FragmentFormBindi
 					"14." + i,  "15." + i));
 		}
 
-		RealmManager.getInstance(KawakpApplication.getRealmInstance()).add(list);
+		Realm realm = KawakpApplication.getRealmInstance();
+
+		if (realm != null) {
+			Log.e("RealmTest", "realm is Succeed!!! list size = " + list.size());
+			RealmManager.getInstance(realm).add(list);
+		}else {
+			Log.e("RealmTest", "realm is NULL!!!");
+		}
 //		mAdapter.notifyDataSetChanged();
 	}
 }
