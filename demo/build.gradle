@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -60,6 +58,8 @@ dependencies {
 
     //Kotlin
     kapt dependencies.databindingCompiler
+    kapt dependencies.realmAnnotations
+    kapt dependencies.realmAnnotationsProcessor
 
     //lib
     compile project(':kernel')
@@ -70,8 +70,4 @@ dependencies {
 
 kapt {
     generateStubs = true
-}
-
-repositories {
-    mavenCentral()
 }
