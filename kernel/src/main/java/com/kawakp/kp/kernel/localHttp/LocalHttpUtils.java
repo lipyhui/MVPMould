@@ -7,15 +7,28 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Created by xiaojun.ma on 2017/5/19.
+ * 创建人: xiaojun.ma
+ * 创建时间: 2017/5/19
+ * 修改人:penghui.li
+ * 修改时间:2017/8/29
+ * 修改内容:
+ *
+ * 功能描述:	对单一元件的读写操作
  */
-
 public class LocalHttpUtils {
     private static String mUrl;
     private static byte[] mData;
     private static ByteArrayOutputStream mBaos;
     private static int mIsThreadRunning;
 
+    /**
+     * 读取单一元件
+     *
+     * @param type 数据类型
+     * @param addr 数据地址
+     * @param len 数据长度的
+     * @return 返回byte[]类型数据
+     */
     public static byte[] getBit(Constants type, int addr, int len) {
         byte[] result = new byte[len];
         for  (int i=0;i<len;i++) {
@@ -32,6 +45,14 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * 读取单一元件
+     *
+     * @param type 数据类型
+     * @param addr 数据地址
+     * @param len 数据长度的
+     * @return 返回short[]类型数据
+     */
     public static short[] getWord(Constants type, int addr, int len) {
         short[] result = new short[len];
         for  (int i=0;i<len;i++) {
@@ -48,6 +69,14 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * 读取单一元件
+     *
+     * @param type 数据类型
+     * @param addr 数据地址
+     * @param len 数据长度的
+     * @return 返回int[]类型数据
+     */
     public static int[] getDWord(Constants type, int addr, int len) {
         int[] result = new int[len];
         for  (int i=0;i<len;i++) {
@@ -63,6 +92,14 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * 读取单一元件
+     *
+     * @param type 数据类型
+     * @param addr 数据地址
+     * @param len 数据长度的
+     * @return 返回float[]类型数据
+     */
     public static float[] getReal(Constants type, int addr, int len) {
         float[] result = new float[len];
         for  (int i=0;i<len;i++) {
@@ -78,27 +115,66 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * 写单一元件
+     *
+     * @param type 数据类型
+     * @param buf 数据值
+     * @param addr 数据地址
+     * @param len 数据长度的
+     */
     public static void setBit(Constants type, byte buf[], int addr, int len) {
         String url = "http://localhost:9800/a/api?t=" + type.getWriteCmd() + "&a=" + Integer.toString(addr) + "&l=" + Integer.toString(len);
         sendPost(url, buf);
     }
 
+    /**
+     * 写单一元件
+     *
+     * @param type 数据类型
+     * @param buf 数据值
+     * @param addr 数据地址
+     * @param len 数据长度的
+     */
     public static void setWord(Constants type, short buf[], int addr, int len) {
         String url = "http://localhost:9800/a/api?t=" + type.getWriteCmd() + "&a=" + Integer.toString(addr) + "&l=" + Integer.toString(len);
         //Log.e("LocalHttpUrl", "url"+ url.toString());
         sendPost(url, s2b(buf));
     }
 
+    /**
+     * 写单一元件
+     *
+     * @param type 数据类型
+     * @param buf 数据值
+     * @param addr 数据地址
+     * @param len 数据长度的
+     */
     public static void setDWord(Constants type, int buf[], int addr, int len) {
         String url = "http://localhost:9800/a/api?t=" + type.getWriteCmd() + "&a=" + Integer.toString(addr) + "&l=" + Integer.toString(len);
         sendPost(url, i2b(buf));
     }
 
+    /**
+     * 写单一元件
+     *
+     * @param type 数据类型
+     * @param buf 数据值
+     * @param addr 数据地址
+     * @param len 数据长度的
+     */
     public static void setReal(Constants type, float buf[], int addr, int len) {
         String url = "http://localhost:9800/a/api?t=" + type.getWriteCmd() + "&a=" + Integer.toString(addr) + "&l=" + Integer.toString(len);
         sendPost(url, f2b(buf));
     }
 
+    /**
+     * 启动读写线程进行数据读写
+     *
+     * @param url 读写请求地址
+     * @param data 待发送数据
+     * @return byte[]类型数据
+     */
     private synchronized static byte[] sendPost(String url, byte[] data) {
         mUrl = url;
         mData = data;
@@ -109,6 +185,12 @@ public class LocalHttpUtils {
         return mBaos.toByteArray();
     }
 
+    /**
+     * byte[]转short[]
+     *
+     * @param buf 待转换数据
+     * @return short[]类型数据
+     */
     private static short[] b2s(byte buf[]) {
         short[] result = new short[buf.length / 2];
         for (int i=0;i<buf.length/2;i++) {
@@ -117,6 +199,12 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * byte[]转int[]
+     *
+     * @param buf 待转换数据
+     * @return int[]类型数据
+     */
     private static int[] b2i(byte buf[]) {
         int[] result = new int[buf.length / 4];
         for (int i=0;i<buf.length/4;i++) {
@@ -125,6 +213,12 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * byte[]转float[]
+     *
+     * @param buf 待转换数据
+     * @return float[]类型数据
+     */
     private static float[] b2f(byte buf[]) {
         float[] result = new float[buf.length / 4];
         for (int i=0;i<buf.length/4;i++) {
@@ -136,6 +230,12 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * short[]转byte[]
+     *
+     * @param buf 待转换数据
+     * @return byte[]类型数据
+     */
     private static byte[] s2b(short buf[]) {
         byte[] result = new byte[buf.length * 2];
         for (int i=0;i<buf.length;i++) {
@@ -145,6 +245,12 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * int[]转byte[]
+     *
+     * @param buf 待转换数据
+     * @return byte[]类型数据
+     */
     private static byte[] i2b(int buf[]) {
         byte[] result = new byte[buf.length * 4];
         for (int i=0;i<buf.length;i++) {
@@ -156,6 +262,12 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * float[]转byte[]
+     *
+     * @param buf 待转换数据
+     * @return byte[]类型数据
+     */
     private static byte[] f2b(float buf[]) {
         byte[] result = new byte[buf.length * 4];
         for (int i=0;i<buf.length;i++) {
@@ -168,6 +280,9 @@ public class LocalHttpUtils {
         return result;
     }
 
+    /**
+     * 读写PLC线程
+     */
     private static class myThread extends Thread {
         public void run() {
             try {
