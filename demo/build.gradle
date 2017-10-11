@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -51,6 +52,14 @@ dependencies {
     compile dependencies.ankoAppcompatV7
     compile dependencies.ankoSupportV4
 
+    kapt dependencies.databindingCompiler
+    kapt dependencies.realmAnnotations
+    kapt dependencies.realmAnnotationsProcessor
+
     //lib
     compile project(':kernel')
+}
+
+kapt {
+    generateStubs = true
 }
