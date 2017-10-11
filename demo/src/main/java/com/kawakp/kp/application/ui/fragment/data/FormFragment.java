@@ -62,13 +62,11 @@ public class FormFragment extends BaseFragment<EmptyPresenter, FragmentFormBindi
 			Log.e("RealmTest", "realm is Succeed!!! list size = " + list.size());
 			getInstance(realm).add(list);
 
-			int size = RealmManager.getInstance(realm).queryAll(FormItem.class).size();
-
-			Log.e("RealmTest", "realm is Succeed!!! queryAll size = " + size);
+			RealmManager.getInstance(realm).queryAllToList(FormItem.class, mList);
+			mAdapter.notifyDataSetChanged();
 
 		}else {
 			Log.e("RealmTest", "realm is NULL!!!");
 		}
-//		mAdapter.notifyDataSetChanged();
 	}
 }

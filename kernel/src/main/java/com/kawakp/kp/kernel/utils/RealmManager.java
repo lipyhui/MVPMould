@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -143,9 +144,25 @@ public class RealmManager {
      */
     public RealmResults<? extends RealmObject> queryAll(Class<? extends RealmObject> clazz) {
         final RealmResults<? extends RealmObject> beans = mRealm.where(clazz).findAll();
-
         return beans;
     }
+
+    /**
+     *  把查询数据处理为指定List
+     *
+     * @param clazz
+     * @param result  返回值(此处会清空list里面的数据，以保证List对象全是查询的返回值)
+     */
+    @SuppressWarnings("unchecked")
+    public void queryAllToList(Class<? extends RealmObject> clazz, List result) {
+        final RealmResults<? extends RealmObject> beans = mRealm.where(clazz).findAll();
+        if (null == result){
+            result = new ArrayList();
+        }
+        result.clear();
+        result.addAll(mRealm.copyFromRealm(beans));
+    }
+
     /**
      * 查询数据库中clazz类所属所有数据
      *
