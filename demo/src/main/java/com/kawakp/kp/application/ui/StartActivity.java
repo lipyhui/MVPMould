@@ -12,7 +12,15 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-
+/**
+ * 创建人: penghui.li
+ * 创建时间: 2017/9/14
+ * 修改人:penghui.li
+ * 修改时间:2017/9/14
+ * 修改内容:
+ *
+ * 功能描述:启动界面
+ */
 public class StartActivity extends BaseActivity<EmptyPresenter, ActivityLaunchBinding> {
 
     @Override
@@ -25,6 +33,9 @@ public class StartActivity extends BaseActivity<EmptyPresenter, ActivityLaunchBi
         redirectTo();
     }
 
+    /**
+     * 3秒后跳转到主页
+     */
     private void redirectTo() {
         Observable.timer(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())

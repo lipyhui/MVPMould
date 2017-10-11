@@ -31,53 +31,62 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
 
     override fun getLayoutId(): Int = R.layout.activity_main
 
+    /**
+     * 页面相关初始化
+     */
     override fun init() {
+        /*配置侧边栏RecyclerView*/
         mAdapter = SideItemAdapter(mList)
         mBinding.sideLists.adapter = mAdapter
         mBinding.sideLists.layoutManager = LinearLayoutManager(this)
 
-    initFragments()
+        initFragments()
 
-    mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
-        override fun getItem(position: Int): Fragment = mFragments[position]
+        /*配置ViewPager适配器*/
+        mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
+            override fun getItem(position: Int): Fragment = mFragments[position]
 
-        override fun getCount(): Int = mFragments.size
+            override fun getCount(): Int = mFragments.size
+        }
+
+        /*限制侧边栏Fragment加载个数*/
+        val limitPage = if (mFragments.size < 8) mFragments.size else 8
+        mBinding.viewPager.offscreenPageLimit = limitPage - 1
+
+        /*侧边栏RecyclerView点击响应*/
+        mAdapter.setOnItemClickListener { binding, pos ->
+        /*            Log.e("ItemFragment", "************************************\n " +
+                            "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
+                            ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************"
+        )*/
+
+            if (pos == selected)
+                return@setOnItemClickListener
+
+            mList[selected].selected = false
+            mList[pos].selected = true
+
+            mAdapter.notifyItemChanged(selected)
+            mAdapter.notifyItemChanged(pos)
+            selected = pos
+
+            mBinding.viewPager.currentItem = pos
+        }
     }
 
-    val limitPage = if (mFragments.size < 8) mFragments.size else 8
-    mBinding.viewPager.offscreenPageLimit = limitPage - 1
+    /**
+     * 初始配置侧边Fragment
+     */
+    private fun initFragments() {
+        mFragments = ArrayList()
 
+        for (item in SideItemRouter.values()) {
+            mList.add(SideItem(item.sideImg, item.sideName))
+            mFragments.add(item.fragment)
+        }
 
-    mAdapter.setOnItemClickListener { binding, pos ->
-/*            Log.e("ItemFragment", "************************************\n " +
-                    "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
-                    ", ${mBinding.viewPager.currentItem + 1} -> ${it + 1} \n************************************"
-)*/
+        mList[0].selected = true
 
-        if (pos == selected)
-            return@setOnItemClickListener
-
-        mList[selected].selected = false
-        mList[pos].selected = true
-
-        mAdapter.notifyItemChanged(selected)
-        mAdapter.notifyItemChanged(pos)
-        selected = pos
-
-        mBinding.viewPager.currentItem = pos
+        mAdapter.notifyDataSetChanged()
     }
-}
-
-private fun initFragments() {
-    mFragments = ArrayList()
-
-    for (item in SideItemRouter.values()) {
-        mList.add(SideItem(item.sideImg, item.sideName))
-        mFragments.add(item.fragment)
-    }
-
-    mList[0].selected = true
-
-    mAdapter.notifyDataSetChanged()
-}
 }

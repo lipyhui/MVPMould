@@ -12,5 +12,8 @@ import com.kawakp.kp.kernel.base.interfaces.IView
  * 功能描述:item1的view接口
  */
 interface Item1Able : IView {
+    /**
+     * 设置文本接口
+     */
     fun setText(data : String)
 }

@@ -9,9 +9,8 @@ import com.kawakp.kp.kernel.KpApplication;
  * 修改时间:2017/9/15
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:绑定异常捕获并重启
  */
-
 public class KawakpApplication extends KpApplication {
 	@Override
 	public void onCreate() {

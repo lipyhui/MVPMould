@@ -29,11 +29,17 @@ public class Item2Fragment extends BaseFragment<Item2Presenter, FragmentTwoBindi
 		Log.e("ItemFragment", "Item2Fragment onFirstUserVisible");
 	}
 
+	/**
+	 * 实现设置文本接口
+	 */
 	@Override
 	public void setText(@NonNull String data) {
 		mBinding.setTextTwo(data);
 	}
 
+	/**
+	 * 错误点击重试响应
+	 */
 	@Override
 	public void onStateViewRetryListener() {
 		showContent();

@@ -17,7 +17,6 @@ import com.kawakp.kp.application.ui.fragment.item2.Item2Fragment;
  *
  * 功能描述:侧边栏fragment功能列表配置
  */
-
 public enum SideItemRouter {
 	CHART(R.string.side_char_img, R.string.side_char, new Item1Fragment()),
 	ANIM(R.string.side_anim_img, R.string.side_anim, new Item2Fragment());

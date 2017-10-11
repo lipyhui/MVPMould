@@ -16,7 +16,6 @@ import com.kawakp.kp.application.databinding.FragmentOneBinding;
  *
  * 功能描述:
  */
-
 public class Item1Fragment extends BaseFragment<Item1Presenter, FragmentOneBinding> implements Item1Able {
 
 	@Override
@@ -29,11 +28,17 @@ public class Item1Fragment extends BaseFragment<Item1Presenter, FragmentOneBindi
 		Log.e("ItemFragment", "Item1Fragment onFirstUserVisible");
 	}
 
+	/**
+	 * 实现设置文本接口
+	 */
 	@Override
 	public void setText(@NonNull String data) {
 		mBinding.setTextOne(data);
 	}
 
+	/**
+	 * 错误点击重试响应
+	 */
 	@Override
 	public void onStateViewRetryListener() {
 		showContent();

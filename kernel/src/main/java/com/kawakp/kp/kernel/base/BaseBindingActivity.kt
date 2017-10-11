@@ -23,9 +23,13 @@ abstract class BaseBindingActivity<T : BasePresenter<*>, B : ViewDataBinding> : 
     lateinit var mBinding: B
     lateinit var mPresenter: T
 
+    /**
+     * 处理屏幕常亮、绑定View和Presenter
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /*处理屏幕常亮*/
         if (KpApplication.isScreenOn()){
             window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
@@ -34,7 +38,13 @@ abstract class BaseBindingActivity<T : BasePresenter<*>, B : ViewDataBinding> : 
         mPresenter = PresenterFactory.createPresenter(this)
     }
 
+    /**
+     * 绑定Layout
+     */
     private fun createViewDataBinding(): B = DataBindingUtil.setContentView(this, getLayoutId())
 
+    /**
+     * 给子类提供配置Layout Id，且返回的Layout Id 不能为空、要真是存在、和ViewDataBinding一致
+     */
     abstract fun getLayoutId(): Int
 }

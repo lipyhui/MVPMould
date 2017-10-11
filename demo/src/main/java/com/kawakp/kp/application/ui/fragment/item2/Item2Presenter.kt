@@ -14,13 +14,19 @@ import java.util.concurrent.TimeUnit
  * 修改时间:2017/9/20
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:Item2逻辑控制器
  */
 class Item2Presenter : BasePresenter<Item2Able>(){
+    /**
+     * 默认加载方法
+     */
     override fun onViewCreated(view: Item2Able, arguments: Bundle?, savedInstanceState: Bundle?) {
         loadData()
     }
 
+    /**
+     * 加载数据
+     */
     fun loadData(){
         Observable.timer(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
