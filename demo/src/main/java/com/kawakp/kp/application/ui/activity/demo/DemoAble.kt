@@ -12,5 +12,8 @@ import com.kawakp.kp.kernel.base.interfaces.IView
  * 功能描述:主view接口
  */
 interface DemoAble : IView {
+    /**
+     * 设置title名
+     */
     fun initTitle(name: String)
 }

@@ -13,7 +13,6 @@ import com.kawakp.kp.application.ui.fragment.data.FormFragment;
  * <p>
  * 功能描述:数据功能列表配置
  */
-
 public enum DataItemRouter implements FunRouter {
     CHART("表格", new FormFragment()),
     ;

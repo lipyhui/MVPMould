@@ -17,7 +17,6 @@ import com.kawakp.kp.application.ui.fragment.anim.ToastFragment;
  * <p>
  * 功能描述:动画列表配置
  */
-
 public enum AnimItemRouter implements FunRouter {
     RESPONSE("响应动画", new ResponseAnimFragment()),
     GIF("GIF图片", new GifFragment()),

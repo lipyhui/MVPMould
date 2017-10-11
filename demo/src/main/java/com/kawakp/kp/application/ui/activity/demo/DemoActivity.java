@@ -26,6 +26,9 @@ public class DemoActivity extends BaseActivity<DemoPresenter, ActivityDemoBindin
 		initBack();
 	}
 
+	/**
+	 * 实现设置title名
+	 */
 	@Override
 	public void initTitle(String name) {
 		mBinding.title.name.setText(name);

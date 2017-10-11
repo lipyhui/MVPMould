@@ -60,8 +60,10 @@ public class FormFragment extends BaseFragment<EmptyPresenter, FragmentFormBindi
 
 		if (realm != null) {
 			Log.e("RealmTest", "realm is Succeed!!! list size = " + list.size());
+			/*数据存储到数据库*/
 			getInstance(realm).add(list);
 
+			/*从数据库读取数据*/
 			RealmManager.getInstance(realm).queryAllToList(FormItem.class, mList);
 			mAdapter.notifyDataSetChanged();
 

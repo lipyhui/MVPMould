@@ -24,6 +24,9 @@ class DemoPresenter : BasePresenter<DemoAble>() {
         loadView()
     }
 
+    /**
+     * 加载界面
+     */
     private fun loadView(){
         Observable.timer(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
@@ -38,6 +41,9 @@ class DemoPresenter : BasePresenter<DemoAble>() {
                 }
     }
 
+    /**
+     * Fragment匹配
+     */
     private fun replaceFragment(funRouter: FunRouter) {
         activity.supportFragmentManager
                 .beginTransaction()

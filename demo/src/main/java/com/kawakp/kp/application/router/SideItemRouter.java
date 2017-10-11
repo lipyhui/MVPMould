@@ -14,9 +14,9 @@ import com.kawakp.kp.application.ui.fragment.main.MainFragment;
  * 修改时间:2017/9/14
  * 修改内容:
  *
- * 功能描述:侧边栏fragment功能列表配置
+ * 功能描述:侧边栏fragment功能列表配置。mType：侧边栏类型，没一栏一个独立类型；
+ * 			mSideImg：侧边栏图标；mSideName：侧边栏子项名
  */
-
 public enum SideItemRouter {
 	CHART(1, R.string.side_char_img, R.string.side_char),
 	ANIM(2, R.string.side_anim_img, R.string.side_anim),

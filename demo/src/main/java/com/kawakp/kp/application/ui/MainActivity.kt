@@ -32,19 +32,24 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun init() {
+        /*配置侧边栏RecyclerView*/
         mAdapter = SideItemAdapter(mList)
         mBinding.sideLists.adapter = mAdapter
         mBinding.sideLists.layoutManager = LinearLayoutManager(this)
         initSideFragments()
+
+        /*配置ViewPager适配*/
         mBinding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment = mFragments[position]
 
             override fun getCount(): Int = mFragments.size
         }
 
+        /*配置默认加载Fragment个数*/
         val limitPage = if (mFragments.size < 8) mFragments.size else 8
         mBinding.viewPager.offscreenPageLimit = limitPage - 1
 
+        /*侧边栏点击响应*/
         mAdapter.setOnItemClickListener { binding, pos ->
             /*            Log.e("ItemFragment", "************************************\n " +
                                 "offscreenPageLimit = ${mBinding.viewPager.offscreenPageLimit}" +
@@ -64,6 +69,9 @@ class MainActivity : BaseActivity<EmptyPresenter, ActivityMainBinding>() {
         }
     }
 
+    /**
+     * 侧边栏Fragment匹配
+     */
     private fun initSideFragments() {
         mFragments = ArrayList()
 

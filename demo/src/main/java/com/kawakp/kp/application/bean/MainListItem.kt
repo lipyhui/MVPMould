@@ -7,6 +7,6 @@ package com.kawakp.kp.application.bean
  * 修改时间:2017/9/14
  * 修改内容:
  *
- * 功能描述:主页列表数据项
+ * 功能描述:主页列表数据项。name：列表项功能名
  */
 data class MainListItem(val name: String)

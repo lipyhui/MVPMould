@@ -14,7 +14,6 @@ import com.kawakp.kp.application.ui.fragment.chart.RealTimeChartFragment;
  * <p>
  * 功能描述:折线图功能列表配置
  */
-
 public enum CharItemRouter implements FunRouter {
     CHART("实时曲线", new RealTimeChartFragment()),
 

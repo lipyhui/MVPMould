@@ -16,7 +16,6 @@ import com.kawakp.kp.application.ui.StartActivity;
  *
  * 功能描述:捕获异常并重启
  */
-
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
 	public static CrashHandler mAppCrashHandler;
@@ -47,6 +46,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 		} else {
 			AlarmManager mgr = (AlarmManager) mAppContext.getSystemService(Context.ALARM_SERVICE);
 
+			//1秒后重启
 			Intent intent = new Intent(mAppContext, StartActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.putExtra("crash", true);
