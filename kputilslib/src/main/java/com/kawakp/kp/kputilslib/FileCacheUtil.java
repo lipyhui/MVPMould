@@ -47,7 +47,9 @@ public class FileCacheUtil {
         }
     }
 
-    //读取缓存，返回字符串（JSON）
+    /**
+     * 读取缓存，返回字符串（JSON）
+     */
     public static String getCache(Context context, String cacheFileName) {
         FileInputStream fis = null;
         StringBuffer sBuf = new StringBuffer();
@@ -77,6 +79,9 @@ public class FileCacheUtil {
         return null;
     }
 
+    /**
+     * 获取储存的地址
+     */
     public static String getCachePath(Context context) {
         return context.getFilesDir().getAbsolutePath();
     }

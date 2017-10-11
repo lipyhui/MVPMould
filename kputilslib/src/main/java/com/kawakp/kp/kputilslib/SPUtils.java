@@ -254,6 +254,9 @@ public class SPUtils {
         }
     }
 
+    /**
+     * 放boolean类型的值
+     */
     public static Boolean getBoolean(Context context, String strKey) {
         SharedPreferences setPreferences = context.getSharedPreferences(
                 spFileName, Context.MODE_PRIVATE);
@@ -261,6 +264,9 @@ public class SPUtils {
         return result;
     }
 
+    /**
+     * @param strData
+     */
     public static void putBoolean(Context context, String strKey,
                                   Boolean strData) {
         SharedPreferences activityPreferences = context.getSharedPreferences(

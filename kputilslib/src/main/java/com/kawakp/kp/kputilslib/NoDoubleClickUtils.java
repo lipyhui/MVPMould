@@ -11,12 +11,18 @@ package com.kawakp.kp.kputilslib;
  */
 public class NoDoubleClickUtils {
     private static long lastClickTime;
+    /**
+     * 两次点击的间距
+     */
     private final static int SPACE_TIME = 300;
 
     public static void initLastClickTime() {
         lastClickTime = 0;
     }
 
+    /**
+     * 直接调用防多次连点
+     */
     public synchronized static boolean isDoubleClick() {
         long currentTime = System.currentTimeMillis();
         boolean isClick2;
