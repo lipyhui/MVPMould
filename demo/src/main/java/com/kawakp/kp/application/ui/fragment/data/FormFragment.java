@@ -1,5 +1,7 @@
 package com.kawakp.kp.application.ui.fragment.data;
 
+import static com.kawakp.kp.kernel.utils.RealmManager.getInstance;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
@@ -58,7 +60,12 @@ public class FormFragment extends BaseFragment<EmptyPresenter, FragmentFormBindi
 
 		if (realm != null) {
 			Log.e("RealmTest", "realm is Succeed!!! list size = " + list.size());
-			RealmManager.getInstance(realm).add(list);
+			getInstance(realm).add(list);
+
+			int size = RealmManager.getInstance(realm).queryAll(FormItem.class).size();
+
+			Log.e("RealmTest", "realm is Succeed!!! queryAll size = " + size);
+
 		}else {
 			Log.e("RealmTest", "realm is NULL!!!");
 		}

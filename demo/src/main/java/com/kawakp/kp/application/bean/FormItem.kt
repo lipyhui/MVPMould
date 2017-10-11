@@ -19,6 +19,4 @@ open class FormItem(
         open var twoP: String = "0",
         open var oneW: String = "0",
         open var twoW: String = "0"
-) : RealmObject(){
-
-}
+) : RealmObject()
