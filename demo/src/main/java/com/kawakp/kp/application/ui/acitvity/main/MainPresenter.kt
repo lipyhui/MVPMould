@@ -18,10 +18,16 @@ import java.util.concurrent.TimeUnit
  * 功能描述:主页presenter
  */
 class MainPresenter : BasePresenter<MainAble>(){
+    /**
+     * 默认加载方法
+     */
     override fun onViewCreated(view: MainAble, arguments: Bundle?, savedInstanceState: Bundle?) {
         loadData()
     }
 
+    /**
+     * 数据加载
+     */
     fun loadData(){
         Observable.timer(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())

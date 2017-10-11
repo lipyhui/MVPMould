@@ -7,13 +7,13 @@ package com.kawakp.kp.kernel.localHttp
  * 修改时间:2017/9/15
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:读写KAWAKP PLC，支持同数据类型多元件类型同时读，同数据类型多元件类型写
  */
 object PLCrw{
     /**
      *读取PLC相应元件的值
      *
-     * @param elements key:读取元件类型
+     * @param elements key:读取数据类型
      *                 value:读取一组元件地址列表
      */
     fun read(elements: Map<Constants, IntArray>): Map<Constants, Array<String>>{
@@ -28,7 +28,7 @@ object PLCrw{
     /**
      *读取PLC相应元件的值
      *
-     * @param type 读取元件类型
+     * @param type 读取数据类型
      * @param addrs 读取一组元件地址列表
      */
     fun read(type: Constants, addrs: IntArray): Map<Constants, Array<String>>{
@@ -41,7 +41,7 @@ object PLCrw{
     /**
      *写一组数据到PLC相应元件
      *
-     * @param type 写入的元件类型
+     * @param type 写入的数据类型
      * @param vaules K:写入的元件地址
      *               v:写入的元件数据
      */

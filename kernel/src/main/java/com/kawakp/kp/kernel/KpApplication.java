@@ -13,7 +13,7 @@ import io.realm.RealmConfiguration;
  * 修改时间:2017/9/15
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:应用全局配置
  */
 
 public class KpApplication extends Application {
@@ -37,7 +37,7 @@ public class KpApplication extends Application {
 	/**
 	 * 获取context
 	 *
-	 * @return
+	 * @return 返回整个应用生命周期内的Context
 	 */
 	public static Context getContext(){
 		return mContext;
@@ -46,7 +46,7 @@ public class KpApplication extends Application {
 	/**
 	 * 获取屏幕是否常亮
 	 *
-	 * @return
+	 * @return 返回屏幕常亮配置，true:屏幕常亮 false:屏幕不常亮(一段时间熄屏)
 	 */
 	public static boolean isScreenOn() {
 		return ScreenOn;
@@ -55,7 +55,7 @@ public class KpApplication extends Application {
 	/**
 	 * 设置屏幕是否常亮
 	 *
-	 * @param screenOn
+	 * @param screenOn 配置屏幕是否常亮，true:屏幕常亮 false:屏幕不常亮(一段时间熄屏)
 	 */
 	public static void setScreenOn(boolean screenOn) {
 		ScreenOn = screenOn;
@@ -64,14 +64,14 @@ public class KpApplication extends Application {
 	/**
 	 * 获取Realm数据库单列
 	 *
-	 * @return
+	 * @return 返回Realm数据库实例
 	 */
 	public static Realm getRealmInstance() {
 		return REALM_INSTANCE;
 	}
 
 	/**
-	 * 	初始化realm数据库
+	 * 	初始化Realm数据库，可以别子类继承修改相关配置
 	 */
 	protected Realm initRealm(){
 		Realm.init(this);

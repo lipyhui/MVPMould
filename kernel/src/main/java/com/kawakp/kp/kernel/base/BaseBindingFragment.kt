@@ -23,6 +23,9 @@ abstract class BaseBindingFragment<T : BasePresenter<*>, B: ViewDataBinding>: Ba
     protected lateinit var mBinding: B
     protected lateinit var mPresenter: T
 
+    /**
+     * 实现Layout和Presenter和绑定
+     */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         mPresenter = PresenterFactory.createPresenter(this)
@@ -34,5 +37,8 @@ abstract class BaseBindingFragment<T : BasePresenter<*>, B: ViewDataBinding>: Ba
         super.onViewCreated(view, savedInstanceState)
     }
 
+    /**
+     * 给子类提供配置Layout Id，且返回的Layout Id 不能为空、要真是存在、和ViewDataBinding一致
+     */
     abstract fun getLayoutId(): Int
 }

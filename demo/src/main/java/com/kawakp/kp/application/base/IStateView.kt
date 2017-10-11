@@ -10,13 +10,24 @@ import com.kawakp.kp.application.R
 import com.kennyc.view.MultiStateView
 import org.jetbrains.anko.findOptional
 
-//apply for MultiStateView
-//step 1: xml文件中标识 android:contentDescription="setup_stateView"
-//step 2：在activity或fragment 使用布局之前调用stateViewSetup()方法完成布局调整
-//step 3：外部实现此接口，覆写通过getStateView()方法，调用getStateView(context: T)
+/**
+ * 创建人: penghui.li
+ * 创建时间: 2017/8/29
+ * 修改人:penghui.li
+ * 修改时间:2017/8/29
+ * 修改内容:
+ *
+ * 功能描述:	实现IStateView相应方法
+ * MultiStateView应用过程
+ * step 1: xml文件中标识 android:contentDescription="setup_stateView"
+ * step 2：在activity或fragment 使用布局之前调用stateViewSetup()方法完成布局调整
+ * step 3：外部实现此接口，覆写通过getStateView()方法，调用getStateView(context: T)
+ */
 interface IStateView {
 
-    //初始化使用--------------------------------------------------------------------------------------
+    /**
+     * 初始化MultiStateView
+     */
     fun getStateView(): MultiStateView? = null
 
     fun <T> getStateView(context: T): MultiStateView? {
@@ -71,15 +82,26 @@ interface IStateView {
         }
     }
 
+    /**
+     * 是否已经注册MultiStateView
+     */
     fun isRegisterStateView(): Boolean = true
 
-    //提供运行时方法--------------------------------------------------------------------------------------
+    /**
+     * 提供运行时监听方法(加载失败点击重试提过这个监听响应)
+     */
     fun onStateViewRetryListener() = Unit
 
+    /**
+     * 处理加载中界面
+     */
     fun stateViewLoading() {
         getStateView()?.viewState = MultiStateView.VIEW_STATE_LOADING
     }
 
+    /**
+     * 处理错误届满
+     */
     fun stateViewError(error: Any, content: String) {
         getStateView()?.apply {
             viewState = MultiStateView.VIEW_STATE_ERROR
@@ -90,10 +112,16 @@ interface IStateView {
         }
     }
 
+    /**
+     * 处理空界面
+     */
     fun stateViewEmpty() {
         getStateView()?.viewState = MultiStateView.VIEW_STATE_EMPTY
     }
 
+    /**
+     * 处理主界面
+     */
     fun stateViewContent() {
         getStateView()?.viewState = MultiStateView.VIEW_STATE_CONTENT
     }

@@ -8,11 +8,11 @@ package com.kawakp.kp.kernel.localHttp
  * 修改时间:2017/9/15
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:读写KAWAKP PLC，支持同数据类型多元件类型同时读写
  */
 object ReadAndWrite{
     /**
-     * 读PLC同一类型的数据
+     * 读PLC同一数据类型的数据
      *
      * @param type 数据类型
      * @param adrs 数据地址
@@ -46,7 +46,7 @@ object ReadAndWrite{
     }
 
     /***
-     * 写数据到PLC里面
+     * 写数据到PLC里面，改方法已经过时
      *
      * @param type 数据类型
      * @param adrs 数据地址

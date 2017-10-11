@@ -16,10 +16,14 @@ import java.lang.reflect.ParameterizedType
  * 修改时间:2017/9/19
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:Activity、Fragment与Presenter建立连接的辅助管理类
  */
 @Suppress("UNCHECKED_CAST")
 internal object PresenterFactory{
+
+    /**
+     * Activity与Presenter建立连接
+     */
     fun <T : BasePresenter<*>> createPresenter(aty: BaseBindingActivity<*, *>): T {
         val trans = aty.supportFragmentManager.beginTransaction()
         val presenterClass = try {
@@ -39,6 +43,9 @@ internal object PresenterFactory{
         return presenter
     }
 
+    /**
+     * Fragment与Presenter建立连接
+     */
     fun <T : BasePresenter<*>> createPresenter(frg: BaseBindingFragment<*, *>): T {
         val trans = frg.fragmentManager.beginTransaction()
         val presenterClass = try {

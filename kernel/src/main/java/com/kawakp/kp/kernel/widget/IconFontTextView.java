@@ -8,11 +8,14 @@ import android.util.AttributeSet;
 
 import com.kawakp.kp.kernel.R;
 
-
 /**
- * 阿里图标字体支持
+ * 创建人: penghui.li
+ * 创建时间: 2017/8/29
+ * 修改人:penghui.li
+ * 修改时间:2017/8/29
+ * 修改内容:
  *
- * Created by lipy01 on 2016/6/2.
+ * 功能描述:	支持ttf系列文字图标，支持配置ttf路径(只支持将ttf文字图库放在assets文件夹里面)
  */
 public class IconFontTextView extends AppCompatTextView {
     public IconFontTextView(Context context) {
@@ -29,6 +32,13 @@ public class IconFontTextView extends AppCompatTextView {
         IconFontSet(attrs, context);
     }
 
+    /**
+     * ttf格式文字图标支持实现
+     * 支持配置ttf路径(只支持将ttf文字图库放在assets文件夹里面)
+     *
+     * @param attrs
+     * @param context
+     */
     private void IconFontSet(AttributeSet attrs, Context context){
         try {
             TypedArray typeArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.IconFontTextView, 0, 0);

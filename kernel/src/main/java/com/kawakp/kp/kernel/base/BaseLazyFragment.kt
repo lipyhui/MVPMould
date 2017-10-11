@@ -4,6 +4,15 @@ import android.os.Bundle
 import android.view.View
 import com.trello.rxlifecycle2.components.support.RxFragment
 
+/**
+ * 创建人: penghui.li
+ * 创建时间: 2017/8/29
+ * 修改人:penghui.li
+ * 修改时间:2017/8/29
+ * 修改内容:
+ *
+ * 功能描述:	细化Fragment的生命周期
+ */
 abstract class BaseLazyFragment : RxFragment() {
 
     private var isFirstResume = true

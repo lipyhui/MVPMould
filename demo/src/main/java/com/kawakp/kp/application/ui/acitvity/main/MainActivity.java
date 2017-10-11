@@ -15,11 +15,17 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 	public void init() {
 	}
 
+	/**
+	 * 实现设置字符串接口
+	 */
 	@Override
 	public void setData(String data) {
 		mBinding.setHello(data);
 	}
 
+	/**
+	 * 点击重试响应
+	 */
 	@Override
 	public void onStateViewRetryListener() {
 		showContent();

@@ -16,12 +16,18 @@ abstract class BaseBindingAdapter<B : ViewDataBinding> : RecyclerView.Adapter<Da
 
     var mListener: ((binding: B, pos: Int) -> Unit)? = null
 
+    /**
+     * 给Item设置电击监听
+     */
     override fun onBindViewHolder(holder: DataBoundViewHolder<B>, position: Int) {
         holder.binding.root.setOnClickListener {
             mListener?.invoke(holder.binding, holder.adapterPosition)
         }
     }
 
+    /**
+     * 监听器，通过该监听器把点击事件传递出去
+     */
     fun setOnItemClickListener(listener: ((binding: B, pos: Int) -> Unit)) {
         mListener = listener
     }

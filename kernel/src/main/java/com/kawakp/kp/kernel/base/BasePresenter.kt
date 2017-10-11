@@ -9,15 +9,13 @@ import com.kawakp.kp.kernel.base.interfaces.IView
 import com.trello.rxlifecycle2.components.support.RxFragment
 
 /**
+ * 创建人: penghui.li
+ * 创建时间: 2017/8/29
+ * 修改人:penghui.li
+ * 修改时间:2017/8/29
+ * 修改内容:
  *
- * <h3>Build Presenter with Fragment：</h3>
- *
- * Fragment has a life cycle
- *
- * FragmentManager can cache fragment
- *
- * Coordinate with RxLifeCycle
- *
+ * 功能描述:	提供一个基础Presenter控制器，在该控制器内绑定View
  */
 @Suppress("UNCHECKED_CAST")
 abstract class BasePresenter<V : IView> : RxFragment() {

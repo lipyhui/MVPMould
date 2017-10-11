@@ -12,5 +12,8 @@ import com.kawakp.kp.kernel.base.interfaces.IView
  * 功能描述:主页view接口定义
  */
 interface MainAble : IView{
+    /**
+     * 设置字符串
+     */
     fun setData(data: String)
 }
