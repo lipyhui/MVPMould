@@ -17,7 +17,7 @@ import com.kawakp.kp.animationlib.Play;
  */
 
 public class SimpleAnimFragment extends BaseFragment<EmptyPresenter, FragmentSimpleAnimBinding> {
-    private Play.YoYoString rope;
+    private Play.YString rope;
     private View mTarget;
 
     @Override

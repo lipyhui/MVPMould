@@ -43,6 +43,9 @@ public class Play {
         target = animationComposer.target;
     }
 
+    /**
+     * 选择播放的动画
+     */
     public static AnimationComposer with(Techniques techniques) {
         return new AnimationComposer(techniques);
     }
@@ -101,6 +104,9 @@ public class Play {
             return this;
         }
 
+        /**
+         * 动画的延迟
+         */
         public AnimationComposer delay(long delay) {
             this.delay = delay;
             return this;
@@ -111,6 +117,9 @@ public class Play {
             return this;
         }
 
+        /**
+         * 中心
+         */
         public AnimationComposer pivot(float pivotX, float pivotY) {
             this.pivotX = pivotX;
             this.pivotY = pivotY;
@@ -127,6 +136,9 @@ public class Play {
             return this;
         }
 
+        /**
+         * 重播
+         */
         public AnimationComposer repeat(int times) {
             if (times < INFINITE) {
                 throw new RuntimeException("Can not be less than -1, -1 is infinite loop");
@@ -141,11 +153,17 @@ public class Play {
             return this;
         }
 
+        /**
+         * 动画带监听播放
+         */
         public AnimationComposer withListener(Animator.AnimatorListener listener) {
             callbacks.add(listener);
             return this;
         }
 
+        /**
+         * 动画开始
+         */
         public AnimationComposer onStart(final AnimatorCallback callback) {
             callbacks.add(new EmptyAnimatorListener() {
                 @Override
@@ -156,6 +174,9 @@ public class Play {
             return this;
         }
 
+        /**
+         * 动画结束
+         */
         public AnimationComposer onEnd(final AnimatorCallback callback) {
             callbacks.add(new EmptyAnimatorListener() {
                 @Override
@@ -166,6 +187,9 @@ public class Play {
             return this;
         }
 
+        /**
+         * 动画取消
+         */
         public AnimationComposer onCancel(final AnimatorCallback callback) {
             callbacks.add(new EmptyAnimatorListener() {
                 @Override
@@ -176,6 +200,9 @@ public class Play {
             return this;
         }
 
+        /**
+         * 动画重播
+         */
         public AnimationComposer onRepeat(final AnimatorCallback callback) {
             callbacks.add(new EmptyAnimatorListener() {
                 @Override
@@ -186,9 +213,12 @@ public class Play {
             return this;
         }
 
-        public YoYoString playOn(View target) {
+        /**
+         *  动画需要播放的时候直接调用
+         */
+        public YString playOn(View target) {
             this.target = target;
-            return new YoYoString(new Play(this).play(), this.target);
+            return new YString(new Play(this).play(), this.target);
         }
 
     }
@@ -196,12 +226,12 @@ public class Play {
     /**
      * YoYo string, you can use this string to control your YoYo.
      */
-    public static final class YoYoString {
+    public static final class YString {
 
         private BaseViewAnimator animator;
         private View target;
 
-        private YoYoString(BaseViewAnimator animator, View target) {
+        private YString(BaseViewAnimator animator, View target) {
             this.target = target;
             this.animator = animator;
         }
@@ -210,22 +240,33 @@ public class Play {
             return animator.isStarted();
         }
 
+        /**
+         * 判断动画是否在运行
+         */
         public boolean isRunning() {
             return animator.isRunning();
         }
 
+        /**
+         * 调用即停止，直接停止
+         */
         public void stop() {
             stop(true);
         }
 
+        /**
+         * 调用即停止
+         */
         public void stop(boolean reset) {
             animator.cancel();
-
             if (reset)
                 animator.reset(target);
         }
     }
 
+    /**
+     * 对目标对象进行播放
+     */
     private BaseViewAnimator play() {
         animator.setTarget(target);
 
