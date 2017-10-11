@@ -88,6 +88,8 @@ dependencies {
 	compile dependencies.kotlinStdlib
 	compile dependencies.kotlinReflect
 	kapt dependencies.databindingCompiler
+	kapt dependencies.realmAnnotations
+	kapt dependencies.realmAnnotationsProcessor
 
 	//rxLifecycle
 	compile dependencies.rxLifecycle
@@ -99,8 +101,4 @@ dependencies {
 
 kapt {
 	generateStubs = true
-}
-
-repositories {
-	mavenCentral()
 }

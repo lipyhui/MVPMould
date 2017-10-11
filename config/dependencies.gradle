@@ -1,7 +1,7 @@
 ext {
   //build
   compileSdkVersion = 26
-  buildToolsVersion = '25.0.3'
+  buildToolsVersion = '26.0.1'
   minSdkVersion = 17
   targetSdkVersion = 26
   versionCode = 1
@@ -31,8 +31,9 @@ ext {
   anko_version = "0.10.1"
 
   //kotlin and gradle plugin
-  kotlinVersion = "1.1.4-3"
+  kotlinVersion = "1.1.51"
   androidPluginVersion = "2.3.3"
+  realm_version = '3.5.0'
 
   dependencies = [
           // support
@@ -92,5 +93,7 @@ ext {
           kotlinStdlib              : "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion",
           kotlinReflect             : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
           databindingCompiler       : "com.android.databinding:compiler:$androidPluginVersion",
+          realmAnnotations          : "io.realm:realm-annotations:$realm_version",
+          realmAnnotationsProcessor : "io.realm:realm-annotations-processor:$realm_version",
   ]
 }
