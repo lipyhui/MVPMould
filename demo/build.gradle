@@ -52,6 +52,7 @@ dependencies {
     compile dependencies.ankoAppcompatV7
     compile dependencies.ankoSupportV4
 
+    //Kotlin
     kapt dependencies.databindingCompiler
     kapt dependencies.realmAnnotations
     kapt dependencies.realmAnnotationsProcessor
