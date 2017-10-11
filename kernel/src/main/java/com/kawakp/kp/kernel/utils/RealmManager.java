@@ -148,7 +148,7 @@ public class RealmManager {
     }
 
     /**
-     *  把查询数据处理为指定List
+     *  查询数据库中clazz类所属所有数据,并把查询数据转换为指定List
      *
      * @param clazz
      * @param result  返回值(此处会清空list里面的数据，以保证List对象全是查询的返回值)
