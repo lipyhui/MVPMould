@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="colorPrimary">#3F51B5</color>
-	<color name="colorPrimaryDark">#303F9F</color>
-	<color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 
-	<color name="colorMainBg">#F0F1F4</color>
+    <color name="colorMainBg">#F0F1F4</color>
 
-	<!-- 顶部title -->
-	<color name="colorTitleBg">#42A5F5</color>
-	<color name="colorText">#FFFFFF</color>
+    <!-- 顶部title -->
+    <color name="colorTitleBg">#42A5F5</color>
+    <color name="colorText">#FFFFFF</color>
 
-	<!-- 侧边栏 -->
-	<color name="colorSideBg">#484D5E</color>
-	<color name="colorSideText">#8691B7</color>
-	<color name="colorSideItemLeft">#42A5F5</color>
-	<color name="colorSideItem">#5B6074</color>
-	<color name="colorSideItemText">#FFFFFF</color>
+    <!-- 侧边栏 -->
+    <color name="colorSideBg">#484D5E</color>
+    <color name="colorSideText">#8691B7</color>
+    <color name="colorSideItemLeft">#42A5F5</color>
+    <color name="colorSideItem">#5B6074</color>
+    <color name="colorSideItemText">#FFFFFF</color>
 
-	<!-- 表格 -->
-	<color name="colorFormSearch">#FFFFFF</color>
-	<color name="colorFormSelect">#999999</color>
-	<color name="colorFormTo">#333333</color>
-	<color name="colorFormBgOne">#C2BEBE</color>
-	<color name="colorFormBgTwo">#00C2BEBE</color>
+    <!-- 表格 -->
+    <color name="colorFormSearch">#FFFFFF</color>
+    <color name="colorFormSelect">#999999</color>
+    <color name="colorFormTo">#333333</color>
+    <color name="colorFormBgOne">#C2BEBE</color>
+    <color name="colorFormBgTwo">#00C2BEBE</color>
+    <!--页面加载-->
+    <color name="load_fail_color">#299af3</color>
+    <color name="load_fail_empty">#9e9e9e</color>
 </resources>
