@@ -1,9 +1,13 @@
 <resources>
-<string name="app_name">KPMouldDemo</string>
+    <string name="app_name">KPMouldDemo</string>
 
-<!-- 侧边栏 -->
-<string name="side_char_img">&#xe606;</string>
-<string name="side_char">折线图</string>
-<string name="side_anim_img">&#xe603; </string>
-<string name="side_anim">动画</string>
+    <!-- 侧边栏 -->
+    <string name="side_char_img">&#xe606;</string>
+    <string name="side_char">折线图</string>
+    <string name="side_anim_img">&#xe603; </string>
+    <string name="side_anim">动画</string>
+
+    <!--页面加载-->
+    <string name="load_fail_txt">加载失败，请重新加载</string>
+    <string name="load_empty_txt">当前页面为空</string>
 </resources>

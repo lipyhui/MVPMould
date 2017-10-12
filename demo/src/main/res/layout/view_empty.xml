@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2017 Ricky.yao https://github.com/vihuela
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -10,11 +9,27 @@
   ~
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		  android:orientation="vertical"
-		  android:layout_width="match_parent"
-		  android:layout_height="match_parent"
-		  android:gravity="center"
-		  android:background="@android:color/white"
-		  android:layout_gravity="center"
-		  android:text="No Results Found" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.02"
+        android:padding="10dp"
+        android:src="@drawable/img_btn_empty" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:text="@string/load_empty_txt"
+        android:textColor="@color/load_fail_empty" />
+
+</LinearLayout>
