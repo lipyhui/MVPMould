@@ -4,10 +4,6 @@ apply plugin: 'realm-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'org.jetbrains.dokka'
-dokka {
-	outputFormat = 'javadoc'
-	outputDirectory = "${rootDir}/doc/API/kernel"
-}
 
 android {
 	compileSdkVersion rootProject.ext.compileSdkVersion
