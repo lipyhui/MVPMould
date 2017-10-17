@@ -18,7 +18,8 @@ import java.lang.reflect.ParameterizedType
  *
  * 功能描述:Activity、Fragment与Presenter建立连接的辅助管理类
  */
-object PresenterFactory{
+@Suppress("UNCHECKED_CAST")
+internal object PresenterFactory{
 
     /**
      * Activity与Presenter建立连接
