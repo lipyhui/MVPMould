@@ -1,0 +1,7 @@
+com.kawakp.kp.kernel
+com.kawakp.kp.kernel.base
+com.kawakp.kp.kernel.base.defaults
+com.kawakp.kp.kernel.base.interfaces
+com.kawakp.kp.kernel.localHttp
+com.kawakp.kp.kernel.utils
+com.kawakp.kp.kernel.widget

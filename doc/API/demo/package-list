@@ -1,0 +1,8 @@
+com.kawakp.kp.application.app
+com.kawakp.kp.application.base
+com.kawakp.kp.application.bean
+com.kawakp.kp.application.router
+com.kawakp.kp.application.ui
+com.kawakp.kp.application.ui.adapter
+com.kawakp.kp.application.ui.fragment.item1
+com.kawakp.kp.application.ui.fragment.item2
