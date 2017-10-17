@@ -10,4 +10,5 @@
     <!--页面加载-->
     <string name="load_fail_txt">加载失败，请重新加载</string>
     <string name="load_empty_txt">当前页面为空</string>
+    <string name="load_ing_txt">加载中，请稍后</string>
 </resources>
