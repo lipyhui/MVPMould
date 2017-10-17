@@ -3,6 +3,9 @@ package com.kawakp.kp.application.ui.activity.demo;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityDemoBinding;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 创建人: penghui.li
@@ -39,5 +42,17 @@ public class DemoActivity extends BaseActivity<DemoPresenter, ActivityDemoBindin
 	 */
 	private void initBack() {
 		mBinding.title.back.setOnClickListener(view -> onBackPressed());
+	}
+
+
+	/**
+	 * 返回当前Activity
+	 *
+	 * @return
+	 */
+	@NotNull
+	@Override
+	public RxAppCompatActivity geRxtActivity() {
+		return this;
 	}
 }

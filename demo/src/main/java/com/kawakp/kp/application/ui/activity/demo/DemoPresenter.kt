@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.kawakp.kp.application.R
 import com.kawakp.kp.application.router.FunRouter
 import com.kawakp.kp.kernel.base.BasePresenter
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -32,6 +33,7 @@ class DemoPresenter : BasePresenter<DemoAble>() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view().showLoading() }
+                .bindToLifecycle(view().geRxtActivity())
                 .subscribe {
                     val funRouter = activity.intent.getSerializableExtra("TARGET_ROUTER") as FunRouter
 
