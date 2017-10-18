@@ -33,7 +33,7 @@ class DemoPresenter : BasePresenter<DemoAble>() {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view().showLoading() }
-                .bindToLifecycle(view().geRxtActivity())
+                .bindToLifecycle(this)
                 .subscribe {
                     val funRouter = activity.intent.getSerializableExtra("TARGET_ROUTER") as FunRouter
 

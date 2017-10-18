@@ -1,7 +1,6 @@
 package com.kawakp.kp.application.ui.activity.demo
 
 import com.kawakp.kp.kernel.base.interfaces.IView
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 
 /**
  * 创建人: penghui.li
@@ -17,9 +16,4 @@ interface DemoAble : IView {
      * 设置title名
      */
     fun initTitle(name: String)
-
-    /**
-     * 返回RxActivity
-     */
-    fun geRxtActivity() : RxAppCompatActivity
 }
