@@ -3,6 +3,7 @@ package com.kawakp.kp.application.ui.acitvity.main
 import android.os.Bundle
 import com.kawakp.kp.kernel.KernelJNI
 import com.kawakp.kp.kernel.base.BasePresenter
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -32,6 +33,7 @@ class MainPresenter : BasePresenter<MainAble>(){
         Observable.timer(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .bindToLifecycle(this)
                 .subscribe { l ->
                     //					hideLoading();
                     //					showContent();
