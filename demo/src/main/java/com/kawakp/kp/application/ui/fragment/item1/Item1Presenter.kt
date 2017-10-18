@@ -2,6 +2,7 @@ package com.kawakp.kp.application.ui.fragment.item1
 
 import android.os.Bundle
 import com.kawakp.kp.kernel.base.BasePresenter
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -32,6 +33,7 @@ class Item1Presenter : BasePresenter<Item1Able>(){
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view().showLoading() }
+                .bindToLifecycle(this)
                 .subscribe {
                     view().setText("This is fragment one")
                     view().showMessageFromNet("error", "This is error")

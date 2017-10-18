@@ -45,6 +45,7 @@ dependencies {
 
 	//stateView
 	compile dependencies.multiStateView
+	compile dependencies.gif
 
 	//anko
 	compile dependencies.ankoCommons
