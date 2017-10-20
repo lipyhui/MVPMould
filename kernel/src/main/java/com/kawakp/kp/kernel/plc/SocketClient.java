@@ -4,8 +4,8 @@ import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -31,7 +31,7 @@ public class SocketClient {
 	 * @param msg 要发送的信息
 	 * @return 响应信息
 	 */
-	public static Observable<String> sendMsg(final byte[] msg) {
+	public static Observable<byte[]> sendMsg(final byte[] msg) {
 		return Observable.just(msg)
 				.subscribeOn(Schedulers.io())
 				.observeOn(Schedulers.io())
@@ -68,9 +68,38 @@ public class SocketClient {
 
 					//接收响应
 					Log.e("socket_Test", "start read!");
-					BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-					return in.readLine();
+//					byte[] result = new byte[1024];
+					byte[] result = readStream(client.getInputStream());
+					for (byte b : result) {
+//						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + length);
+						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + bytes.length);
+					}
+					return result;
 				});
+	}
+
+	public static byte[] readStream(InputStream inStream) throws Exception {
+		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int len = -1;
+		while ((len = inStream.read(buffer)) != -1) {
+			outSteam.write(buffer, 0, len);
+		}
+		outSteam.close();
+		inStream.close();
+		return outSteam.toByteArray();
+	}
+
+	public static String byteToHexString(byte src) {
+		int j = src;
+		if (j < 0) {
+			j += 256;
+		}
+		String s = Integer.toHexString(j);
+		if (s.length() < 2) {
+			s = "0" + s;
+		}
+		return s;
 	}
 }
 

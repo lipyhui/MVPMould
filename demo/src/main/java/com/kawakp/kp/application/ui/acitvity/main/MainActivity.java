@@ -17,11 +17,11 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 	@Override
 	public void init() {
 		mBinding.testText.setOnClickListener(view -> {
-			byte[] data = new byte[]{0x01, 0x03, 0x22, 0x33, 0x25, 0x01};
+			byte[] data = new byte[]{0x01, 0x03, 0x22, 0x33, 0x25, 0x01, 0x03, 0x22, 0x33, 0x25, 0x01};
 			Log.e("socket_Test", "socket start ");
 			Log.e("socket_Test", "Socket Start!!!!!!!!!!!!!!!!!!");
 			SocketClient.sendMsg(data)
-					.subscribe(s -> Log.e("socket_Test", "END*************************** " + s));
+					.subscribe(s -> Log.e("socket_Test", "END***************************\n"));
 		});
 	}
 
