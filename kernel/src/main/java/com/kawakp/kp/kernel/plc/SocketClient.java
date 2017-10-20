@@ -4,7 +4,6 @@ import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import io.reactivex.Observable;
@@ -61,25 +60,29 @@ public class SocketClient {
 
 					//发送数据
 					Log.e("socket_Test", "start write!");
-					/*PrintWriter out = new PrintWriter(client.getOutputStream());
-					out.println(bytes);
-					out.flush();*/
 					client.getOutputStream().write(bytes);
 
 					//接收响应
 					Log.e("socket_Test", "start read!");
-//					byte[] result = new byte[1024];
 					byte[] result = readStream(client.getInputStream());
 					for (byte b : result) {
-//						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + length);
-						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + bytes.length);
+						Log.e("socket_Test_result", byteToHexString(b));
+//						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + length + ", count = " + count);
+//						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + bytes.length);
 					}
 					return result;
 				});
 	}
 
-	public static byte[] readStream(InputStream inStream) throws Exception {
-		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+	/**
+	 * 读取数据
+	 *
+	 * @param inStream 输入数据流
+	 * @return 反回读取结果
+	 * @throws Exception 读取异常
+	 */
+	private static byte[] readStream(InputStream inStream) throws Exception {
+		/*ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int len = -1;
 		while ((len = inStream.read(buffer)) != -1) {
@@ -87,7 +90,18 @@ public class SocketClient {
 		}
 		outSteam.close();
 		inStream.close();
-		return outSteam.toByteArray();
+		return outSteam.toByteArray();*/
+
+		int count = 0;
+		while (count == 0) {
+			count = inStream.available();
+		}
+		byte[] bytes = new byte[count];
+		int readCount = 0; // 已经成功读取的字节的个数
+		while (readCount < count) {
+			readCount += inStream.read(bytes, readCount, count - readCount);
+		}
+		return bytes;
 	}
 
 	public static String byteToHexString(byte src) {
