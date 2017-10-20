@@ -1,6 +1,9 @@
 package com.kawakp.kp.application.ui.acitvity.main;
 
+import android.util.Log;
+
 import com.kawakp.kp.application.R;
+import com.kawakp.kp.kernel.plc.SocketClient;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityMainBinding;
 
@@ -13,6 +16,11 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 
 	@Override
 	public void init() {
+		mBinding.testText.setOnClickListener(view -> {
+			Log.e("socket_Test", "Socket Start!!!!!!!!!!!!!!!!!!");
+			SocketClient.sendMsg("KAWA_test_socket")
+			.subscribe(s -> Log.e("socket_Test", "END*************************** " + s));
+		});
 	}
 
 	/**

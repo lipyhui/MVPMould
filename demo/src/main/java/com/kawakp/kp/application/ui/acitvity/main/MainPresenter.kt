@@ -30,14 +30,15 @@ class MainPresenter : BasePresenter<MainAble>(){
      * 数据加载
      */
     fun loadData(){
-        Observable.timer(3, TimeUnit.SECONDS)
+        Observable.timer(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
                 .subscribe { l ->
                     //					hideLoading();
                     //					showContent();
-                    view().showMessageFromNet("error", "This is other error!")
+//                    view().showMessageFromNet("error", "This is other error!")
+                    view().showContent()
                     //showMessage("this is a test msg");
                     view().setData(KernelJNI.stringFromJNI())
                 }
