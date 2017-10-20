@@ -3,9 +3,9 @@ package com.kawakp.kp.application.ui.acitvity.main;
 import android.util.Log;
 
 import com.kawakp.kp.application.R;
-import com.kawakp.kp.kernel.plc.SocketClient;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityMainBinding;
+import com.kawakp.kp.kernel.plc.SocketClient;
 
 public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBinding> implements MainAble {
 
@@ -17,9 +17,11 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 	@Override
 	public void init() {
 		mBinding.testText.setOnClickListener(view -> {
+			byte[] data = new byte[]{0x01, 0x03, 0x22, 0x33, 0x25, 0x01};
+			Log.e("socket_Test", "socket start ");
 			Log.e("socket_Test", "Socket Start!!!!!!!!!!!!!!!!!!");
-			SocketClient.sendMsg("KAWA_test_socket")
-			.subscribe(s -> Log.e("socket_Test", "END*************************** " + s));
+			SocketClient.sendMsg(data)
+					.subscribe(s -> Log.e("socket_Test", "END*************************** " + s));
 		});
 	}
 

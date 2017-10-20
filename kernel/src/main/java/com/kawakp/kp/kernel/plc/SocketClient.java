@@ -6,7 +6,6 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -32,11 +31,11 @@ public class SocketClient {
 	 * @param msg 要发送的信息
 	 * @return 响应信息
 	 */
-	public static Observable<String> sendMsg(final String msg) {
+	public static Observable<String> sendMsg(final byte[] msg) {
 		return Observable.just(msg)
 				.subscribeOn(Schedulers.io())
 				.observeOn(Schedulers.io())
-				.map(s -> {
+				.map(bytes -> {
 					//创建socket
 					LocalSocket client = new LocalSocket();
 					LocalSocketAddress address = new LocalSocketAddress(SOCKET_NAME, LocalSocketAddress.Namespace
@@ -62,10 +61,10 @@ public class SocketClient {
 
 					//发送数据
 					Log.e("socket_Test", "start write!");
-					PrintWriter out = new PrintWriter(client.getOutputStream());
-					s += "\n";
-					out.println(s);
-					out.flush();
+					/*PrintWriter out = new PrintWriter(client.getOutputStream());
+					out.println(bytes);
+					out.flush();*/
+					client.getOutputStream().write(bytes);
 
 					//接收响应
 					Log.e("socket_Test", "start read!");
