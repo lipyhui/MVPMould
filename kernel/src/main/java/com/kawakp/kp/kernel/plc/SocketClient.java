@@ -27,11 +27,13 @@ public class SocketClient {
 	/**
 	 * 发送消息
 	 *
-	 * @param msg 要发送的信息
+	 * @param header 要发送的头部信息
+	 * @param data   要发送的数据
+	 * @param verify 要发送的校验信息
 	 * @return 响应信息
 	 */
-	public static Observable<byte[]> sendMsg(final byte[] msg) {
-		return Observable.just(msg)
+	public static Observable<byte[]> sendMsg(final byte[] header, final byte[] data, final byte[] verify) {
+		return Observable.just(header)
 				.subscribeOn(Schedulers.io())
 				.observeOn(Schedulers.io())
 				.map(bytes -> {
@@ -60,17 +62,28 @@ public class SocketClient {
 
 					//发送数据
 					Log.e("socket_Test", "start write!");
-					client.getOutputStream().write(bytes);
+					if (bytes.length > 0) {
+						client.getOutputStream().write(bytes);
+					}
+					if (data.length > 0) {
+						client.getOutputStream().write(data);
+					}
+					if (verify.length > 0) {
+						client.getOutputStream().write(verify);
+					}
 
 					//接收响应
 					Log.e("socket_Test", "start read!");
-					byte[] result = readStream(client.getInputStream());
-					for (byte b : result) {
-						Log.e("socket_Test_result", byteToHexString(b));
-//						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + length + ", count = " + count);
-//						Log.e("socket_Test_result", byteToHexString(b) + ", length = " + bytes.length);
-					}
-					return result;
+//					byte[] result = readStream(client.getInputStream());
+//					for (byte b : result) {
+//						Log.e("socket_Test_result", Integer.toHexString(b & 0xff));
+////						Log.e("socket_Test_result", Integer.toHexString(b & 0xff) + ", length = " + length + ", count = " +
+//// count);
+////						Log.e("socket_Test_result", Integer.toHexString(b & 0xff) + ", length = " + bytes.length);
+//					}
+//					return result;
+
+					return readStream(client.getInputStream());
 				});
 	}
 
@@ -102,18 +115,6 @@ public class SocketClient {
 			readCount += inStream.read(bytes, readCount, count - readCount);
 		}
 		return bytes;
-	}
-
-	public static String byteToHexString(byte src) {
-		int j = src;
-		if (j < 0) {
-			j += 256;
-		}
-		String s = Integer.toHexString(j);
-		if (s.length() < 2) {
-			s = "0" + s;
-		}
-		return s;
 	}
 }
 
