@@ -71,12 +71,16 @@ public class VerifyUtil {
 	 * @param lcp_Buff 待校验数据
 	 * @return crc16校验码
 	 */
-	public static byte[] calc_crc16(byte[] lcp_Buff) {
+	public static byte[] calc_crc16(byte[] lcp_Buff, int start, int length) {
 		char lcv_CRCHigh = 0xFF;
 		char lcv_CRCLow = 0xFF;
 		int liv_Index;
 
-		for (int luv_Len = 0; luv_Len < lcp_Buff.length; luv_Len++) {
+		int end = start + length;
+		if (lcp_Buff.length < end)
+			end = lcp_Buff.length;
+
+		for (int luv_Len = start; luv_Len < end; luv_Len++) {
 			liv_Index = lcv_CRCLow ^ lcp_Buff[luv_Len];
 			if (liv_Index < 0) {
 				liv_Index += 256;

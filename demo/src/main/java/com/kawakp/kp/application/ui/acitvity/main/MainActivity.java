@@ -5,6 +5,7 @@ import android.util.Log;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityMainBinding;
+import com.kawakp.kp.kernel.plc.SocketClient;
 
 public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBinding> implements MainAble {
 
@@ -18,8 +19,11 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 		mBinding.testText.setOnClickListener(view -> {
 			byte[] data = new byte[]{0x08, (byte) 0x83, (byte) 0xc2, (byte) 0xd3, (byte) 0xf5, 0x08};
 			Log.e("socket_Test", "Socket Start!!!!!!!!!!!!!!!!!!");
-			/*SocketClient.sendMsg(data)
-					.subscribe(s -> Log.e("socket_Test", "END***************************\n"));*/
+		/*	new PLCManager.ReadBuilder()
+					.readBool(PLCElement.BOOL.X, 20)
+					.build();*/
+			SocketClient.sendMsg(data)
+					.subscribe(s -> Log.e("socket_Test", "END***************************\n"));
 		});
 	}
 
