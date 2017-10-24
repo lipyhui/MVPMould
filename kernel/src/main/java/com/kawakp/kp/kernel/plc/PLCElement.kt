@@ -57,14 +57,74 @@ class PLCElement private constructor() {
     }
 
     /** 创建PLC BOOL 元件 */
-    class ElementBOOL constructor(var element: BOOL = BOOL.X, var addr: Int = 0, var value: Boolean = false)
+    class ElementBOOL {
+        var element: BOOL = BOOL.X
+        var addr: Int = 0
+        var value: Boolean = false
+
+        constructor(element: BOOL = BOOL.X, addr: Int = 0) {
+            this.element = element
+            this.addr = addr
+        }
+
+        constructor(element: BOOL = BOOL.X, addr: Int = 0, value: Boolean = false) {
+            this.element = element
+            this.addr = addr
+            this.value = value
+        }
+    }
 
     /** 创建PLC WORD 元件 */
-    class ElementWORD constructor(var element: WORD = WORD.D, var addr: Int = 0, var value: Int = 0)
+    class ElementWORD {
+        var element: WORD = WORD.D
+        var addr: Int = 0
+        var value: Boolean = false
+
+        constructor(element: WORD = WORD.D, addr: Int = 0) {
+            this.element = element
+            this.addr = addr
+        }
+
+        constructor(element: WORD = WORD.D, addr: Int = 0, value: Boolean = false) {
+            this.element = element
+            this.addr = addr
+            this.value = value
+        }
+    }
 
     /** 创建PLC DWORD 元件 */
-    class ElementDWORD constructor(var element: DWORD = DWORD.D, var addr: Int = 0, var value: Int = 0)
+    class ElementDWORD {
+        var element: DWORD = DWORD.D
+        var addr: Int = 0
+        var value: Boolean = false
+
+        constructor(element: DWORD = DWORD.D, addr: Int = 0) {
+            this.element = element
+            this.addr = addr
+        }
+
+        constructor(element: DWORD = DWORD.D, addr: Int = 0, value: Boolean = false) {
+            this.element = element
+            this.addr = addr
+            this.value = value
+        }
+    }
 
     /** 创建PLC REAL 元件 */
-    class ElementREAL constructor(var element: REAL = REAL.D, var addr: Int = 0, var value: Int = 0)
+    class ElementREAL {
+        var element: REAL = REAL.D
+        var addr: Int = 0
+        var value: Boolean = false
+
+        constructor(element: REAL = REAL.D, addr: Int = 0) {
+            this.element = element
+            this.addr = addr
+        }
+
+        constructor(element: REAL = REAL.D, addr: Int = 0, value: Boolean = false) {
+            this.element = element
+            this.addr = addr
+            this.value = value
+        }
+    }
 }

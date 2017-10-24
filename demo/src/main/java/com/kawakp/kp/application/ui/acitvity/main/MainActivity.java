@@ -19,7 +19,13 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 	public void init() {
 		mBinding.testText.setOnClickListener(view -> {
 			Log.e("socket_Test", "Socket Start!!!!!!!!!!!!!!!!!!");
+	/*		List<PLCElement.ElementBOOL> list = new ArrayList<PLCElement.ElementBOOL>();
+			for (int i = 0; i < 1000; i ++){
+				list.add(new PLCElement.ElementBOOL(PLCElement.BOOL.X, i));
+			}*/
+
 			new PLCManager.ReadBuilder()
+//					.readBoolList(list)
 					.readBool(PLCElement.BOOL.X, 15)
 					.readBool(PLCElement.BOOL.X, 16)
 					.readBool(PLCElement.BOOL.X, 17)

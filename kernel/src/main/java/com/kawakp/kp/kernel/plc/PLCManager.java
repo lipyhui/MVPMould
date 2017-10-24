@@ -17,7 +17,9 @@ import io.reactivex.Observable;
  * 修改时间:2017/10/23
  * 修改内容:
  *
- * 功能描述:KAWA PLC读写操作(超出缓冲区，默认丢失后加入的元件)
+ * 功能描述:KAWA PLC读写操作(超出缓冲区，默认丢失后加入的元件):
+ * 		   1、读一次最多读取 338 个位/字(BOOL、WORD)元件、169 个双字(DWORD、REAL)元件
+ * 		   2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
  */
 
 public class PLCManager {
@@ -130,6 +132,8 @@ public class PLCManager {
 
 	/*****************************************************************************
 	 * 								读元件构造器
+	 * 							一次最多读取 338 个位/字(BOOL、WORD)元件
+	 * 							一次最多读169 个双字(DWORD、REAL)元件
 	 *****************************************************************************/
 	public static final class ReadBuilder {
 		/** 去除 2 字节的校验码长度，协议头部内容放入bits数组中 */
@@ -187,8 +191,8 @@ public class PLCManager {
 			//从协议头部后开始接收位元件
 			int start = bitCount * singleBit + 8;
 			bits[start] = element.getCode();
-			bits[start + 1] = (byte) (addr >> 8);
-			bits[start + 2] = (byte) addr;
+			bits[start + 1] = (byte) addr;
+			bits[start + 2] = (byte) (addr >> 8);
 
 			//统计
 			bitElementName.add(element.name() + addr);
@@ -212,8 +216,8 @@ public class PLCManager {
 
 			int start = wordCount * singleWord;
 			words[start] = element.getCode();
-			words[start + 1] = (byte) (addr >> 8);
-			words[start + 2] = (byte) addr;
+			words[start + 1] = (byte) addr;
+			words[start + 2] = (byte) (addr >> 8);
 
 			//统计
 			wordElementName.add(element.name() + addr);
@@ -238,13 +242,13 @@ public class PLCManager {
 
 			int start = wordCount * singleWord;
 			words[start] = element.getCode();
-			words[start + 1] = (byte) (addr >> 8);
-			words[start + 2] = (byte) addr;
+			words[start + 1] = (byte) addr;
+			words[start + 2] = (byte) (addr >> 8);
 
 			int addr2 = addr + 1;
 			words[start + 3] = element.getCode();
-			words[start + 4] = (byte) (addr2 >> 8);
-			words[start + 5] = (byte) addr2;
+			words[start + 4] = (byte) addr2;
+			words[start + 5] = (byte) (addr2 >> 8);
 
 			//统计
 			wordElementName.add(element.name() + addr);
@@ -269,13 +273,13 @@ public class PLCManager {
 
 			int start = wordCount * singleWord;
 			words[start] = element.getCode();
-			words[start + 1] = (byte) (addr >> 8);
-			words[start + 2] = (byte) addr;
+			words[start + 1] = (byte) addr;
+			words[start + 2] = (byte) (addr >> 8);
 
 			int addr2 = addr + 1;
 			words[start + 3] = element.getCode();
-			words[start + 4] = (byte) (addr2 >> 8);
-			words[start + 5] = (byte) addr2;
+			words[start + 4] = (byte) addr2;
+			words[start + 5] = (byte) (addr2 >> 8);
 
 			//统计
 			wordElementName.add(element.name() + addr);
@@ -285,22 +289,71 @@ public class PLCManager {
 			return this;
 		}
 
+		/**
+		 * 读取一组位元件
+		 *
+		 * @param bools 需要读取的位元件列表
+		 * @return 当前建造类
+		 */
 		public ReadBuilder readBoolList(List<PLCElement.ElementBOOL> bools) {
+			if (bools == null || bools.size() <= 0) {
+				return this;
+			}
+
 			for (PLCElement.ElementBOOL bool : bools) {
-//				readBool(bool.)
+				readBool(bool.getElement(), bool.getAddr());
 			}
 			return this;
 		}
 
+		/**
+		 * 读取一组字元件
+		 *
+		 * @param words 需要读取的字元件列表
+		 * @return 当前建造类
+		 */
 		public ReadBuilder readWORDList(List<PLCElement.ElementWORD> words) {
+			if (words == null || words.size() <= 0) {
+				return this;
+			}
+
+			for (PLCElement.ElementWORD word : words) {
+				readWord(word.getElement(), word.getAddr());
+			}
 			return this;
 		}
 
+		/**
+		 * 读取一组双字元件
+		 *
+		 * @param dwords 需要读取的位双字件列表
+		 * @return 当前建造类
+		 */
 		public ReadBuilder readDWORDList(List<PLCElement.ElementDWORD> dwords) {
+			if (dwords == null || dwords.size() <= 0) {
+				return this;
+			}
+
+			for (PLCElement.ElementDWORD dword : dwords) {
+				readDWord(dword.getElement(), dword.getAddr());
+			}
 			return this;
 		}
 
+		/**
+		 * 读取一组REAL元件
+		 *
+		 * @param reals 需要读取的REAL元件列表
+		 * @return 当前建造类
+		 */
 		public ReadBuilder readREALList(List<PLCElement.ElementREAL> reals) {
+			if (reals == null || reals.size() <= 0) {
+				return this;
+			}
+
+			for (PLCElement.ElementREAL real : reals) {
+				readREAL(real.getElement(), real.getAddr());
+			}
 			return this;
 		}
 
@@ -327,15 +380,18 @@ public class PLCManager {
 			bits[3] = 0x0B;
 			//数据长度
 			int count = bitCount + wordCount;
-			bits[4] = (byte) (count >> 8);
-			bits[5] = (byte) count;
-			bits[6] = (byte) (bitCount >> 8);
-			bits[7] = (byte) bitCount;
+			bits[4] = (byte) count;
+			bits[5] = (byte) (count >> 8);
+			bits[6] = (byte) bitCount;
+			bits[7] = (byte) (bitCount >> 8);
 		}
 	}
 
 	/*****************************************************************************
 	 * 								写元件构造器
+	 * 							一次最多写 253 个位(BOOL)元件
+	 * 							一次最多写202 个字(WORD)元件
+	 * 							一次最多写101 个双字(DWORD、REAL)元件
 	 *****************************************************************************/
 	public static final class WriteBuilder {
 		/** 去除 2 字节的校验码长度，协议头部内容放入bits数组中 */
@@ -393,10 +449,10 @@ public class PLCManager {
 			bits[3] = 0x0B;
 			//数据长度
 			int count = bitCount + wordCount;
-			bits[4] = (byte) (count >> 8);
-			bits[5] = (byte) count;
-			bits[6] = (byte) (bitCount >> 8);
-			bits[7] = (byte) bitCount;
+			bits[4] = (byte) count;
+			bits[5] = (byte) (count >> 8);
+			bits[6] = (byte) bitCount;
+			bits[7] = (byte) (bitCount >> 8);
 		}
 	}
 }
