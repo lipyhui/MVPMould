@@ -18,8 +18,8 @@ import io.reactivex.Observable;
  * 修改内容:
  *
  * 功能描述:KAWA PLC读写操作(超出缓冲区，默认丢失后加入的元件):
- * 		   1、读一次最多读取 338 个位/字(BOOL、WORD)元件、169 个双字(DWORD、REAL)元件
- * 		   2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
+ * 1、读一次最多读取 338 个位/字(BOOL、WORD)元件、169 个双字(DWORD、REAL)元件
+ * 2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
  */
 
 public class PLCManager {
@@ -178,7 +178,7 @@ public class PLCManager {
 		/**
 		 * 读布尔(BOOL)数据
 		 *
-		 * @param element 布尔元件类型
+		 * @param element 布尔(BOOL)元件类型
 		 * @param addr    元件地址
 		 * @return 当前建造类
 		 */
@@ -204,7 +204,7 @@ public class PLCManager {
 		/**
 		 * 读字(WORD)数据
 		 *
-		 * @param element 布尔元件类型
+		 * @param element 字(WORD)元件类型
 		 * @param addr    元件地址
 		 * @return 当前建造类
 		 */
@@ -230,7 +230,7 @@ public class PLCManager {
 		/**
 		 * 读双字(DWORD)数据
 		 *
-		 * @param element 布尔元件类型
+		 * @param element 双字(DWORD)元件类型
 		 * @param addr    元件地址
 		 * @return 当前建造类
 		 */
@@ -261,7 +261,7 @@ public class PLCManager {
 		/**
 		 * 读双字(REAL)数据
 		 *
-		 * @param element 布尔元件类型
+		 * @param element 双字(REAL)元件类型
 		 * @param addr    元件地址
 		 * @return 当前建造类
 		 */
@@ -290,9 +290,9 @@ public class PLCManager {
 		}
 
 		/**
-		 * 读取一组位元件
+		 * 读取一组位(BOOL)元件
 		 *
-		 * @param bools 需要读取的位元件列表
+		 * @param bools 需要读取的位(BOOL)元件列表
 		 * @return 当前建造类
 		 */
 		public ReadBuilder readBoolList(List<PLCElement.ElementBOOL> bools) {
@@ -307,9 +307,9 @@ public class PLCManager {
 		}
 
 		/**
-		 * 读取一组字元件
+		 * 读取一组字(WORD)元件
 		 *
-		 * @param words 需要读取的字元件列表
+		 * @param words 需要读取的字(WORD)元件列表
 		 * @return 当前建造类
 		 */
 		public ReadBuilder readWORDList(List<PLCElement.ElementWORD> words) {
@@ -324,9 +324,9 @@ public class PLCManager {
 		}
 
 		/**
-		 * 读取一组双字元件
+		 * 读取一组双字(DWORD)元件
 		 *
-		 * @param dwords 需要读取的位双字件列表
+		 * @param dwords 需要读取的位双字(DWORD)件列表
 		 * @return 当前建造类
 		 */
 		public ReadBuilder readDWORDList(List<PLCElement.ElementDWORD> dwords) {
@@ -341,9 +341,9 @@ public class PLCManager {
 		}
 
 		/**
-		 * 读取一组REAL元件
+		 * 读取一组双字(REAL)元件
 		 *
-		 * @param reals 需要读取的REAL元件列表
+		 * @param reals 需要读取的双字(REAL)元件列表
 		 * @return 当前建造类
 		 */
 		public ReadBuilder readREALList(List<PLCElement.ElementREAL> reals) {
@@ -427,6 +427,14 @@ public class PLCManager {
 			words = new byte[MAX_WORD_LEN];
 		}
 
+		/**
+		 * 写一个布尔(BOOL)类型元件
+		 *
+		 * @param element 布尔(BOOL)元件类型
+		 * @param addr    元件地址
+		 * @param value   要写入元件的值
+		 * @return 当前建造类
+		 */
 		public WriteBuilder writeBool(final PLCElement.BOOL element, final short addr, final boolean value) {
 			return this;
 		}
