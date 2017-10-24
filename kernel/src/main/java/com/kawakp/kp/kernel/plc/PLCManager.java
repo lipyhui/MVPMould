@@ -99,7 +99,6 @@ public class PLCManager {
 	 * @return 返回响应数据
 	 */
 	public Observable<PLCResponse> start() {
-//		actionStart(context);
 		return SocketClient.sendMsg(mData, mVerify)
 				.map(bytes -> {
 //					for (byte b : bytes) {
@@ -108,25 +107,7 @@ public class PLCManager {
 					}
 					return new PLCResponse();
 				});
-/*		return Observable.just(1)
-				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.io())
-				.map(integer -> new PLCResponse());*/
 	}
-
-	// Static method to start the service
-/*	public void actionStart(Context ctx) {
-		Intent i = new Intent(ctx, SocketClientService.class);
-//		i.setAction(ACTION_START);
-		ctx.startService(i);
-	}
-
-	// Static method to stop the service
-	public void actionStop(Context ctx) {
-		Intent i = new Intent(ctx, SocketClientService.class);
-		i.setAction(ACTION_STOP);
-		ctx.startService(i);
-	}*/
 
 	/**
 	 * 合并两个byte数组
@@ -496,58 +477,4 @@ public class PLCManager {
 			bits[7] = (byte) (bitCount >> 8);
 		}
 	}
-
-	/*****************************************************************************
-	 * 						Socket通信服务，带系统权限服务
-	 *****************************************************************************/
-	/*public class SocketClientService extends Service{
-		private static final String TAG = "Socket_test_service";
-
-		@Override
-		public void onCreate() {
-			Log.i(TAG, "SocketClientService-onCreate");
-			super.onCreate();
-		}
-
-		@Override
-		public void onStart(Intent intent, int startId) {
-			Log.i(TAG, "SocketClientService-onStart");
-			super.onStart(intent, startId);
-
-			SocketClient.sendMsg(mData, mVerify)
-					.map(bytes -> {
-//					for (byte b : bytes) {
-						for (int i = 0; i < bytes.length; i++) {
-							Log.e("socket_Test_response", "byte[" + i + "] = " + Integer.toHexString(bytes[i] & 0xff));
-						}
-						return new PLCResponse();
-					}).subscribe();
-		}
-
-		@Override
-		public int onStartCommand(Intent intent, int flags, int startId) {
-			//执行文件的下载或者播放等操作
-			Log.i(TAG, "SocketClientService-onStartCommand");
-        *//*
-         * 这里返回状态有三个值，分别是:
-         * 1、START_STICKY：当服务进程在运行时被杀死，系统将会把它置为started状态，但是不保存其传递的Intent对象，之后，系统会尝试重新创建服务;
-         * 2、START_NOT_STICKY：当服务进程在运行时被杀死，并且没有新的Intent对象传递过来的话，系统将会把它置为started状态，
-         *   但是系统不会重新创建服务，直到startService(Intent intent)方法再次被调用;
-         * 3、START_REDELIVER_INTENT：当服务进程在运行时被杀死，它将会在隔一段时间后自动创建，并且最后一个传递的Intent对象将会再次传递过来。
-         *//*
-			return super.onStartCommand(intent, flags, startId);
-		}
-
-		@Override
-		public IBinder onBind(Intent intent) {
-			Log.i(TAG, "SocketClientService-onBind");
-			return null;
-		}
-
-		@Override
-		public void onDestroy() {
-			Log.i(TAG, "SocketClientService-onDestroy");
-			super.onDestroy();
-		}
-	}*/
 }
