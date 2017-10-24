@@ -59,6 +59,11 @@ public class SocketClient {
 						}
 					}
 
+					//防止未连接奔溃
+					if (!client.isConnected()){
+						return new byte[0];
+					}
+
 					//发送数据
 					Log.e("socket_Test", "start write!");
 					if (bytes.length > 0) {
