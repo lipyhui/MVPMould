@@ -19,4 +19,4 @@ package com.kawakp.kp.kernel.plc
  */
 data class PLCResponse constructor(val responseCode: Int = -10,
                                    val responseMsg: String = "未知原因失败",
-                                   val data: List<PLCRespElement> = ArrayList())
+                                   val data: Map<String, PLCRespElement> = HashMap())

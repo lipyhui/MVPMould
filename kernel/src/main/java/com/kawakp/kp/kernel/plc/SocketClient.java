@@ -27,13 +27,12 @@ public class SocketClient {
 	/**
 	 * 发送消息
 	 *
-	 * @param header 要发送的头部信息
 	 * @param data   要发送的数据
 	 * @param verify 要发送的校验信息
 	 * @return 响应信息
 	 */
-	public static Observable<byte[]> sendMsg(final byte[] header, final byte[] data, final byte[] verify) {
-		return Observable.just(header)
+	public static Observable<byte[]> sendMsg(final byte[] data, final byte[] verify) {
+		return Observable.just(data)
 				.subscribeOn(Schedulers.io())
 				.observeOn(Schedulers.io())
 				.map(bytes -> {
@@ -64,9 +63,6 @@ public class SocketClient {
 					Log.e("socket_Test", "start write!");
 					if (bytes.length > 0) {
 						client.getOutputStream().write(bytes);
-					}
-					if (data.length > 0) {
-						client.getOutputStream().write(data);
 					}
 					if (verify.length > 0) {
 						client.getOutputStream().write(verify);

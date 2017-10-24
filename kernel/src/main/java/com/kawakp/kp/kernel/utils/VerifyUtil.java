@@ -7,7 +7,7 @@ package com.kawakp.kp.kernel.utils;
  * 修改时间:2017/10/20
  * 修改内容:
  *
- * 功能描述:
+ * 功能描述:校验文件
  */
 
 public class VerifyUtil {
@@ -69,9 +69,11 @@ public class VerifyUtil {
 	 * crc16校验
 	 *
 	 * @param lcp_Buff 待校验数据
+	 * @param start 待校验数据起始位，从 0 位置开始
+	 * @param length 待校验数据长度
 	 * @return crc16校验码
 	 */
-	public static byte[] calc_crc16(byte[] lcp_Buff, int start, int length) {
+	public static byte[] calcCrc16(byte[] lcp_Buff, int start, int length) {
 		char lcv_CRCHigh = 0xFF;
 		char lcv_CRCLow = 0xFF;
 		int liv_Index;
@@ -92,8 +94,8 @@ public class VerifyUtil {
 		short crc = (short) (lcv_CRCHigh | lcv_CRCLow << 8);
 
 		byte[] result = new byte[]{
-				(byte) (crc & 0xff),
-				(byte) ((crc & 0xff00) >> 8)
+				(byte) ((crc & 0xff00) >> 8),
+				(byte) (crc & 0xff)
 		};
 
 		return result;
