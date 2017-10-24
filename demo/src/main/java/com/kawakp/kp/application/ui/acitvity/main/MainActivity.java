@@ -42,6 +42,7 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 					.readREAL(PLCElement.REAL.D, 31)
 					.readREAL(PLCElement.REAL.D, 33)
 					.build()
+//					.start(this);
 					.startAsync();
 		});
 	}
