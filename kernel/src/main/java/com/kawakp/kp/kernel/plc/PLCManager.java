@@ -357,6 +357,11 @@ public class PLCManager {
 			return this;
 		}
 
+		/**
+		 * 构造 PLC 读写管理器
+		 *
+		 * @return PLC 读写管理器
+		 */
 		public PLCManager build() {
 			//判断是否有读元件
 			if (bitCount == 0 && wordCount == 0) {
@@ -426,6 +431,11 @@ public class PLCManager {
 			return this;
 		}
 
+		/**
+		 * 构造 PLC 读写管理器
+		 *
+		 * @return PLC 读写管理器
+		 */
 		public PLCManager build() {
 			//判断是否有写元件
 			if (bitCount == 0 && wordCount == 0) {
