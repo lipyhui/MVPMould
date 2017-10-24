@@ -78,14 +78,14 @@ class PLCElement private constructor() {
     class ElementWORD {
         var element: WORD = WORD.D
         var addr: Int = 0
-        var value: Boolean = false
+        var value: Int = 0
 
         constructor(element: WORD = WORD.D, addr: Int = 0) {
             this.element = element
             this.addr = addr
         }
 
-        constructor(element: WORD = WORD.D, addr: Int = 0, value: Boolean = false) {
+        constructor(element: WORD = WORD.D, addr: Int = 0, value: Int = 0) {
             this.element = element
             this.addr = addr
             this.value = value
@@ -96,14 +96,14 @@ class PLCElement private constructor() {
     class ElementDWORD {
         var element: DWORD = DWORD.D
         var addr: Int = 0
-        var value: Boolean = false
+        var value: Int = 0
 
         constructor(element: DWORD = DWORD.D, addr: Int = 0) {
             this.element = element
             this.addr = addr
         }
 
-        constructor(element: DWORD = DWORD.D, addr: Int = 0, value: Boolean = false) {
+        constructor(element: DWORD = DWORD.D, addr: Int = 0, value: Int = 0) {
             this.element = element
             this.addr = addr
             this.value = value
@@ -114,14 +114,14 @@ class PLCElement private constructor() {
     class ElementREAL {
         var element: REAL = REAL.D
         var addr: Int = 0
-        var value: Boolean = false
+        var value: Int = 0
 
         constructor(element: REAL = REAL.D, addr: Int = 0) {
             this.element = element
             this.addr = addr
         }
 
-        constructor(element: REAL = REAL.D, addr: Int = 0, value: Boolean = false) {
+        constructor(element: REAL = REAL.D, addr: Int = 0, value: Int = 0) {
             this.element = element
             this.addr = addr
             this.value = value

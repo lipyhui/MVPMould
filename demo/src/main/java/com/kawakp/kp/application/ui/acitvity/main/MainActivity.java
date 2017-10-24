@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 				list.add(new PLCElement.ElementBOOL(PLCElement.BOOL.X, i));
 			}*/
 
-			new PLCManager.ReadBuilder()
+/*			new PLCManager.ReadBuilder()
 //					.readBoolList(list)
 					.readBool(PLCElement.BOOL.X, 15)
 					.readBool(PLCElement.BOOL.X, 16)
@@ -38,9 +38,26 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 					.readWord(PLCElement.WORD.D, 24)
 					.readDWord(PLCElement.DWORD.D, 25)
 					.readDWord(PLCElement.DWORD.D, 27)
-					.readREAL(PLCElement.REAL.D, 29)
-					.readREAL(PLCElement.REAL.D, 31)
-					.readREAL(PLCElement.REAL.D, 33)
+					.readReal(PLCElement.REAL.D, 29)
+					.readReal(PLCElement.REAL.D, 31)
+					.readReal(PLCElement.REAL.D, 33)
+					.build()
+					.startAsync();*/
+
+			new PLCManager.WriteBuilder()
+					.writeBool(PLCElement.BOOL.Y, 0, true)
+					.writeBool(PLCElement.BOOL.Y, 1, true)
+					.writeBool(PLCElement.BOOL.Y, 2, true)
+					.writeBool(PLCElement.BOOL.Y, 3, true)
+					.writeWord(PLCElement.WORD.D, 4, 15)
+					.writeWord(PLCElement.WORD.D, 5, 16)
+					.writeWord(PLCElement.WORD.D, 6, 17)
+					.writeDWord(PLCElement.DWORD.D, 7, 18)
+					.writeDWord(PLCElement.DWORD.D, 9, 19)
+					.writeDWord(PLCElement.DWORD.D, 11, 20)
+					.writeReal(PLCElement.REAL.D, 13, 20.5F)
+					.writeReal(PLCElement.REAL.D, 15, 25.4F)
+					.writeReal(PLCElement.REAL.D, 17, 39.8F)
 					.build()
 					.startAsync();
 		});
