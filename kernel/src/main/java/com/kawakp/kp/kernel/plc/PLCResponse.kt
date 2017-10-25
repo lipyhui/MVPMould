@@ -9,7 +9,7 @@ package com.kawakp.kp.kernel.plc
  *
  * 功能描述:PLC读写响应数据
  *         responseCode: 存放返回代码，默认为 -100
- *                      0：表示成功
+ *                      0：成功
  *                      -1：连接失败
  *                      -2：数据发送失败
  *                      -3：响应接收失败

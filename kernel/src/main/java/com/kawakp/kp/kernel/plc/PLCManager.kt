@@ -65,7 +65,7 @@ private constructor(
      * 异步发送数据，不关心返回
      */
     fun startAsync() {
-        start().subscribe()
+        start().subscribe{response -> Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")}
     }
 
     /**
@@ -85,10 +85,12 @@ private constructor(
     fun start(): Observable<PLCResponse> {
         return SocketClient.sendMsg(mData, mVerify)
                 .map { bytes ->
+                    val response = verifyResponse(bytes)
+
                     for (b in bytes) {
                         Log.e("socket_Test_response", "byte = ${Integer.toHexString(b.toInt())}")
                     }
-                    PLCResponse()
+                    response
                 }
     }
 
@@ -103,14 +105,16 @@ private constructor(
         val length = bytes.size
 
         if (length <= 0) {
-            return PLCResponse()
+            return PLCResponse(-1, "连接失败")
         }
 
         //crc16校验接收数据
         val crc = VerifyUtil.calcCrc16(bytes, 0, length - 2)
-        return if (crc[0] != bytes[length - 2] || crc[1] != bytes[length - 1]) {
-            PLCResponse()
-        } else PLCResponse()
+        if (crc[0] != bytes[length - 2] || crc[1] != bytes[length - 1]) {
+            return PLCResponse(-4, "校验失败")
+        } else {
+            return PLCResponse(0, "成功")
+        }
     }
 
     /*****************************************************************************
