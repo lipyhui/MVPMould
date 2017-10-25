@@ -699,7 +699,7 @@ private constructor(
 
             if (bytes[1] == LOCAL_READ_CODE) {
                 //根据长度判断接收响应数据是否正确
-                val length = ((bytes[3].toInt() shl 8) and 0xff00) + (bytes[4].toInt() and 0xff)
+                val length = ((bytes[3].toInt() shl 8) and 0xff00) or (bytes[4].toInt() and 0xff)
                 //响应数据总长度是 = 响应头部(5个字节) + 数据 + 校验码(2个字节)
                 if (bytes.size != (5 + 2 + length)) {
                     response.responseCode = -3
@@ -729,7 +729,7 @@ private constructor(
                         when (wordType[i]) {
                             //解析WORD
                             TYPE.WORD -> {
-                                val value = ((bytes[startPosition].toInt() shl 8) and 0xff00) +
+                                val value = ((bytes[startPosition].toInt() shl 8) and 0xff00) or
                                         (bytes[startPosition + 1].toInt() and 0xff)
                                 response.data.put(wordElementName[i], PLCRespElement(false, value))
                                 startPosition += 2
@@ -737,9 +737,9 @@ private constructor(
 
                             //解析DWORD
                             TYPE.DWORD -> {
-                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) +
-                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) +
-                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) +
+                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) or
+                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) or
+                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) or
                                         (bytes[startPosition + 3].toLong() and 0xff)
                                 response.data.put(wordElementName[i], PLCRespElement(false, 0, value.toInt()))
                                 startPosition += 4
@@ -747,9 +747,9 @@ private constructor(
 
                             //解析REAL
                             TYPE.REAL -> {
-                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) +
-                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) +
-                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) +
+                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) or
+                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) or
+                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) or
                                         (bytes[startPosition + 3].toLong() and 0xff)
                                 response.data.put(wordElementName[i], PLCRespElement(false, 0, 0,
                                         java.lang.Float.intBitsToFloat(value.toInt())))
