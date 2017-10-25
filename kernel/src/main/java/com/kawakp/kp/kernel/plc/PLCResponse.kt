@@ -11,7 +11,7 @@ package com.kawakp.kp.kernel.plc
  *         responseCode: 存放返回代码，默认为 -100
  *                      0：成功
  *                      -1：连接失败
- *                      -2：数据发送失败
+ *                      -2：写数据失败
  *                      -3：响应接收失败
  *                      -4：校验失败
  *                      -5：数据解析失败
@@ -20,4 +20,4 @@ package com.kawakp.kp.kernel.plc
  */
 data class PLCResponse constructor(var responseCode: Int = -10,
                                    var responseMsg: String = "未知原因失败",
-                                   val data: Map<String, PLCRespElement> = HashMap())
+                                   val data: HashMap<String, PLCRespElement> = HashMap())

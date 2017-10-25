@@ -14,7 +14,7 @@ import java.util.*
  * 修改内容:
  *
  * 功能描述:KAWA PLC读写操作(超出缓冲区，默认丢失后加入的元件):
- * 1、读一次最多读取 338 个位/字(BOOL、WORD)元件、169 个双字(DWORD、REAL)元件
+ * 1、读一次最多 338 个位/字(BOOL、WORD)元件、169 个双字(DWORD、REAL)元件
  * 2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
  */
 
@@ -25,8 +25,8 @@ class PLCManager
  * @param mData            协议数据域
  * @param mVerify          协议校验
  * @param mBitElementName  位元件名称列表(按顺序)
- * @param mBitElementName 字元件名称列表(按顺序)
- * @param mWordElementName        字元件的数据类型列表(按顺序)
+ * @param mWordElementName 字元件名称列表(按顺序)
+ * @param mWordType        字元件的数据类型列表(按顺序)
  * @param mBitCount        位元件个数
  */
 private constructor(
@@ -59,7 +59,12 @@ private constructor(
      * 异步发送数据，不关心返回
      */
     fun startAsync() {
-        start().subscribe { response -> Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}") }
+        start().subscribe { response ->
+            Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")
+            for ((key, value) in response.data){
+                Log.e("socket_Test_response", "key = $key, value = $value")
+            }
+        }
     }
 
     /**
@@ -80,16 +85,16 @@ private constructor(
         return SocketClient.sendMsg(mData, mVerify)
                 .map { bytes ->
                     for (b in bytes) {
-                        Log.e("socket_Test_response", "byte = ${Integer.toHexString(b.toInt())}")
+                        Log.e("socket_Test_response", "byte = ${Integer.toHexString(b.toInt() and 0xff)}")
                     }
-                    analysisResponse(bytes)
+                    analysisResponse(bytes, mBitElementName, mWordElementName, mWordType, mBitCount)
                 }
     }
 
     /*****************************************************************************
      * 读元件构造器
-     * 一次最多读取 338 个位/字(BOOL、WORD)元件
-     * 一次最多读169 个双字(DWORD、REAL)元件
+     * 一次最多读 338 个位/字(BOOL、WORD)元件
+     * 一次最多读 169 个双字(DWORD、REAL)元件
      *****************************************************************************/
     class ReadBuilder {
         /** 去除 2 字节的校验码长度，协议头部内容放入bits数组中  */
@@ -351,8 +356,8 @@ private constructor(
     /*****************************************************************************
      * 写元件构造器
      * 一次最多写 253 个位(BOOL)元件
-     * 一次最多写202 个字(WORD)元件
-     * 一次最多写101 个双字(DWORD、REAL)元件
+     * 一次最多写 202 个字(WORD)元件
+     * 一次最多写 101 个双字(DWORD、REAL)元件
      *****************************************************************************/
     class WriteBuilder {
         /** 去除 2 字节的校验码长度，协议头部内容放入bits数组中  */
@@ -626,6 +631,8 @@ private constructor(
         private val LOCAL_WRITE_START: Byte = 0x57
         /** 本地 PLC 写功能码  */
         private val LOCAL_WRITE_CODE: Byte = 0x68
+        /** 本地 PLC 写位、字错误功能码  */
+        private val LOCAL_WRITE_ERROR_CODE: Byte = 0xE8.toByte()
 
         /** 本地 PLC 读写从站地址  */
         private val LOCAL_STATION: Byte = 0x01
@@ -662,10 +669,15 @@ private constructor(
         /**
          * 解析接收的响应数据
          *
-         * @param bytes 接收的响应数据
+         * @param bytes           接收的响应数据
+         * @param bitElementName  位元件名称列表(按顺序)
+         * @param wordElementName 字元件名称列表(按顺序)
+         * @param wordType        字元件的数据类型列表(按顺序)
+         * @param bitCount        位元件个数
          * @return 返回解析结果
          */
-        private fun analysisResponse(bytes: ByteArray): PLCResponse {
+        private fun analysisResponse(bytes: ByteArray, bitElementName: List<String>?, wordElementName: List<String>?,
+                                     wordType: List<TYPE>?, bitCount: Int): PLCResponse {
             //crc16校验
             val response = verifyResponse(bytes)
 
@@ -682,10 +694,30 @@ private constructor(
             }
 
             if (bytes[1] == LOCAL_READ_CODE) {
+                //根据长度判断接收响应数据是否正确
+                val length = ((bytes[3].toInt() shl 8) and 0xff00) + (bytes[4].toInt() and 0xff)
+                if (bytes.size != (5 + 2 + length)) {
+                    response.responseCode = -3
+                    response.responseMsg = "响应接收失败"
+                    return response
+                }
+
+                //bitElementName 非空解析bit类型数据
+                bitElementName?.let {
+                    for (i in bitElementName.indices) {
+                        val status = (bytes[5 + i / 8].toInt() and (0x01 shl (i % 8))) > 0
+                        response.data.put(bitElementName[i], PLCRespElement(status))
+                    }
+                }
+
                 return response
             } else if (bytes[1] == LOCAL_WRITE_CODE) {
                 response.responseCode = 0
                 response.responseMsg = "成功"
+                return response
+            } else if (bytes[1] == LOCAL_WRITE_ERROR_CODE) {
+                response.responseCode = -2
+                response.responseMsg = "写数据失败"
                 return response
             } else {
                 response.responseCode = -100
