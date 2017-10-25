@@ -79,14 +79,10 @@ private constructor(
     fun start(): Observable<PLCResponse> {
         return SocketClient.sendMsg(mData, mVerify)
                 .map { bytes ->
-                    val response = verifyResponse(bytes)
-
-                    Log.e("socket_Test_response", "bitCount = $mBitCount")
-
                     for (b in bytes) {
                         Log.e("socket_Test_response", "byte = ${Integer.toHexString(b.toInt())}")
                     }
-                    response
+                    analysisResponse(bytes)
                 }
     }
 
@@ -339,10 +335,10 @@ private constructor(
          */
         private fun buildHeader() {
             //协议头部
-            bits[0] = 0x52
-            bits[1] = 0x01
+            bits[0] = LOCAL_READ_START
+            bits[1] = LOCAL_STATION
             bits[2] = LOCAL_READ_CODE
-            bits[3] = 0x0B
+            bits[3] = LOCAL_SUB_CODE
             //数据长度
             val count = bitCount + wordCount
             bits[4] = count.toByte()
@@ -601,10 +597,10 @@ private constructor(
          */
         private fun buildHeader() {
             //协议头部
-            bits[0] = 0x57
-            bits[1] = 0x01
+            bits[0] = LOCAL_WRITE_START
+            bits[1] = LOCAL_STATION
             bits[2] = LOCAL_WRITE_CODE
-            bits[3] = 0x0B
+            bits[3] = LOCAL_SUB_CODE
             //数据长度
             val count = bitCount + wordCount
             bits[4] = count.toByte()
@@ -616,10 +612,20 @@ private constructor(
 
     companion object {
 
+        /** 本地 PLC 读起始字  */
+        private val LOCAL_READ_START: Byte = 0x52
         /** 本地 PLC 读功能码  */
         private val LOCAL_READ_CODE: Byte = 0x69
+
+        /** 本地 PLC 写起始字  */
+        private val LOCAL_WRITE_START: Byte = 0x57
         /** 本地 PLC 写功能码  */
         private val LOCAL_WRITE_CODE: Byte = 0x68
+
+        /** 本地 PLC 读写从站地址  */
+        private val LOCAL_STATION: Byte = 0x01
+        /** 本地 PLC 读写子功能码  */
+        private val LOCAL_SUB_CODE: Byte = 0x0B
 
         /** 定义PLC读写最大缓存区大小  */
         private val MAX_BUFF_LEN = 1024
@@ -646,6 +652,26 @@ private constructor(
             } else {
                 return PLCResponse(0, "成功")
             }
+        }
+
+        /**
+         * 解析接收的响应数据
+         *
+         * @param bytes 接收的响应数据
+         * @return 返回解析结果
+         */
+        private fun analysisResponse(bytes: ByteArray): PLCResponse{
+            //crc16校验
+            val response = verifyResponse(bytes)
+
+            //校验错误
+            if(response.responseCode < 0){
+                return response
+            }
+
+//            if (bytes[0])
+
+            return response
         }
 
         /**
