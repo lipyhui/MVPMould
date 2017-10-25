@@ -59,7 +59,7 @@ private constructor(
      * 异步发送数据，不关心返回
      */
     fun startAsync() {
-        start().subscribe{response -> Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")}
+        start().subscribe { response -> Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}") }
     }
 
     /**
@@ -90,7 +90,7 @@ private constructor(
      * 读元件构造器
      * 一次最多读取 338 个位/字(BOOL、WORD)元件
      * 一次最多读169 个双字(DWORD、REAL)元件
-     */
+     *****************************************************************************/
     class ReadBuilder {
         /** 去除 2 字节的校验码长度，协议头部内容放入bits数组中  */
         private val MAX_BIT_LEN = MAX_BUFF_LEN - 2
@@ -353,7 +353,7 @@ private constructor(
      * 一次最多写 253 个位(BOOL)元件
      * 一次最多写202 个字(WORD)元件
      * 一次最多写101 个双字(DWORD、REAL)元件
-     */
+     *****************************************************************************/
     class WriteBuilder {
         /** 去除 2 字节的校验码长度，协议头部内容放入bits数组中  */
         private val MAX_BIT_LEN = MAX_BUFF_LEN - 2
@@ -610,6 +610,11 @@ private constructor(
         }
     }
 
+    /*****************************************************************************
+     * 协议头部协议代码定义
+     * 缓存区大小定义
+     * 数据解析和内部方法
+     *****************************************************************************/
     companion object {
 
         /** 本地 PLC 读起始字  */
@@ -660,18 +665,33 @@ private constructor(
          * @param bytes 接收的响应数据
          * @return 返回解析结果
          */
-        private fun analysisResponse(bytes: ByteArray): PLCResponse{
+        private fun analysisResponse(bytes: ByteArray): PLCResponse {
             //crc16校验
             val response = verifyResponse(bytes)
 
             //校验错误
-            if(response.responseCode < 0){
+            if (response.responseCode < 0) {
                 return response
             }
 
-//            if (bytes[0])
+            //判断响应头部信息
+            if (bytes[0] != LOCAL_STATION || bytes[2] != LOCAL_SUB_CODE) {
+                response.responseCode = -3
+                response.responseMsg = "响应接收失败"
+                return response
+            }
 
-            return response
+            if (bytes[1] == LOCAL_READ_CODE) {
+                return response
+            } else if (bytes[1] == LOCAL_WRITE_CODE) {
+                response.responseCode = 0
+                response.responseMsg = "成功"
+                return response
+            } else {
+                response.responseCode = -100
+                response.responseMsg = "未知原因失败"
+                return response
+            }
         }
 
         /**

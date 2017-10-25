@@ -18,6 +18,6 @@ package com.kawakp.kp.kernel.plc
  *                      -100：未知原因失败
  *         data: 存放返回数据，默认长度为 0
  */
-data class PLCResponse constructor(val responseCode: Int = -10,
-                                   val responseMsg: String = "未知原因失败",
+data class PLCResponse constructor(var responseCode: Int = -10,
+                                   var responseMsg: String = "未知原因失败",
                                    val data: Map<String, PLCRespElement> = HashMap())
