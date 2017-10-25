@@ -90,8 +90,8 @@ private constructor(
         //读写元件并返回
         return SocketClient.sendMsg(mData, mVerify)
                 .map { bytes ->
-                    for (b in bytes) {
-                        Log.e("socket_Test_response", "byte = ${Integer.toHexString(b.toInt() and 0xff)}")
+                    for (i in bytes.indices) {
+                        Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
                     }
                     analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
                 }
@@ -700,6 +700,7 @@ private constructor(
             if (bytes[1] == LOCAL_READ_CODE) {
                 //根据长度判断接收响应数据是否正确
                 val length = ((bytes[3].toInt() shl 8) and 0xff00) + (bytes[4].toInt() and 0xff)
+                //响应数据总长度是 = 响应头部(5个字节) + 数据 + 校验码(2个字节)
                 if (bytes.size != (5 + 2 + length)) {
                     response.responseCode = -3
                     response.responseMsg = "响应接收失败"
@@ -715,39 +716,44 @@ private constructor(
                 //判断字类型数据是否可以正常解析
                 if (!wordElementName.isEmpty() && !wordType.isEmpty() && wordElementName.size == wordType.size) {
                     //计算WORD类型数据起始位置
-                    var startPostion = 5 + bitElementName.size / 8
+                    var startPosition = 5 + bitElementName.size / 8
                     if (bitElementName.size % 8 > 0) {
-                        startPostion++
+                        startPosition++
                     }
 
                     //解析WORD、DWORD、REAL类型数据
                     for (i in wordElementName.indices) {
+                        Log.e("socket_Test_response",
+                                "i = $i, " + "name = ${wordElementName[i]}, " +
+                                        "startPosition = $startPosition")
                         when (wordType[i]) {
                             //解析WORD
                             TYPE.WORD -> {
-                                val value = ((bytes[startPostion].toInt() shl 8) and 0xff00) +
-                                        (bytes[startPostion + 1].toInt() and 0xff)
+                                val value = ((bytes[startPosition].toInt() shl 8) and 0xff00) +
+                                        (bytes[startPosition + 1].toInt() and 0xff)
                                 response.data.put(wordElementName[i], PLCRespElement(false, value))
-                                startPostion += 2
+                                startPosition += 2
                             }
+
                             //解析DWORD
                             TYPE.DWORD -> {
-                                val value = ((bytes[startPostion].toLong() shl 24) and 0xff000000) +
-                                        ((bytes[startPostion + 1].toLong() shl 16) and 0xff0000) +
-                                        ((bytes[startPostion + 2].toLong() shl 8) and 0xff00) +
-                                        (bytes[startPostion + 3].toLong() and 0xff)
+                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) +
+                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) +
+                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) +
+                                        (bytes[startPosition + 3].toLong() and 0xff)
                                 response.data.put(wordElementName[i], PLCRespElement(false, 0, value.toInt()))
-                                startPostion += 4
+                                startPosition += 4
                             }
+
                             //解析REAL
                             TYPE.REAL -> {
-                                val value = ((bytes[startPostion].toLong() shl 24) and 0xff000000) +
-                                        ((bytes[startPostion + 1].toLong() shl 16) and 0xff0000) +
-                                        ((bytes[startPostion + 2].toLong() shl 8) and 0xff00) +
-                                        (bytes[startPostion + 3].toLong() and 0xff)
+                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) +
+                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) +
+                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) +
+                                        (bytes[startPosition + 3].toLong() and 0xff)
                                 response.data.put(wordElementName[i], PLCRespElement(false, 0, 0,
                                         java.lang.Float.intBitsToFloat(value.toInt())))
-                                startPostion += 4
+                                startPosition += 4
                             }
                         }
                     }

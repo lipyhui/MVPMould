@@ -19,7 +19,7 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 	public void init() {
 		mBinding.testText.setOnClickListener(view -> {
 			Log.e("socket_Test", "Socket Start!!!!!!!!!!!!!!!!!!");
-			new PLCManager.WriteBuilder()
+		/*	new PLCManager.WriteBuilder()
 					.writeBool(PLCElement.BOOL.Y, 0, true)
 					.writeBool(PLCElement.BOOL.Y, 1, true)
 					.writeBool(PLCElement.BOOL.Y, 2, true)
@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBindin
 					.writeReal(PLCElement.REAL.D, 17, 39.8F)
 					.build()
 					.startAsync();
-
+*/
 			new PLCManager.ReadBuilder()
 					.readBool(PLCElement.BOOL.Y, 0)
 					.readBool(PLCElement.BOOL.Y, 1)
