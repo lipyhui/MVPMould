@@ -90,29 +90,6 @@ private constructor(
                 }
     }
 
-    /**
-     * 校验响应数据
-     *
-     * @param bytes 接收的响应数据
-     * @return 返回校验结果
-     */
-    private fun verifyResponse(bytes: ByteArray): PLCResponse {
-        //获得数据长度
-        val length = bytes.size
-
-        if (length <= 0) {
-            return PLCResponse(-1, "连接失败")
-        }
-
-        //crc16校验接收数据
-        val crc = VerifyUtil.calcCrc16(bytes, 0, length - 2)
-        if (crc[0] != bytes[length - 2] || crc[1] != bytes[length - 1]) {
-            return PLCResponse(-4, "校验失败")
-        } else {
-            return PLCResponse(0, "成功")
-        }
-    }
-
     /*****************************************************************************
      * 读元件构造器
      * 一次最多读取 338 个位/字(BOOL、WORD)元件
@@ -646,6 +623,30 @@ private constructor(
 
         /** 定义PLC读写最大缓存区大小  */
         private val MAX_BUFF_LEN = 1024
+
+        /**
+         * 校验响应数据
+         *
+         * @param bytes 接收的响应数据
+         * @return 返回校验结果
+         */
+        private fun verifyResponse(bytes: ByteArray): PLCResponse {
+            //获得数据长度
+            val length = bytes.size
+
+            //判断 Socket 是否连接成功
+            if (length <= 0) {
+                return PLCResponse(-1, "连接失败")
+            }
+
+            //crc16校验接收数据
+            val crc = VerifyUtil.calcCrc16(bytes, 0, length - 2)
+            if (crc[0] != bytes[length - 2] || crc[1] != bytes[length - 1]) {
+                return PLCResponse(-4, "校验失败")
+            } else {
+                return PLCResponse(0, "成功")
+            }
+        }
 
         /**
          * 合并两个byte数组
