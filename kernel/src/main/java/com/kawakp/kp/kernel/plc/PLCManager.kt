@@ -4,7 +4,7 @@ import android.util.Log
 import com.kawakp.kp.kernel.utils.VerifyUtil
 import com.kawakp.kp.kernel.utils.VerifyUtil.calcCrc16
 import io.reactivex.Observable
-import java.util.*
+import io.reactivex.schedulers.Schedulers
 
 /**
  * 创建人: penghui.li
@@ -27,21 +27,18 @@ class PLCManager
  * @param mBitElementName  位元件名称列表(按顺序)
  * @param mWordElementName 字元件名称列表(按顺序)
  * @param mWordType        字元件的数据类型列表(按顺序)
- * @param mBitCount        位元件个数
  */
 private constructor(
         /** 待发送数据  */
-        private val mData: ByteArray?,
+        private val mData: ByteArray,
         /** 数据校验信息  */
-        private val mVerify: ByteArray?,
+        private val mVerify: ByteArray,
         /** 记录BOOL类型元件名称(按顺序排序),例：X100  */
-        private val mBitElementName: List<String>?,
+        private val mBitElementName: List<String>,
         /** 记录WORD类型元件名称(按顺序排序)，例：D100  */
-        private val mWordElementName: List<String>?,
+        private val mWordElementName: List<String>,
         /** WORD 数据的类型列表(按顺序排序)  */
-        private val mWordType: List<TYPE>?,
-        /** 位元件个数  */
-        private val mBitCount: Int = 0) {
+        private val mWordType: List<TYPE>) {
 
     /** 定义字数据类型  */
     private enum class TYPE {
@@ -61,7 +58,7 @@ private constructor(
     fun startAsync() {
         start().subscribe { response ->
             Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")
-            for ((key, value) in response.data){
+            for ((key, value) in response.data) {
                 Log.e("socket_Test_response", "key = $key, value = $value")
             }
         }
@@ -82,12 +79,21 @@ private constructor(
      * @return 返回响应数据
      */
     fun start(): Observable<PLCResponse> {
+        //屏蔽读写元件为 0、校验码为空的情况
+        if (mData.isEmpty() || mVerify.isEmpty()) {
+            return Observable.just(mData)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .map { PLCResponse(-100, "未知原因失败") }
+        }
+
+        //读写元件并返回
         return SocketClient.sendMsg(mData, mVerify)
                 .map { bytes ->
                     for (b in bytes) {
                         Log.e("socket_Test_response", "byte = ${Integer.toHexString(b.toInt() and 0xff)}")
                     }
-                    analysisResponse(bytes, mBitElementName, mWordElementName, mWordType, mBitCount)
+                    analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
                 }
     }
 
@@ -326,13 +332,12 @@ private constructor(
         fun build(): PLCManager {
             //判断是否有读元件
             if (bitCount == 0 && wordCount == 0) {
-                return PLCManager(null, null, null, null, null, 0)
+                return PLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
             val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return PLCManager(data, calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType,
-                    bitCount)
+            return PLCManager(data, calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType)
         }
 
         /**
@@ -589,12 +594,12 @@ private constructor(
         fun build(): PLCManager {
             //判断是否有写元件
             if (bitCount == 0 && wordCount == 0) {
-                return PLCManager(null, null, null, null, null, 0)
+                return PLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
             val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return PLCManager(data, calcCrc16(data, 1, data.size - 1), null, null, null, bitCount)
+            return PLCManager(data, calcCrc16(data, 1, data.size - 1), ArrayList(), ArrayList(), ArrayList())
         }
 
         /**
@@ -673,11 +678,10 @@ private constructor(
          * @param bitElementName  位元件名称列表(按顺序)
          * @param wordElementName 字元件名称列表(按顺序)
          * @param wordType        字元件的数据类型列表(按顺序)
-         * @param bitCount        位元件个数
          * @return 返回解析结果
          */
-        private fun analysisResponse(bytes: ByteArray, bitElementName: List<String>?, wordElementName: List<String>?,
-                                     wordType: List<TYPE>?, bitCount: Int): PLCResponse {
+        private fun analysisResponse(bytes: ByteArray, bitElementName: List<String>, wordElementName: List<String>,
+                                     wordType: List<TYPE>): PLCResponse {
             //crc16校验
             val response = verifyResponse(bytes)
 
@@ -702,11 +706,50 @@ private constructor(
                     return response
                 }
 
-                //bitElementName 非空解析bit类型数据
-                bitElementName?.let {
-                    for (i in bitElementName.indices) {
-                        val status = (bytes[5 + i / 8].toInt() and (0x01 shl (i % 8))) > 0
-                        response.data.put(bitElementName[i], PLCRespElement(status))
+                //解析BOOL类型数据
+                for (i in bitElementName.indices) {
+                    val status = (bytes[5 + i / 8].toInt() and (0x01 shl (i % 8))) > 0
+                    response.data.put(bitElementName[i], PLCRespElement(status))
+                }
+
+                //判断字类型数据是否可以正常解析
+                if (!wordElementName.isEmpty() && !wordType.isEmpty() && wordElementName.size == wordType.size) {
+                    //计算WORD类型数据起始位置
+                    var startPostion = 5 + bitElementName.size / 8
+                    if (bitElementName.size % 8 > 0) {
+                        startPostion++
+                    }
+
+                    //解析WORD、DWORD、REAL类型数据
+                    for (i in wordElementName.indices) {
+                        when (wordType[i]) {
+                            //解析WORD
+                            TYPE.WORD -> {
+                                val value = ((bytes[startPostion].toInt() shl 8) and 0xff00) +
+                                        (bytes[startPostion + 1].toInt() and 0xff)
+                                response.data.put(wordElementName[i], PLCRespElement(false, value))
+                                startPostion += 2
+                            }
+                            //解析DWORD
+                            TYPE.DWORD -> {
+                                val value = ((bytes[startPostion].toLong() shl 24) and 0xff000000) +
+                                        ((bytes[startPostion + 1].toLong() shl 16) and 0xff0000) +
+                                        ((bytes[startPostion + 2].toLong() shl 8) and 0xff00) +
+                                        (bytes[startPostion + 3].toLong() and 0xff)
+                                response.data.put(wordElementName[i], PLCRespElement(false, 0, value.toInt()))
+                                startPostion += 4
+                            }
+                            //解析REAL
+                            TYPE.REAL -> {
+                                val value = ((bytes[startPostion].toLong() shl 24) and 0xff000000) +
+                                        ((bytes[startPostion + 1].toLong() shl 16) and 0xff0000) +
+                                        ((bytes[startPostion + 2].toLong() shl 8) and 0xff00) +
+                                        (bytes[startPostion + 3].toLong() and 0xff)
+                                response.data.put(wordElementName[i], PLCRespElement(false, 0, 0,
+                                        java.lang.Float.intBitsToFloat(value.toInt())))
+                                startPostion += 4
+                            }
+                        }
                     }
                 }
 
