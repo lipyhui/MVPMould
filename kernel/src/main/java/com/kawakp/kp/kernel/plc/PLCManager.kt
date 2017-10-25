@@ -27,7 +27,7 @@ class PLCManager
  * @param mBitElementName  位元件名称列表(按顺序)
  * @param mBitElementName 字元件名称列表(按顺序)
  * @param mWordElementName        字元件的数据类型列表(按顺序)
- * @param bitCount        位元件个数
+ * @param mBitCount        位元件个数
  */
 private constructor(
         /** 待发送数据  */
@@ -40,10 +40,8 @@ private constructor(
         private val mWordElementName: List<String>?,
         /** WORD 数据的类型列表(按顺序排序)  */
         private val mWordType: List<TYPE>?,
-        bitCount: Int) {
-
-    /** 位元件个数  */
-    private var mBitCount = 0
+        /** 位元件个数  */
+        private val mBitCount: Int = 0) {
 
     /** 定义字数据类型  */
     private enum class TYPE {
@@ -55,10 +53,6 @@ private constructor(
     /** PLC 读写数据监听，返回 PLC 读写结果 */
     interface OnPLCResponseListener {
         fun onPLCResponse(response: PLCResponse)
-    }
-
-    init {
-        mBitCount = bitCount
     }
 
     /**
@@ -86,6 +80,8 @@ private constructor(
         return SocketClient.sendMsg(mData, mVerify)
                 .map { bytes ->
                     val response = verifyResponse(bytes)
+
+                    Log.e("socket_Test_response", "bitCount = $mBitCount")
 
                     for (b in bytes) {
                         Log.e("socket_Test_response", "byte = ${Integer.toHexString(b.toInt())}")
