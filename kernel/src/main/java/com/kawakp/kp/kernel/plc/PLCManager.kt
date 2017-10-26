@@ -739,20 +739,20 @@ private constructor(
 
                             //解析DWORD
                             TYPE.DWORD -> {
-                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) or
-                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) or
-                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) or
-                                        (bytes[startPosition + 3].toLong() and 0xff)
+                                val value = ((bytes[startPosition].toLong() shl 8) and 0xff00) or
+                                        ((bytes[startPosition + 1].toLong()) and 0xff) or
+                                        ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
+                                        (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
                                 response.data.put(wordElementName[i], PLCRespElement(false, 0, value.toInt()))
                                 startPosition += 4
                             }
 
                             //解析REAL
                             TYPE.REAL -> {
-                                val value = ((bytes[startPosition].toLong() shl 24) and 0xff000000) or
-                                        ((bytes[startPosition + 1].toLong() shl 16) and 0xff0000) or
-                                        ((bytes[startPosition + 2].toLong() shl 8) and 0xff00) or
-                                        (bytes[startPosition + 3].toLong() and 0xff)
+                                val value = ((bytes[startPosition].toLong() shl 8) and 0xff00) or
+                                        ((bytes[startPosition + 1].toLong()) and 0xff) or
+                                        ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
+                                        (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
                                 response.data.put(wordElementName[i], PLCRespElement(false, 0, 0,
                                         java.lang.Float.intBitsToFloat(value.toInt())))
                                 startPosition += 4
