@@ -114,14 +114,14 @@ class PLCElement private constructor() {
     class ElementREAL {
         var element: REAL = REAL.D
         var addr: Int = 0
-        var value: Int = 0
+        var value: Float = 0F
 
         constructor(element: REAL = REAL.D, addr: Int = 0) {
             this.element = element
             this.addr = addr
         }
 
-        constructor(element: REAL = REAL.D, addr: Int = 0, value: Int = 0) {
+        constructor(element: REAL = REAL.D, addr: Int = 0, value: Float = 0F) {
             this.element = element
             this.addr = addr
             this.value = value

@@ -56,12 +56,7 @@ private constructor(
      * 异步发送数据，不关心返回
      */
     fun startAsync() {
-        start().subscribe { response ->
-            Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")
-            for ((key, value) in response.data) {
-                Log.e("socket_Test_response", "key = $key, value = $value")
-            }
-        }
+        start().subscribe()
     }
 
     /**
@@ -94,6 +89,13 @@ private constructor(
                         Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
                     }
                     analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
+                }
+                .map { response ->
+                    Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")
+                    for ((key, value) in response.data) {
+                        Log.e("socket_Test_response", "key = $key, value = $value")
+                    }
+                    response
                 }
     }
 
@@ -581,7 +583,7 @@ private constructor(
             }
 
             for (real in reals) {
-                writeReal(real.element, real.addr, real.value.toFloat())
+                writeReal(real.element, real.addr, real.value)
             }
             return this
         }
