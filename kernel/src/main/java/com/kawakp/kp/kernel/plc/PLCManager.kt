@@ -85,18 +85,18 @@ private constructor(
         //读写元件并返回
         return SocketClient.sendMsg(mData, mVerify)
                 .map { bytes ->
-                    for (i in bytes.indices) {
+                  /*  for (i in bytes.indices) {
                         Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
-                    }
+                    }*/
                     analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
                 }
-                .map { response ->
+             /*   .map { response ->
                     Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")
                     for ((key, value) in response.data) {
                         Log.e("socket_Test_response", "key = $key, value = $value")
                     }
                     response
-                }
+                }*/
     }
 
     /*****************************************************************************
