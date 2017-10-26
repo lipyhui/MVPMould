@@ -1,4 +1,4 @@
-package com.kawakp.kp.kernel.plc
+package com.kawakp.kp.kernel.plc.kawa
 
 /**
  * 创建人: penghui.li
@@ -13,7 +13,7 @@ package com.kawakp.kp.kernel.plc
  *          dword: 存放 PLC DWORD类型数据,默认为 0
  *          real: 存放 PLC REAL类型数据,默认为 0
  */
-data class PLCRespElement constructor(val bool: Boolean = false,
-                                      val word: Int = 0,
-                                      val dword: Int = 0,
-                                      val real: Float = 0F)
+data class PLCValue constructor(val bool: Boolean = false,
+                                val word: Int = 0,
+                                val dword: Int = 0,
+                                val real: Float = 0F)

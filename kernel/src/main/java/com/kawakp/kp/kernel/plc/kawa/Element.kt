@@ -1,4 +1,4 @@
-package com.kawakp.kp.kernel.plc
+package com.kawakp.kp.kernel.plc.kawa
 
 /**
  * 创建人: penghui.li

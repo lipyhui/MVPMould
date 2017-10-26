@@ -1,4 +1,4 @@
-package com.kawakp.kp.kernel.plc;
+package com.kawakp.kp.kernel.local;
 
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;

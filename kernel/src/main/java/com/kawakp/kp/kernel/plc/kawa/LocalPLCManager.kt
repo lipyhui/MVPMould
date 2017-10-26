@@ -1,5 +1,8 @@
-package com.kawakp.kp.kernel.plc
+package com.kawakp.kp.kernel.plc.kawa
 
+import com.kawakp.kp.kernel.plc.bean.PLCResponse
+import com.kawakp.kp.kernel.plc.bean.PLCValue
+import com.kawakp.kp.kernel.plc.interfaces.OnPLCResponseListener
 import com.kawakp.kp.kernel.utils.VerifyUtil
 import com.kawakp.kp.kernel.utils.VerifyUtil.calcCrc16
 import io.reactivex.Observable
@@ -17,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
  * 2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
  */
 
-class PLCManager
+class KawaPLCManager
 /**
  * 构造方法
  *
@@ -44,11 +47,6 @@ private constructor(
         WORD,
         DWORD,
         REAL
-    }
-
-    /** PLC 读写数据监听，返回 PLC 读写结果 */
-    interface OnPLCResponseListener {
-        fun onPLCResponse(response: PLCResponse)
     }
 
     /**
@@ -90,7 +88,7 @@ private constructor(
                     analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
                 }
              /*   .map { response ->
-                    Log.e("socket_Test_response", "code = ${response.responseCode}, msg = ${response.responseMsg}")
+                    Log.e("socket_Test_response", "code = ${response.respCode}, msg = ${response.respMsg}")
                     for ((key, value) in response.data) {
                         Log.e("socket_Test_response", "key = $key, value = $value")
                     }
@@ -150,7 +148,7 @@ private constructor(
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readBool(element: PLCElement.BOOL, addr: Int): ReadBuilder {
+        fun readBool(element: Element.BOOL, addr: Int): ReadBuilder {
             //防止数据超过缓冲大小
             if (8 + bytesCount + singleBit > MAX_BIT_LEN) {
                 return this
@@ -176,7 +174,7 @@ private constructor(
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readWord(element: PLCElement.WORD, addr: Int): ReadBuilder {
+        fun readWord(element: Element.WORD, addr: Int): ReadBuilder {
             //防止数据超过缓冲大小
             if (bytesCount + singleWord > MAX_WORD_LEN) {
                 return this
@@ -202,7 +200,7 @@ private constructor(
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readDWord(element: PLCElement.DWORD, addr: Int): ReadBuilder {
+        fun readDWord(element: Element.DWORD, addr: Int): ReadBuilder {
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
@@ -233,7 +231,7 @@ private constructor(
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readReal(element: PLCElement.REAL, addr: Int): ReadBuilder {
+        fun readReal(element: Element.REAL, addr: Int): ReadBuilder {
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
@@ -263,7 +261,7 @@ private constructor(
          * @param bools 需要读取的位(BOOL)元件列表
          * @return 当前建造类
          */
-        fun readBoolList(bools: List<PLCElement.ElementBOOL>?): ReadBuilder {
+        fun readBoolList(bools: List<Element.ElementBOOL>?): ReadBuilder {
             if (bools == null || bools.size <= 0) {
                 return this
             }
@@ -280,7 +278,7 @@ private constructor(
          * @param words 需要读取的字(WORD)元件列表
          * @return 当前建造类
          */
-        fun readWordList(words: List<PLCElement.ElementWORD>?): ReadBuilder {
+        fun readWordList(words: List<Element.ElementWORD>?): ReadBuilder {
             if (words == null || words.size <= 0) {
                 return this
             }
@@ -297,7 +295,7 @@ private constructor(
          * @param dwords 需要读取的位双字(DWORD)件列表
          * @return 当前建造类
          */
-        fun readDWordList(dwords: List<PLCElement.ElementDWORD>?): ReadBuilder {
+        fun readDWordList(dwords: List<Element.ElementDWORD>?): ReadBuilder {
             if (dwords == null || dwords.size <= 0) {
                 return this
             }
@@ -314,7 +312,7 @@ private constructor(
          * @param reals 需要读取的双字(REAL)元件列表
          * @return 当前建造类
          */
-        fun readRealList(reals: List<PLCElement.ElementREAL>?): ReadBuilder {
+        fun readRealList(reals: List<Element.ElementREAL>?): ReadBuilder {
             if (reals == null || reals.size <= 0) {
                 return this
             }
@@ -330,15 +328,15 @@ private constructor(
          *
          * @return PLC 读写管理器
          */
-        fun build(): PLCManager {
+        fun build(): KawaPLCManager {
             //判断是否有读元件
             if (bitCount == 0 && wordCount == 0) {
-                return PLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
+                return KawaPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
             val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return PLCManager(data, calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType)
+            return KawaPLCManager(data, calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType)
         }
 
         /**
@@ -402,7 +400,7 @@ private constructor(
          * @param value   要写入元件的值
          * @return 当前建造类
          */
-        fun writeBool(element: PLCElement.BOOL, addr: Int, value: Boolean): WriteBuilder {
+        fun writeBool(element: Element.BOOL, addr: Int, value: Boolean): WriteBuilder {
             //防止数据超过缓冲大小
             if (8 + bytesCount + singleBit > MAX_BIT_LEN) {
                 return this
@@ -429,7 +427,7 @@ private constructor(
          * @param value   要写入元件的值
          * @return 当前建造类
          */
-        fun writeWord(element: PLCElement.WORD, addr: Int, value: Int): WriteBuilder {
+        fun writeWord(element: Element.WORD, addr: Int, value: Int): WriteBuilder {
             //防止数据超过缓冲大小
             if (bytesCount + singleWord > MAX_WORD_LEN) {
                 return this
@@ -456,7 +454,7 @@ private constructor(
          * @param value   要写入元件的值
          * @return 当前建造类
          */
-        fun writeDWord(element: PLCElement.DWORD, addr: Int, value: Int): WriteBuilder {
+        fun writeDWord(element: Element.DWORD, addr: Int, value: Int): WriteBuilder {
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
@@ -490,7 +488,7 @@ private constructor(
          * @param value   要写入元件的值
          * @return 当前建造类
          */
-        fun writeReal(element: PLCElement.REAL, addr: Int, value: Float): WriteBuilder {
+        fun writeReal(element: Element.REAL, addr: Int, value: Float): WriteBuilder {
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
@@ -525,7 +523,7 @@ private constructor(
          * @param bools 需要写的位(BOOL)元件列表
          * @return 当前建造类
          */
-        fun writeBoolList(bools: List<PLCElement.ElementBOOL>?): WriteBuilder {
+        fun writeBoolList(bools: List<Element.ElementBOOL>?): WriteBuilder {
             if (bools == null || bools.size <= 0) {
                 return this
             }
@@ -542,7 +540,7 @@ private constructor(
          * @param words 需要写的字(WORD)元件列表
          * @return 当前建造类
          */
-        fun writeWordList(words: List<PLCElement.ElementWORD>?): WriteBuilder {
+        fun writeWordList(words: List<Element.ElementWORD>?): WriteBuilder {
             if (words == null || words.size <= 0) {
                 return this
             }
@@ -559,7 +557,7 @@ private constructor(
          * @param dwords 需要写的字(DWORD)元件列表
          * @return 当前建造类
          */
-        fun writeDWordList(dwords: List<PLCElement.ElementDWORD>?): WriteBuilder {
+        fun writeDWordList(dwords: List<Element.ElementDWORD>?): WriteBuilder {
             if (dwords == null || dwords.size <= 0) {
                 return this
             }
@@ -576,7 +574,7 @@ private constructor(
          * @param reals 需要写的字(REAL)元件列表
          * @return 当前建造类
          */
-        fun writeRealList(reals: List<PLCElement.ElementREAL>?): WriteBuilder {
+        fun writeRealList(reals: List<Element.ElementREAL>?): WriteBuilder {
             if (reals == null || reals.size <= 0) {
                 return this
             }
@@ -592,15 +590,15 @@ private constructor(
          *
          * @return PLC 读写管理器
          */
-        fun build(): PLCManager {
+        fun build(): KawaPLCManager {
             //判断是否有写元件
             if (bitCount == 0 && wordCount == 0) {
-                return PLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
+                return KawaPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
             val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return PLCManager(data, calcCrc16(data, 1, data.size - 1), ArrayList(), ArrayList(), ArrayList())
+            return KawaPLCManager(data, calcCrc16(data, 1, data.size - 1), ArrayList(), ArrayList(), ArrayList())
         }
 
         /**
@@ -687,14 +685,14 @@ private constructor(
             val response = verifyResponse(bytes)
 
             //校验错误
-            if (response.responseCode < 0) {
+            if (response.respCode < 0) {
                 return response
             }
 
             //判断响应头部信息
             if (bytes[0] != LOCAL_STATION || bytes[2] != LOCAL_SUB_CODE) {
-                response.responseCode = -3
-                response.responseMsg = "响应接收失败"
+                response.respCode = -3
+                response.respMsg = "响应接收失败"
                 return response
             }
 
@@ -703,15 +701,15 @@ private constructor(
                 val length = ((bytes[3].toInt() shl 8) and 0xff00) or (bytes[4].toInt() and 0xff)
                 //响应数据总长度是 = 响应头部(5个字节) + 数据 + 校验码(2个字节)
                 if (bytes.size != (5 + 2 + length)) {
-                    response.responseCode = -3
-                    response.responseMsg = "响应接收失败"
+                    response.respCode = -3
+                    response.respMsg = "响应接收失败"
                     return response
                 }
 
                 //解析BOOL类型数据
                 for (i in bitElementName.indices) {
                     val status = (bytes[5 + i / 8].toInt() and (0x01 shl (i % 8))) > 0
-                    response.data.put(bitElementName[i], PLCRespElement(status))
+                    response.data.put(bitElementName[i], PLCValue(status))
                 }
 
                 //判断字类型数据是否可以正常解析
@@ -732,7 +730,7 @@ private constructor(
                             TYPE.WORD -> {
                                 val value = ((bytes[startPosition].toInt() shl 8) and 0xff00) or
                                         (bytes[startPosition + 1].toInt() and 0xff)
-                                response.data.put(wordElementName[i], PLCRespElement(false, value))
+                                response.data.put(wordElementName[i], PLCValue(false, value))
                                 startPosition += 2
                             }
 
@@ -742,7 +740,7 @@ private constructor(
                                         ((bytes[startPosition + 1].toLong()) and 0xff) or
                                         ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
                                         (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
-                                response.data.put(wordElementName[i], PLCRespElement(false, 0, value.toInt()))
+                                response.data.put(wordElementName[i], PLCValue(false, 0, value.toInt()))
                                 startPosition += 4
                             }
 
@@ -752,7 +750,7 @@ private constructor(
                                         ((bytes[startPosition + 1].toLong()) and 0xff) or
                                         ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
                                         (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
-                                response.data.put(wordElementName[i], PLCRespElement(false, 0, 0,
+                                response.data.put(wordElementName[i], PLCValue(false, 0, 0,
                                         java.lang.Float.intBitsToFloat(value.toInt())))
                                 startPosition += 4
                             }
@@ -762,16 +760,16 @@ private constructor(
 
                 return response
             } else if (bytes[1] == LOCAL_WRITE_CODE) {
-                response.responseCode = 0
-                response.responseMsg = "成功"
+                response.respCode = 0
+                response.respMsg = "成功"
                 return response
             } else if (bytes[1] == LOCAL_WRITE_ERROR_CODE) {
-                response.responseCode = -2
-                response.responseMsg = "写数据失败"
+                response.respCode = -2
+                response.respMsg = "写数据失败"
                 return response
             } else {
-                response.responseCode = -100
-                response.responseMsg = "未知原因失败"
+                response.respCode = -100
+                response.respMsg = "未知原因失败"
                 return response
             }
         }
