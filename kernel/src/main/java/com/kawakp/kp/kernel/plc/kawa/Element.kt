@@ -9,7 +9,7 @@ package com.kawakp.kp.kernel.plc.kawa
  *
  * 功能描述:元件类型管理
  */
-class PLCElement private constructor() {
+class Element private constructor() {
     /**
      * 布尔类型元件：
      * 元件X

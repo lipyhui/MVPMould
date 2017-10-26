@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
  * 2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
  */
 
-class KawaPLCManager
+class LocalPLCManager
 /**
  * 构造方法
  *
@@ -328,15 +328,15 @@ private constructor(
          *
          * @return PLC 读写管理器
          */
-        fun build(): KawaPLCManager {
+        fun build(): LocalPLCManager {
             //判断是否有读元件
             if (bitCount == 0 && wordCount == 0) {
-                return KawaPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
+                return LocalPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
             val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return KawaPLCManager(data, calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType)
+            return LocalPLCManager(data, calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType)
         }
 
         /**
@@ -590,15 +590,15 @@ private constructor(
          *
          * @return PLC 读写管理器
          */
-        fun build(): KawaPLCManager {
+        fun build(): LocalPLCManager {
             //判断是否有写元件
             if (bitCount == 0 && wordCount == 0) {
-                return KawaPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
+                return LocalPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
             val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return KawaPLCManager(data, calcCrc16(data, 1, data.size - 1), ArrayList(), ArrayList(), ArrayList())
+            return LocalPLCManager(data, calcCrc16(data, 1, data.size - 1), ArrayList(), ArrayList(), ArrayList())
         }
 
         /**

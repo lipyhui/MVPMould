@@ -1,4 +1,4 @@
-package com.kawakp.kp.kernel.plc.kawa
+package com.kawakp.kp.kernel.plc.bean
 
 /**
  * 创建人: penghui.li
@@ -15,10 +15,10 @@ package com.kawakp.kp.kernel.plc.kawa
  *                   -3：响应接收失败
  *                   -4：校验失败
  *                   -5：数据解析失败
- *                    -100：未知原因失败
+ *                   -100：未知原因失败
  *         respMsg: 响应提示消息
  *         data: 返回数据，默认长度为 0
  */
-data class Response constructor(var respCode: Int = -100,
-                                var respMsg: String = "未知原因失败",
-                                val data: HashMap<String, PLCValue> = HashMap())
+data class PLCResponse constructor(var respCode: Int = -100,
+                                   var respMsg: String = "未知原因失败",
+                                   val data: HashMap<String, PLCValue> = HashMap())
