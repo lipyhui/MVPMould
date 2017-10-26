@@ -44,7 +44,7 @@ public class SocketClient {
 					//连接本地socket进程
 					boolean isConnected = false;
 					int connectCount = 0;
-					Log.e("socket_Test", "start connect!");
+//					Log.e("socket_Test", "start connect!");
 					while (!isConnected && connectCount <= 10) {
 						try {
 							if (connectCount != 0) {
@@ -65,7 +65,7 @@ public class SocketClient {
 					}
 
 					//发送数据
-					Log.e("socket_Test", "start write!");
+//					Log.e("socket_Test", "start write!");
 					if (bytes.length > 0) {
 						client.getOutputStream().write(bytes);
 					}
@@ -74,7 +74,7 @@ public class SocketClient {
 					}
 
 					//接收响应
-					Log.e("socket_Test", "start read!");
+//					Log.e("socket_Test", "start read!");
 //					byte[] result = readStream(client.getInputStream());
 //					for (byte b : result) {
 //						Log.e("socket_Test_result", Integer.toHexString(b & 0xff));

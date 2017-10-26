@@ -1,6 +1,5 @@
 package com.kawakp.kp.kernel.plc
 
-import android.util.Log
 import com.kawakp.kp.kernel.utils.VerifyUtil
 import com.kawakp.kp.kernel.utils.VerifyUtil.calcCrc16
 import io.reactivex.Observable
@@ -627,7 +626,7 @@ private constructor(
      * 缓存区大小定义
      * 数据解析和内部方法
      *****************************************************************************/
-    companion object {
+    private companion object {
 
         /** 本地 PLC 读起始字  */
         private val LOCAL_READ_START: Byte = 0x52
@@ -725,9 +724,9 @@ private constructor(
 
                     //解析WORD、DWORD、REAL类型数据
                     for (i in wordElementName.indices) {
-                        Log.e("socket_Test_response",
+                     /*   Log.e("socket_Test_response",
                                 "i = $i, " + "name = ${wordElementName[i]}, " +
-                                        "startPosition = $startPosition")
+                                        "startPosition = $startPosition")*/
                         when (wordType[i]) {
                             //解析WORD
                             TYPE.WORD -> {
