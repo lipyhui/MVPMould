@@ -6,6 +6,7 @@ import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import io.reactivex.Observable;
@@ -86,8 +87,8 @@ public class SocketClient {
 						byte[] result = readStream(client.getInputStream());
 
 						//关闭输入流、输出流、socket
-						client.shutdownOutput();
-						client.shutdownInput();
+					/*	client.shutdownOutput();
+						client.shutdownInput();*/
 						client.close();
 
 						return result;
@@ -107,7 +108,7 @@ public class SocketClient {
 	 * @throws Exception 读取异常
 	 */
 	private static byte[] readStream(InputStream inStream) throws Exception {
-		/*ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int len = -1;
 		while ((len = inStream.read(buffer)) != -1) {
@@ -115,9 +116,9 @@ public class SocketClient {
 		}
 		outSteam.close();
 		inStream.close();
-		return outSteam.toByteArray();*/
+		return outSteam.toByteArray();
 
-		int count = 0;
+		/*int count = 0;
 		while (count == 0) {
 			count = inStream.available();
 		}
@@ -126,7 +127,7 @@ public class SocketClient {
 		while (readCount < count) {
 			readCount += inStream.read(bytes, readCount, count - readCount);
 		}
-		return bytes;
+		return bytes;*/
 	}
 }
 
