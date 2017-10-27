@@ -1,5 +1,7 @@
 package com.kawakp.kp.kernel.plc.kawa;
 
+import static java.net.SocketOptions.SO_TIMEOUT;
+
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.util.Log;
@@ -59,32 +61,41 @@ public class SocketClient {
 						}
 					}
 
-					//防止未连接奔溃
-					if (!client.isConnected()){
+					try {
+						//防止未连接奔溃
+						if (!client.isConnected()){
+							//关闭 socket 并返回
+							client.close();
+							return new byte[0];
+						}
+
+						//设置读超时，防止一直阻塞
+						client.setSoTimeout(SO_TIMEOUT);
+
+						//发送数据
+	//					Log.e("socket_Test", "start write!");
+						if (bytes.length > 0) {
+							client.getOutputStream().write(bytes);
+						}
+						if (verify.length > 0) {
+							client.getOutputStream().write(verify);
+						}
+
+						//接收响应
+	//					Log.e("socket_Test", "start read!");
+						byte[] result = readStream(client.getInputStream());
+
+						//关闭输入流、输出流、socket
+						client.shutdownOutput();
+						client.shutdownInput();
+						client.close();
+
+						return result;
+					} catch (Exception e) {
+						//socket读写操作失败
+						Log.e("SocketClient", "SendMsg fail, err = " + e.toString());
 						return new byte[0];
 					}
-
-					//发送数据
-//					Log.e("socket_Test", "start write!");
-					if (bytes.length > 0) {
-						client.getOutputStream().write(bytes);
-					}
-					if (verify.length > 0) {
-						client.getOutputStream().write(verify);
-					}
-
-					//接收响应
-//					Log.e("socket_Test", "start read!");
-//					byte[] result = readStream(client.getInputStream());
-//					for (byte b : result) {
-//						Log.e("socket_Test_result", Integer.toHexString(b & 0xff));
-////						Log.e("socket_Test_result", Integer.toHexString(b & 0xff) + ", length = " + length + ", count = " +
-//// count);
-////						Log.e("socket_Test_result", Integer.toHexString(b & 0xff) + ", length = " + bytes.length);
-//					}
-//					return result;
-
-					return readStream(client.getInputStream());
 				});
 	}
 
