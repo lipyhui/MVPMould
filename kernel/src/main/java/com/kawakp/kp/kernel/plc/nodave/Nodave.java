@@ -18,7 +18,7 @@
  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  
 */
 
-package com.kawakp.kp.kernel.plc.siemens;
+package com.kawakp.kp.kernel.plc.nodave;
 
 public class Nodave {
 	public final static int OrderCodeSize = 21;
