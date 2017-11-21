@@ -20,43 +20,28 @@
  along with this; see the file COPYING.  If not, write to
  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  
 */
-package com.kawakp.kp.kernel.plc.siemens;
-public class TCP243Connection extends TCPConnection {
-	
-	public TCP243Connection(PLCinterface ifa, int rack, int slot) {
-		super(ifa,0,0);
+package com.kawakp.kp.kernel.plc.nodave;
+
+/**
+ * @author Thomas Hergenhahn
+ *
+ */
+public class ResultSet {
+	private int errorState, numResults;
+	public Result[] results;
+	public void setErrorState(int error) {
+		errorState = error;
 	}
-	
-	public int connectPLC() {
-		int res;
-		byte[] b4CP243 ={
-			(byte)0x11,
-			(byte)0xE0,
-			(byte)0x00,
-			(byte)0x00,
-			(byte)0x00,
-			(byte)0x01,
-			(byte)0x00,
-			(byte)0xC1,
-			(byte)0x02,
-			(byte)0x4D,
-			(byte)0x57,
-			(byte)0xC2,
-			(byte)0x02,
-			(byte)0x4D,
-			(byte)0x57,
-			(byte)0xC0,
-			(byte)0x01,
-			(byte)0x09 };
-			
-		System.out.println("daveConnectPLC() step 0.");
-		if ((Nodave.Debug & Nodave.DEBUG_CONNECT) != 0)
-			System.out.println("daveConnectPLC() step 1.");
-		System.arraycopy(b4CP243, 0, msgOut, 4, b4CP243.length);
-		sendISOPacket(b4CP243.length);
-		readISOPacket();
-		if ((Nodave.Debug & Nodave.DEBUG_CONNECT) != 0)
-			System.out.println("daveConnectPLC() step 1.");
-		return negPDUlengthRequest();
+
+	public int getErrorState() {
+		return errorState;
+	};
+
+	public void setNumResults(int nr) {
+		numResults = nr;
 	}
+
+	public int getNumResults() {
+		return numResults;
+	};
 }

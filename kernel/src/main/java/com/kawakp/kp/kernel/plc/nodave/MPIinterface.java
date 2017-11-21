@@ -20,7 +20,7 @@
  along with this; see the file COPYING.  If not, write to
  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  
 */
-package com.kawakp.kp.kernel.plc.siemens;
+package com.kawakp.kp.kernel.plc.nodave;
 
 import java.io.InputStream;
 import java.io.OutputStream;

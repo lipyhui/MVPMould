@@ -20,28 +20,16 @@
  along with this; see the file COPYING.  If not, write to
  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  
 */
-package com.kawakp.kp.kernel.plc.siemens;
+package com.kawakp.kp.kernel.plc.nodave;
 
 /**
  * @author Thomas Hergenhahn
  *
+ * To change the template for this generated type comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class ResultSet {
-	private int errorState, numResults;
-	public Result[] results;
-	public void setErrorState(int error) {
-		errorState = error;
-	}
-
-	public int getErrorState() {
-		return errorState;
-	};
-
-	public void setNumResults(int nr) {
-		numResults = nr;
-	}
-
-	public int getNumResults() {
-		return numResults;
-	};
+public class Result {
+public int error;
+public	int length;
+public	int bufferStart;
 }

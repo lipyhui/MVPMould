@@ -20,23 +20,23 @@
  along with this; see the file COPYING.  If not, write to
  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  
 */
-package com.kawakp.kp.kernel.plc.siemens;
+package com.kawakp.kp.kernel.plc.nodave;
 
-public class IBH_MPIConnection extends S7Connection {
+public class NetLinkProConnection extends S7Connection {
 	byte MPI;
 
-	public IBH_MPIConnection(PLCinterface ifa, int mpi) {
+	public NetLinkProConnection(PLCinterface ifa, int mpi) {
 		super(ifa);
 		this.MPI = (byte) mpi;
 		PDUstartIn = 8 + 7;
-		PDUstartOut = 8 + 7;
+		PDUstartOut = 6 + 7;
 	}
 
 	private int readPacket() {
-		int res = iface.read(msgIn, 0, 4);
-		if (res == 4) {
-			int len = 0x100 * msgIn[2] + msgIn[3];
-			res += iface.read(msgIn, 4, len);
+		int res = iface.read(msgIn, 0, 2);
+		if (res == 2) {
+			int len = 0x100 * msgIn[0] + msgIn[1];
+			res += iface.read(msgIn, 2, len);
 		}
 		return res;
 	}
@@ -52,11 +52,11 @@ public class IBH_MPIConnection extends S7Connection {
 	int readIBHPacket() {
 //		System.out.println("readIBHPacket");
 		int i, res = 0;
-		res = iface.read(msgIn, 0, 3);
+		res = iface.read(msgIn, 0, 2);
 //		System.out.println("readIBHPacket  res:" + res);
-		if (res == 3) {
-			int len = Nodave.USByte(msgIn, 2) + 5;
-			res += iface.read(msgIn, 3, len);
+		if (res == 2) {
+			int len = Nodave.USByte(msgIn, 0) + 0;
+			res += iface.read(msgIn, 2, len);
 		} else {
 			if ((Nodave.Debug & Nodave.DEBUG_IFACE) != 0) {
 				System.out.println("res " + res);
@@ -86,10 +86,10 @@ public class IBH_MPIConnection extends S7Connection {
 		int res = 0, a = 0;
 		int res2;
 		if ((Nodave.Debug & Nodave.DEBUG_CONNECT) != 0)
-			System.out.println("_daveInitStepIBH before write.\n");
+			System.out.println("_daveInitStepNLPro before write.\n");
 		res = writeIBH(chal, chal.length);
 		if ((Nodave.Debug & Nodave.DEBUG_CONNECT) != 0)
-			System.out.println("_daveInitStepIBH write returned " + res);
+			System.out.println("_daveInitStepNLPro write returned " + res);
 		//if (res < 0)
 		//	return 100;
 		res = readIBHPacket();
