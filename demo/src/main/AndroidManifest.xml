@@ -12,6 +12,9 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
+
+		<service android:name="com.kawakp.kp.kernel.plc.siemens.SiemensService"/>
+
 		<activity
 			android:configChanges="keyboardHidden|orientation|screenSize|locale|screenLayout|mcc|mnc"
 			android:name=".ui.StartActivity"
