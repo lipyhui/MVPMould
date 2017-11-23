@@ -25,8 +25,6 @@ public class KpApplication extends Application {
 	/*获取数据库*/
 	private static Realm REALM_INSTANCE;
 
-	private
-
 	@Override
 	public void onCreate()
 	{
