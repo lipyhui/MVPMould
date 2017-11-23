@@ -13,7 +13,7 @@ ext {
   //Http
   retrofitLibVersion = "2.1.0"
   okhttpLibVersion = "3.4.2"
-  gsonLibVersion = "2.6.2"
+  gsonLibVersion = "2.8.2"
 
   //Dagger2
   daggerLibVersion = "2.7"
