@@ -72,6 +72,9 @@ dependencies {
 	compile dependencies.rxkotlin
 	compile dependencies.rxAndroid
 
+	//gson
+	compile dependencies.gson
+
 	//Kotlin
 	compile dependencies.kotlinStdlib
 	compile dependencies.kotlinReflect

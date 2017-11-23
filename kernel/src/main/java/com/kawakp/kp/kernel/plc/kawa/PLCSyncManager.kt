@@ -1,12 +1,8 @@
 package com.kawakp.kp.kernel.plc.kawa
 
+import android.util.Log
 import com.kawakp.kp.kernel.plc.bean.PLCResponse
-import com.kawakp.kp.kernel.plc.bean.PLCValue
-import com.kawakp.kp.kernel.plc.interfaces.OnPLCResponseListener
 import com.kawakp.kp.kernel.utils.VerifyUtil
-import com.kawakp.kp.kernel.utils.VerifyUtil.calcCrc16
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 
 /**
  * 创建人: penghui.li
@@ -20,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
  * 2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
  */
 
-class LocalPLCManager
+class PLCSyncManager
 /**
  * 构造方法
  *
@@ -50,50 +46,20 @@ private constructor(
     }
 
     /**
-     * 异步发送数据，不关心返回
-     */
-    fun startAsync() {
-        start().subscribe()
-    }
-
-    /**
-     * 开始发送数据并接收响应数据
-     *
-     * @param listener 监听返回响应数据
-     */
-    fun start(listener: OnPLCResponseListener) {
-        start().subscribe { response -> listener.onPLCResponse(response) }
-    }
-
-    /**
      * 开始发送数据并接收响应数据,以 rxJava 方式返回
      *
      * @return 返回响应数据
      */
-    fun start(): Observable<PLCResponse> {
+    fun start(): List<Byte> {
+
         //屏蔽读写元件为 0、校验码为空的情况
         if (mData.isEmpty() || mVerify.isEmpty()) {
-            return Observable.just(mData)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .map { PLCResponse(-100, "未知原因失败") }
+            Log.e(TAG, PLCResponse(-100, "未知原因失败").toString())
+            return listOf()
         }
 
         //读写元件并返回
-        return SocketClient.sendMsg(mData, mVerify)
-                .map { bytes ->
-                  /*  for (i in bytes.indices) {
-                        Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
-                    }*/
-                    analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
-                }
-             /*   .map { response ->
-                    Log.e("socket_Test_response", "code = ${response.respCode}, msg = ${response.respMsg}")
-                    for ((key, value) in response.data) {
-                        Log.e("socket_Test_response", "key = $key, value = $value")
-                    }
-                    response
-                }*/
+        return analysisResponse(SocketClient.sendMsg(mData, mVerify), mBitElementName, mWordElementName, mWordType)
     }
 
     /*****************************************************************************
@@ -144,11 +110,15 @@ private constructor(
         /**
          * 读布尔(BOOL)数据
          *
-         * @param element 布尔(BOOL)元件类型
+         * @param element 布尔(BOOL)元件类型(X、Y、M)
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readBool(element: Element.BOOL, addr: Int): ReadBuilder {
+        fun readBool(element: SyncElement, addr: Int): ReadBuilder {
+            if (element != SyncElement.X && element != SyncElement.Y && element != SyncElement.M){
+                return this
+            }
+
             //防止数据超过缓冲大小
             if (8 + bytesCount + singleBit > MAX_BIT_LEN) {
                 return this
@@ -170,11 +140,15 @@ private constructor(
         /**
          * 读字(WORD)数据
          *
-         * @param element 字(WORD)元件类型
+         * @param element 字(WORD)元件类型(D、SD、R)
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readWord(element: Element.WORD, addr: Int): ReadBuilder {
+        fun readWord(element: SyncElement, addr: Int): ReadBuilder {
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+                return this
+            }
+
             //防止数据超过缓冲大小
             if (bytesCount + singleWord > MAX_WORD_LEN) {
                 return this
@@ -196,11 +170,15 @@ private constructor(
         /**
          * 读双字(DWORD)数据
          *
-         * @param element 双字(DWORD)元件类型
+         * @param element 双字(DWORD)元件类型(D、SD、R)
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readDWord(element: Element.DWORD, addr: Int): ReadBuilder {
+        fun readDWord(element: SyncElement, addr: Int): ReadBuilder {
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+                return this
+            }
+
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
@@ -227,11 +205,15 @@ private constructor(
         /**
          * 读双字(REAL)数据
          *
-         * @param element 双字(REAL)元件类型
+         * @param element 双字(REAL)元件类型(D、R)
          * @param addr    元件地址
          * @return 当前建造类
          */
-        fun readReal(element: Element.REAL, addr: Int): ReadBuilder {
+        fun readReal(element: SyncElement, addr: Int): ReadBuilder {
+            if (element != SyncElement.D && element != SyncElement.R){
+                return this
+            }
+
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
@@ -256,87 +238,19 @@ private constructor(
         }
 
         /**
-         * 读取一组位(BOOL)元件
-         *
-         * @param bools 需要读取的位(BOOL)元件列表
-         * @return 当前建造类
-         */
-        fun readBoolList(bools: List<Element.ElementBOOL>?): ReadBuilder {
-            if (bools == null || bools.size <= 0) {
-                return this
-            }
-
-            for (bool in bools) {
-                readBool(bool.element, bool.addr)
-            }
-            return this
-        }
-
-        /**
-         * 读取一组字(WORD)元件
-         *
-         * @param words 需要读取的字(WORD)元件列表
-         * @return 当前建造类
-         */
-        fun readWordList(words: List<Element.ElementWORD>?): ReadBuilder {
-            if (words == null || words.size <= 0) {
-                return this
-            }
-
-            for (word in words) {
-                readWord(word.element, word.addr)
-            }
-            return this
-        }
-
-        /**
-         * 读取一组双字(DWORD)元件
-         *
-         * @param dwords 需要读取的位双字(DWORD)件列表
-         * @return 当前建造类
-         */
-        fun readDWordList(dwords: List<Element.ElementDWORD>?): ReadBuilder {
-            if (dwords == null || dwords.size <= 0) {
-                return this
-            }
-
-            for (dword in dwords) {
-                readDWord(dword.element, dword.addr)
-            }
-            return this
-        }
-
-        /**
-         * 读取一组双字(REAL)元件
-         *
-         * @param reals 需要读取的双字(REAL)元件列表
-         * @return 当前建造类
-         */
-        fun readRealList(reals: List<Element.ElementREAL>?): ReadBuilder {
-            if (reals == null || reals.size <= 0) {
-                return this
-            }
-
-            for (real in reals) {
-                readReal(real.element, real.addr)
-            }
-            return this
-        }
-
-        /**
          * 构造 PLC 读写管理器
          *
          * @return PLC 读写管理器
          */
-        fun build(): LocalPLCManager {
+        fun build(): PLCSyncManager {
             //判断是否有读元件
             if (bitCount == 0 && wordCount == 0) {
-                return LocalPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
+                return PLCSyncManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
             val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return LocalPLCManager(data, calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType)
+            return PLCSyncManager(data, VerifyUtil.calcCrc16(data, 1, data.size - 1), bitElementName, wordElementName, wordType)
         }
 
         /**
@@ -395,12 +309,20 @@ private constructor(
         /**
          * 写一个布尔(BOOL)类型元件
          *
-         * @param element 布尔(BOOL)元件类型
+         * @param element 布尔(BOOL)元件类型(X、Y、M)
          * @param addr    元件地址
-         * @param value   要写入元件的值
+         * @param value   要写入元件的值,只支持 1、0
          * @return 当前建造类
          */
-        fun writeBool(element: Element.BOOL, addr: Int, value: Boolean): WriteBuilder {
+        fun writeBool(element: SyncElement, addr: Int, value: Byte): WriteBuilder {
+            if (element != SyncElement.X && element != SyncElement.Y && element != SyncElement.M){
+                return this
+            }
+
+            if (value < 0 || value > 1){
+                return this
+            }
+
             //防止数据超过缓冲大小
             if (8 + bytesCount + singleBit > MAX_BIT_LEN) {
                 return this
@@ -411,7 +333,7 @@ private constructor(
             bits[start] = element.code
             bits[start + 1] = addr.toByte()
             bits[start + 2] = (addr shr 8).toByte()
-            bits[start + 3] = (if (value) 1 else 0).toByte()
+            bits[start + 3] = value
 
             //统计
             bitCount++
@@ -422,12 +344,19 @@ private constructor(
         /**
          * 写一个字(WORD)类型元件
          *
-         * @param element 字(WORD)元件类型
+         * @param element 字(WORD)元件类型(D、SD、R)
          * @param addr    元件地址
-         * @param value   要写入元件的值
+         * @param value   要写入元件的值,两个 byte，byte[0]高字节、byte[1]低字节
          * @return 当前建造类
          */
-        fun writeWord(element: Element.WORD, addr: Int, value: Int): WriteBuilder {
+        fun writeWord(element: SyncElement, addr: Int, value: ByteArray): WriteBuilder {
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+                return this
+            }
+
+            val real = ((value[0].toLong() shl 8) and 0xff00) or
+                    ((value[1].toLong()) and 0xff)
+
             //防止数据超过缓冲大小
             if (bytesCount + singleWord > MAX_WORD_LEN) {
                 return this
@@ -437,8 +366,8 @@ private constructor(
             words[start] = element.code
             words[start + 1] = addr.toByte()
             words[start + 2] = (addr shr 8).toByte()
-            words[start + 3] = value.toByte()
-            words[start + 4] = (value shr 8).toByte()
+            words[start + 3] = value[1]
+            words[start + 4] = value[0]
 
             //统计
             wordCount++
@@ -449,12 +378,21 @@ private constructor(
         /**
          * 写一个双字(DWORD)类型元件
          *
-         * @param element 双字(DWORD)元件类型
+         * @param element 双字(DWORD)元件类型(D、SD、R)
          * @param addr    元件地址
-         * @param value   要写入元件的值
+         * @param value   要写入元件的值,四个 byte，byte[0]高字节、byte[3]低字节
          * @return 当前建造类
          */
-        fun writeDWord(element: Element.DWORD, addr: Int, value: Int): WriteBuilder {
+        fun writeDWord(element: SyncElement, addr: Int, value: ByteArray): WriteBuilder {
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+                return this
+            }
+
+            val real = ((value[2].toLong() shl 8) and 0xff00) or
+                    ((value[3].toLong()) and 0xff) or
+                    ((value[0].toLong() shl 24) and 0xff000000) or
+                    (value[1].toLong() shl 16 and 0xff0000)
+
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
@@ -464,15 +402,15 @@ private constructor(
             words[start] = element.code
             words[start + 1] = addr.toByte()
             words[start + 2] = (addr shr 8).toByte()
-            words[start + 3] = value.toByte()
-            words[start + 4] = (value shr 8).toByte()
+            words[start + 3] = value[3]
+            words[start + 4] = value[2]
 
             val addr2 = addr + 1
             words[start + 5] = element.code
             words[start + 6] = addr2.toByte()
             words[start + 7] = (addr2 shr 8).toByte()
-            words[start + 8] = (value shr 16).toByte()
-            words[start + 9] = (value shr 24).toByte()
+            words[start + 8] = value[1]
+            words[start + 9] = value[0]
 
             //统计
             wordCount += 2
@@ -483,33 +421,39 @@ private constructor(
         /**
          * 写一个双字(REAL)类型元件
          *
-         * @param element 双字(REAL)元件类型
+         * @param element 双字(REAL)元件类型(D、R)
          * @param addr    元件地址
-         * @param value   要写入元件的值
+         * @param value   要写入元件的值,四个 byte，byte[0]高字节、byte[3]低字节
          * @return 当前建造类
          */
-        fun writeReal(element: Element.REAL, addr: Int, value: Float): WriteBuilder {
+        fun writeReal(element: SyncElement, addr: Int, value: ByteArray): WriteBuilder {
+            if (element != SyncElement.D && element != SyncElement.R){
+                return this
+            }
+
+            val real = ((value[2].toLong() shl 8) and 0xff00) or
+                    ((value[3].toLong()) and 0xff) or
+                    ((value[0].toLong() shl 24) and 0xff000000) or
+                    (value[1].toLong() shl 16 and 0xff0000)
+
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
                 return this
             }
 
-            //float 转 int
-            val valueInt = java.lang.Float.floatToIntBits(value)
-
             val start = wordCount * singleWord
             words[start] = element.code
             words[start + 1] = addr.toByte()
             words[start + 2] = (addr shr 8).toByte()
-            words[start + 3] = valueInt.toByte()
-            words[start + 4] = (valueInt shr 8).toByte()
+            words[start + 3] = value[3]
+            words[start + 4] = value[2]
 
             val addr2 = addr + 1
             words[start + 5] = element.code
             words[start + 6] = addr2.toByte()
             words[start + 7] = (addr2 shr 8).toByte()
-            words[start + 8] = (valueInt shr 16).toByte()
-            words[start + 9] = (valueInt shr 24).toByte()
+            words[start + 8] = value[1]
+            words[start + 9] = value[0]
 
             //统计
             wordCount += 2
@@ -518,87 +462,19 @@ private constructor(
         }
 
         /**
-         * 写取一组位(BOOL)元件
-         *
-         * @param bools 需要写的位(BOOL)元件列表
-         * @return 当前建造类
-         */
-        fun writeBoolList(bools: List<Element.ElementBOOL>?): WriteBuilder {
-            if (bools == null || bools.size <= 0) {
-                return this
-            }
-
-            for (bool in bools) {
-                writeBool(bool.element, bool.addr, bool.value)
-            }
-            return this
-        }
-
-        /**
-         * 写取一组字(WORD)元件
-         *
-         * @param words 需要写的字(WORD)元件列表
-         * @return 当前建造类
-         */
-        fun writeWordList(words: List<Element.ElementWORD>?): WriteBuilder {
-            if (words == null || words.size <= 0) {
-                return this
-            }
-
-            for (word in words) {
-                writeWord(word.element, word.addr, word.value)
-            }
-            return this
-        }
-
-        /**
-         * 写取一组双字(DWORD)元件
-         *
-         * @param dwords 需要写的字(DWORD)元件列表
-         * @return 当前建造类
-         */
-        fun writeDWordList(dwords: List<Element.ElementDWORD>?): WriteBuilder {
-            if (dwords == null || dwords.size <= 0) {
-                return this
-            }
-
-            for (dword in dwords) {
-                writeDWord(dword.element, dword.addr, dword.value)
-            }
-            return this
-        }
-
-        /**
-         * 写取一组双字(REAL)元件
-         *
-         * @param reals 需要写的字(REAL)元件列表
-         * @return 当前建造类
-         */
-        fun writeRealList(reals: List<Element.ElementREAL>?): WriteBuilder {
-            if (reals == null || reals.size <= 0) {
-                return this
-            }
-
-            for (real in reals) {
-                writeReal(real.element, real.addr, real.value)
-            }
-            return this
-        }
-
-        /**
          * 构造 PLC 读写管理器
          *
          * @return PLC 读写管理器
          */
-        fun build(): LocalPLCManager {
+        fun build(): PLCSyncManager {
             //判断是否有写元件
             if (bitCount == 0 && wordCount == 0) {
-                return LocalPLCManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
+                return PLCSyncManager(ByteArray(0), ByteArray(0), ArrayList(), ArrayList(), ArrayList())
             }
 
             buildHeader()
-            val data = addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
-            return LocalPLCManager(data, calcCrc16(data, 1, data.size - 1), ArrayList(), ArrayList(), ArrayList())
+            val data = PLCSyncManager.addBytes(bits, 8 + bitCount * singleBit, words, wordCount * singleWord)
+            return PLCSyncManager(data, VerifyUtil.calcCrc16(data, 1, data.size - 1), ArrayList(), ArrayList(), ArrayList())
         }
 
         /**
@@ -625,6 +501,7 @@ private constructor(
      * 数据解析和内部方法
      *****************************************************************************/
     private companion object {
+        private val TAG = "PLCSyncManager"
 
         /** 本地 PLC 读起始字  */
         private val LOCAL_READ_START: Byte = 0x52
@@ -680,20 +557,22 @@ private constructor(
          * @return 返回解析结果
          */
         private fun analysisResponse(bytes: ByteArray, bitElementName: List<String>, wordElementName: List<String>,
-                                     wordType: List<TYPE>): PLCResponse {
+                                     wordType: List<TYPE>): List<Byte> {
             //crc16校验
             val response = verifyResponse(bytes)
 
             //校验错误
             if (response.respCode < 0) {
-                return response
+                Log.e(TAG, response.toString())
+                return listOf()
             }
 
             //判断响应头部信息
             if (bytes[0] != LOCAL_STATION || bytes[2] != LOCAL_SUB_CODE) {
                 response.respCode = -3
                 response.respMsg = "响应接收失败"
-                return response
+                Log.e(TAG, response.toString())
+                return listOf()
             }
 
             if (bytes[1] == LOCAL_READ_CODE) {
@@ -703,13 +582,8 @@ private constructor(
                 if (bytes.size != (5 + 2 + length)) {
                     response.respCode = -3
                     response.respMsg = "响应接收失败"
-                    return response
-                }
-
-                //解析BOOL类型数据
-                for (i in bitElementName.indices) {
-                    val status = (bytes[5 + i / 8].toInt() and (0x01 shl (i % 8))) > 0
-                    response.data.put(bitElementName[i], PLCValue(status))
+                    Log.e(TAG, response.toString())
+                    return listOf()
                 }
 
                 //判断字类型数据是否可以正常解析
@@ -720,57 +594,48 @@ private constructor(
                         startPosition++
                     }
 
+                     var buff: ByteArray = byteArrayOf(0, 0)
+
                     //解析WORD、DWORD、REAL类型数据
                     for (i in wordElementName.indices) {
-                     /*   Log.e("socket_Test_response",
-                                "i = $i, " + "name = ${wordElementName[i]}, " +
-                                        "startPosition = $startPosition")*/
+                     /*   Log.e(TAG,"i = $i, " + "name = ${wordElementName[i]}, " + "startPosition = $startPosition")*/
                         when (wordType[i]) {
                             //解析WORD
                             TYPE.WORD -> {
-                                val value = ((bytes[startPosition].toInt() shl 8) and 0xff00) or
-                                        (bytes[startPosition + 1].toInt() and 0xff)
-                                response.data.put(wordElementName[i], PLCValue(false, value))
                                 startPosition += 2
                             }
 
                             //解析DWORD
-                            TYPE.DWORD -> {
-                                val value = ((bytes[startPosition].toLong() shl 8) and 0xff00) or
-                                        ((bytes[startPosition + 1].toLong()) and 0xff) or
-                                        ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
-                                        (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
-                                response.data.put(wordElementName[i], PLCValue(false, 0, value.toInt()))
-                                startPosition += 4
-                            }
+                            TYPE.DWORD, TYPE.REAL -> {
+                                buff[0] = bytes[startPosition]
+                                buff[1] = bytes[startPosition + 1]
+                                bytes[startPosition] = bytes[startPosition + 2]
+                                bytes[startPosition + 1] = bytes[startPosition + 3]
+                                bytes[startPosition + 2] = buff[0]
+                                bytes[startPosition + 3] = buff[1]
 
-                            //解析REAL
-                            TYPE.REAL -> {
-                                val value = ((bytes[startPosition].toLong() shl 8) and 0xff00) or
-                                        ((bytes[startPosition + 1].toLong()) and 0xff) or
-                                        ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
-                                        (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
-                                response.data.put(wordElementName[i], PLCValue(false, 0, 0,
-                                        java.lang.Float.intBitsToFloat(value.toInt())))
                                 startPosition += 4
                             }
                         }
                     }
                 }
 
-                return response
+                return bytes.take(bytes.size - 2).drop(5)
             } else if (bytes[1] == LOCAL_WRITE_CODE) {
                 response.respCode = 0
                 response.respMsg = "成功"
-                return response
+                Log.e(TAG, response.toString())
+                return listOf()
             } else if (bytes[1] == LOCAL_WRITE_ERROR_CODE) {
                 response.respCode = -2
                 response.respMsg = "写数据失败"
-                return response
+                Log.e(TAG, response.toString())
+                return listOf()
             } else {
                 response.respCode = -100
                 response.respMsg = "未知原因失败"
-                return response
+                Log.e(TAG, response.toString())
+                return listOf()
             }
         }
 

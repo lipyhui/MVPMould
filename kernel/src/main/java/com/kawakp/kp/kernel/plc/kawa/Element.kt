@@ -7,7 +7,7 @@ package com.kawakp.kp.kernel.plc.kawa
  * 修改时间:2017/10/20
  * 修改内容:
  *
- * 功能描述:元件类型管理
+ * 功能描述:KAWA 元件类型管理
  */
 class Element private constructor() {
     /**

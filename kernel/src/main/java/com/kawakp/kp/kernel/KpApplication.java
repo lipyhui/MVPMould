@@ -3,6 +3,8 @@ package com.kawakp.kp.kernel;
 import android.app.Application;
 import android.content.Context;
 
+import com.kawakp.kp.kernel.plc.siemens.SiemensService;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -32,6 +34,9 @@ public class KpApplication extends Application {
 
 		//初始化realm数据库
 		REALM_INSTANCE = initRealm();
+
+
+		SiemensService.actionStart(mContext);
 	}
 
 	/**
