@@ -1,0 +1,146 @@
+[
+    {
+        "type":"BOOL",
+        "area":"FLAGS",
+        "dbNum":0,
+        "start": 8,
+        "num":4,
+        "element":"M",
+        "startAddr": 0
+    },
+    {
+        "type":"BOOL",
+        "area":"FLAGS",
+        "dbNum":0,
+        "start": 0,
+        "num":8,
+        "element":"M",
+        "startAddr": 4
+    },
+    {
+        "type":"BOOL",
+        "area":"FLAGS",
+        "dbNum":0,
+        "start": 16,
+        "num":10,
+        "element":"M",
+        "startAddr": 12
+    },
+    {
+        "type":"BOOL",
+        "area":"IN",
+        "dbNum":0,
+        "start": 0,
+        "num":2,
+        "element":"M",
+        "startAddr": 22
+    },
+     {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 98,
+        "num":1,
+        "element":"M",
+        "startAddr": 24
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 226,
+        "num":1,
+        "element":"M",
+        "startAddr": 25
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 354,
+        "num":1,
+        "element":"M",
+        "startAddr": 26
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 482,
+        "num":1,
+        "element":"M",
+        "startAddr": 27
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 610,
+        "num":1,
+        "element":"M",
+        "startAddr": 28
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 738,
+        "num":1,
+        "element":"M",
+        "startAddr": 29
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 866,
+        "num":1,
+        "element":"M",
+        "startAddr": 30
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 994,
+        "num":1,
+        "element":"M",
+        "startAddr": 31
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 1122,
+        "num":1,
+        "element":"M",
+        "startAddr": 32
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":1,
+        "start": 1250,
+        "num":1,
+        "element":"M",
+        "startAddr": 33
+    },
+    {
+        "type":"BOOL",
+        "area":"DB",
+        "dbNum":2,
+        "start": 0,
+        "num":10,
+        "element":"M",
+        "startAddr": 34
+    },
+    {
+        "type":"REAL",
+        "area":"DB",
+        "dbNum":3,
+        "start": 0,
+        "num":300,
+        "element":"D",
+        "startAddr": 45
+    }
+]

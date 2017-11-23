@@ -9,9 +9,6 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
-
 /**
  * 创建人: penghui.li
  * 创建时间: 2017/10/20
@@ -34,70 +31,65 @@ public class SocketClient {
 	 * @param verify 要发送的校验信息
 	 * @return 响应信息
 	 */
-	public static Observable<byte[]> sendMsg(final byte[] data, final byte[] verify) {
-		return Observable.just(data)
-				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.io())
-				.map(bytes -> {
-					//创建socket
-					LocalSocket client = new LocalSocket();
-					LocalSocketAddress address = new LocalSocketAddress(SOCKET_NAME, LocalSocketAddress.Namespace
-							.RESERVED);
+	public static byte[] sendMsg(final byte[] data, final byte[] verify) {
+		//创建socket
+		LocalSocket client = new LocalSocket();
+		LocalSocketAddress address = new LocalSocketAddress(SOCKET_NAME, LocalSocketAddress.Namespace
+				.RESERVED);
 
-					//连接本地socket进程
-					boolean isConnected = false;
-					int connectCount = 0;
+		//连接本地socket进程
+		boolean isConnected = false;
+		int connectCount = 0;
 //					Log.e("socket_Test", "start connect!");
-					while (!isConnected && connectCount <= 10) {
-						try {
-							if (connectCount != 0) {
-								Thread.sleep(20);
-							}
-							client.connect(address);
-							isConnected = true;
-						} catch (Exception e) {
-							connectCount++;
-							isConnected = false;
-							Log.e("SocketClient", "Connect fail, err = " + e.toString());
-						}
-					}
+		while (!isConnected && connectCount <= 10) {
+			try {
+				if (connectCount != 0) {
+					Thread.sleep(20);
+				}
+				client.connect(address);
+				isConnected = true;
+			} catch (Exception e) {
+				connectCount++;
+				isConnected = false;
+				Log.e("SocketClient", "Connect fail, err = " + e.toString());
+			}
+		}
 
-					try {
-						//防止未连接奔溃
-						if (!client.isConnected()){
-							//关闭 socket 并返回
-							client.close();
-							return new byte[0];
-						}
+		try {
+			//防止未连接奔溃
+			if (!client.isConnected()){
+				//关闭 socket 并返回
+				client.close();
+				return new byte[0];
+			}
 
-						//设置读超时，防止一直阻塞
-						client.setSoTimeout(SO_TIMEOUT);
+			//设置读超时，防止一直阻塞
+			client.setSoTimeout(SO_TIMEOUT);
 
-						//发送数据
-	//					Log.e("socket_Test", "start write!");
-						if (bytes.length > 0) {
-							client.getOutputStream().write(bytes);
-						}
-						if (verify.length > 0) {
-							client.getOutputStream().write(verify);
-						}
+			//发送数据
+//					Log.e("socket_Test", "start write!");
+			if (data.length > 0) {
+				client.getOutputStream().write(data);
+			}
+			if (verify.length > 0) {
+				client.getOutputStream().write(verify);
+			}
 
-						//接收响应
-	//					Log.e("socket_Test", "start read!");
-						byte[] result = readStream(client.getInputStream());
+			//接收响应
+//					Log.e("socket_Test", "start read!");
+			byte[] result = readStream(client.getInputStream());
 
-						//关闭输入流、输出流、socket
-					/*	client.shutdownOutput();
-						client.shutdownInput();*/
-						client.close();
+			//关闭输入流、输出流、socket
+		/*	client.shutdownOutput();
+			client.shutdownInput();*/
+			client.close();
 
-						return result;
-					} catch (Exception e) {
-						//socket读写操作失败
-						Log.e("SocketClient", "SendMsg fail, err = " + e.toString());
-						return new byte[0];
-					}
-				});
+			return result;
+		} catch (Exception e) {
+			//socket读写操作失败
+			Log.e("SocketClient", "SendMsg fail, err = " + e.toString());
+			return new byte[0];
+		}
 	}
 
 	/**
