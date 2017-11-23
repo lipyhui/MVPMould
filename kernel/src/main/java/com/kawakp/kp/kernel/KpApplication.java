@@ -25,6 +25,8 @@ public class KpApplication extends Application {
 	/*获取数据库*/
 	private static Realm REALM_INSTANCE;
 
+	private
+
 	@Override
 	public void onCreate()
 	{
@@ -35,7 +37,7 @@ public class KpApplication extends Application {
 		//初始化realm数据库
 		REALM_INSTANCE = initRealm();
 
-
+		//启动西门子同步服务
 		SiemensService.actionStart(mContext);
 	}
 
@@ -64,6 +66,10 @@ public class KpApplication extends Application {
 	 */
 	public static void setScreenOn(boolean screenOn) {
 		ScreenOn = screenOn;
+	}
+
+	public static void startSiementsSync(boolean start){
+
 	}
 
 	/**
