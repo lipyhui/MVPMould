@@ -1,7 +1,5 @@
 package com.kawakp.kp.kernel.plc.kawa
 
-import android.util.Log
-import com.kawakp.kp.kernel.plc.bean.PLCResponse
 import com.kawakp.kp.kernel.utils.VerifyUtil
 
 /**
@@ -54,7 +52,7 @@ private constructor(
 
         //屏蔽读写元件为 0、校验码为空的情况
         if (mData.isEmpty() || mVerify.isEmpty()) {
-            Log.e(TAG, PLCResponse(-100, "未知原因失败").toString())
+//            Log.e(TAG, PLCResponse(-100, "未知原因失败").toString())
             return listOf()
         }
 
@@ -529,21 +527,24 @@ private constructor(
          * @param bytes 接收的响应数据
          * @return 返回校验结果
          */
-        private fun verifyResponse(bytes: ByteArray): PLCResponse {
+        private fun verifyResponse(bytes: ByteArray): Int {
             //获得数据长度
             val length = bytes.size
 
             //判断 Socket 是否连接成功
             if (length <= 0) {
-                return PLCResponse(-1, "连接失败")
+//                return PLCResponse(-1, "连接失败")
+                return -1
             }
 
             //crc16校验接收数据
             val crc = VerifyUtil.calcCrc16(bytes, 0, length - 2)
             if (crc[0] != bytes[length - 2] || crc[1] != bytes[length - 1]) {
-                return PLCResponse(-4, "校验失败")
+//                return PLCResponse(-4, "校验失败")
+                return -4
             } else {
-                return PLCResponse(0, "成功")
+//                return PLCResponse(0, "成功")
+                return -0
             }
         }
 
@@ -559,19 +560,21 @@ private constructor(
         private fun analysisResponse(bytes: ByteArray, bitElementName: List<String>, wordElementName: List<String>,
                                      wordType: List<TYPE>): List<Byte> {
             //crc16校验
-            val response = verifyResponse(bytes)
+//            val response = verifyResponse(bytes)
+            val respCode = verifyResponse(bytes)
 
             //校验错误
-            if (response.respCode < 0) {
-                Log.e(TAG, response.toString())
+//            if (response.respCode < 0) {
+            if (respCode < 0){
+//                Log.e(TAG, response.toString())
                 return listOf()
             }
 
             //判断响应头部信息
             if (bytes[0] != LOCAL_STATION || bytes[2] != LOCAL_SUB_CODE) {
-                response.respCode = -3
-                response.respMsg = "响应接收失败"
-                Log.e(TAG, response.toString())
+//                response.respCode = -3
+//                response.respMsg = "响应接收失败"
+//                Log.e(TAG, response.toString())
                 return listOf()
             }
 
@@ -580,9 +583,9 @@ private constructor(
                 val length = ((bytes[3].toInt() shl 8) and 0xff00) or (bytes[4].toInt() and 0xff)
                 //响应数据总长度是 = 响应头部(5个字节) + 数据 + 校验码(2个字节)
                 if (bytes.size != (5 + 2 + length)) {
-                    response.respCode = -3
-                    response.respMsg = "响应接收失败"
-                    Log.e(TAG, response.toString())
+//                    response.respCode = -3
+//                    response.respMsg = "响应接收失败"
+//                    Log.e(TAG, response.toString())
                     return listOf()
                 }
 
@@ -622,19 +625,19 @@ private constructor(
 
                 return bytes.take(bytes.size - 2).drop(5)
             } else if (bytes[1] == LOCAL_WRITE_CODE) {
-                response.respCode = 0
-                response.respMsg = "成功"
-                Log.e(TAG, response.toString())
+//                response.respCode = 0
+//                response.respMsg = "成功"
+//                Log.e(TAG, response.toString())
                 return listOf()
             } else if (bytes[1] == LOCAL_WRITE_ERROR_CODE) {
-                response.respCode = -2
-                response.respMsg = "写数据失败"
-                Log.e(TAG, response.toString())
+//                response.respCode = -2
+//                response.respMsg = "写数据失败"
+//                Log.e(TAG, response.toString())
                 return listOf()
             } else {
-                response.respCode = -100
-                response.respMsg = "未知原因失败"
-                Log.e(TAG, response.toString())
+//                response.respCode = -100
+//                response.respMsg = "未知原因失败"
+//                Log.e(TAG, response.toString())
                 return listOf()
             }
         }

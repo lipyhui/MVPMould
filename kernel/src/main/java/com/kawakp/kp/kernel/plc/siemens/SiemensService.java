@@ -29,6 +29,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -59,34 +63,40 @@ public class SiemensService extends Service {
 	/** 西门子配置列表路径的标志 */
 	private static final String CONFIG_KEY = "configPathKey";
 
-	/** 西门子同步更新时间，单位ms */
-	private static final int UPDATE_TIME = 100;
+	/** 西门子同步更新时间(最小值为 10)，单位 ms */
+	private final int UPDATE_TIME = 10;
+	/** 西门子连接设备时间(最小值为 1)，单位 ms */
+	private final int CONNECT_TIME = 200;
 
 	/** 一次最多同步元件个数 */
-	private static final int MAX_NUM = 25;
+	private final int MAX_NUM = 25;
 
 	/** 西门子配置表在 assets 中的完整路径 */
-	private static String mConfigPath = "config/SiemensConfig.json";
+	private String mConfigPath = "config/SiemensConfig.json";
 
 	/** 西门子设备默认 HOST(IP) */
-	private static String mHost = "192.168.0.1";
+	private String mHost = "192.168.0.1";
 
 	/** 西门子连接状态 */
-	private static boolean mConnection = false;
+	private boolean mConnection = false;
 
 	/** ISO TCP 读写配置 */
-	private static PLCinterface di = null;
-	private static TCPConnection dc = null;
-	private static int slot = 1;
+	private Socket socket = null;
+	private PLCinterface di = null;
+	private TCPConnection dc = null;
+	private int slot = 1;
 
 	/** 待发送数据缓冲区 */
-	private static byte[] by;
+	private byte[] by;
 
 	/** 读取西门子配置列表 */
 	private List<PLCConfig> mConfigs = null;
 
 	/** 同步数据缓存，用于从云下发数据同步到西门子 */
 	private Map<String, byte[]> mValue = null;
+
+	/** RxJava 订阅统一管理 */
+	private CompositeDisposable mDisposables = null;
 
 	/**
 	 * 启动西门子同步服务
@@ -149,8 +159,7 @@ public class SiemensService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		log("onStartCommand");
-
+		mDisposables = new CompositeDisposable();
 		analyConfig();
 		initSyncValue();
 
@@ -160,8 +169,6 @@ public class SiemensService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-
-		log("onStart");
 
 		if (intent == null) {
 			return;
@@ -177,27 +184,64 @@ public class SiemensService extends Service {
 	}
 
 	private synchronized void start() {
-		Observable.just(0)
-				.repeatWhen(it -> it.delay(UPDATE_TIME, TimeUnit.MILLISECONDS))
-				.retryWhen(it -> it.delay(UPDATE_TIME, TimeUnit.MILLISECONDS))
-				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.io())
-				.subscribe(it -> {
-					if (mConnection) {
-						sync();
-					} else if (dc == null || di == null) {
-						dc = null;
-						di = null;
+		//防止 Rxjava 无法取消订阅导致
+		if (mDisposables == null) {
+			return;
+		}
 
-						connection(createSock());
-					}
-				});
+		mDisposables.add(
+				Observable.just(0)
+						.subscribeOn(Schedulers.io())
+						.observeOn(Schedulers.io())
+						.map(it -> {
+							dc = null;
+							di = null;
+
+							createSock();
+							connection(socket);
+
+							sync();
+
+							return it;
+						})
+						.subscribe()
+		);
 	}
 
 	private synchronized void stop() {
+		mDisposables.dispose();
 		stopConnection();
 		dc = null;
 		di = null;
+
+		//CONNECT_TIME ms 后再重新启动西门子后台同步服务
+		Observable.timer(CONNECT_TIME, TimeUnit.MILLISECONDS)
+				.subscribeOn(Schedulers.io())
+				.observeOn(Schedulers.io())
+				.subscribe(new Observer<Long>() {
+					private Disposable mDisposable = null;
+
+					@Override
+					public void onSubscribe(@NonNull Disposable d) {
+						mDisposable = d;
+					}
+
+					@Override
+					public void onNext(@NonNull Long aLong) {
+						actionStart(getApplicationContext());
+						mDisposable.dispose();
+					}
+
+					@Override
+					public void onError(@NonNull Throwable e) {
+
+					}
+
+					@Override
+					public void onComplete() {
+
+					}
+				});
 	}
 
 	/**
@@ -205,21 +249,17 @@ public class SiemensService extends Service {
 	 *
 	 * @return 返回创建的 socket 对象
 	 */
-	private Socket createSock() {
-		Socket socket = null;
+	private void createSock() {
 		try {
+			socket = null;
 			socket = new Socket(mHost, 102);
 		} catch (IOException e) {
 			log("create socket error -----> " + e.toString());
 		}
-
-		return socket;
 	}
 
 	/**
 	 * 连接西门子
-	 *
-	 * @param socket 用于读写西门子的 socket 对象
 	 */
 	private void connection(Socket socket) {
 		mConnection = false;
@@ -270,15 +310,16 @@ public class SiemensService extends Service {
 	/**
 	 * 西门子 PLC 于 KWAW PLC 数据同步
 	 */
-	private void sync(){
-		//防止未连接西门子
-		if (!mConnection){
+	private void sync() {
+		//防止未连接西门子或连接失败
+		if (dc == null || di == null || !mConnection) {
+			stop();
 			return;
 		}
 
 		//防止没有配置列表
-		if (mConfigs == null || mConfigs.size() <= 0){
-			return;
+		if (mConfigs == null || mConfigs.size() <= 0) {
+			analyConfig();
 		}
 
 		//防止没有初始化同步缓存数据
@@ -286,100 +327,115 @@ public class SiemensService extends Service {
 			initSyncValue();
 		}
 
-		for (PLCConfig cfg : mConfigs){
-			//需要读取西门子的 byte 数
-			int length = getSiemensLength(cfg.getType(), cfg.getNum());
+		for (PLCConfig config : mConfigs) {
+			mDisposables.add(
+					Observable.just(config)
+							.repeatWhen(it -> it.delay(UPDATE_TIME, TimeUnit.MILLISECONDS))
+							.retryWhen(it -> it.delay(UPDATE_TIME, TimeUnit.MILLISECONDS))
+							.subscribeOn(Schedulers.io())
+							.observeOn(Schedulers.io())
+							.subscribe(cfg -> {
+								//防止连接掉线，掉线停止连接并重连
+								if (!socket.getInetAddress().isReachable(1000)) {
+									stop();
+									return;
+								}
 
-			//读取西门子数据
-			dc.readBytes(getAreaValue(cfg.getArea()), cfg.getDbNum(), getSiemensStart(cfg.getType(), cfg.getStart()),
-					length, by);
+								//需要读取西门子的 byte 数
+								int length = getSiemensLength(cfg.getType(), cfg.getNum());
 
-			//KAWA 元件写数据控制器
-			PLCSyncManager.WriteBuilder write = new PLCSyncManager.WriteBuilder();
+								//读取西门子数据
+								dc.readBytes(getAreaValue(cfg.getArea()), cfg.getDbNum(),
+										getSiemensStart(cfg.getType(), cfg.getStart()), length, by);
 
-			if (cfg.getType().equals("BOOL")){	//BOOL 类型数据解析同步
-				//KAWA 元件类型
-				SyncElement element = getElementValue(cfg.getElement());
+								//KAWA 元件写数据控制器
+								PLCSyncManager.WriteBuilder write = new PLCSyncManager.WriteBuilder();
 
-				//防止不支持的元件
-				if (element == null){
-					return;
-				}
+								if (cfg.getType().equals("BOOL")) {    //BOOL 类型数据解析同步
+									//KAWA 元件类型
+									SyncElement element = getElementValue(cfg.getElement());
 
-				//初始化读取西门子数据为0
-				int b = 0;
-				for (int i = 0; i < cfg.getNum(); i++) {
-					int addr = cfg.getStartAddr() + i;
+									//防止不支持的元件
+									if (element == null) {
+										return;
+									}
 
-					int position = (i + cfg.getStart()) % 8;
+									//初始化读取西门子数据为0
+									int b = 0;
+									for (int i = 0; i < cfg.getNum(); i++) {
+										int addr = cfg.getStartAddr() + i;
 
-					//读取西门子元件值,每 8 位读一次
-					if (position == 0) {
-						b = dc.getBYTE();
-					}
+										int position = (i + cfg.getStart()) % 8;
 
-					byte[] bytes = {(byte) ((b >> position) & 0x01)};
+										//读取西门子元件值,每 8 位读一次
+										if (position == 0) {
+											b = dc.getBYTE();
+										}
 
-					//同步数据备份
-					mValue.put(cfg.getElement() + addr, bytes);
-					//数据加入
-					write.writeBool(element, addr, bytes[0]);
-				}	//end of for (int i = 0; i < cfg.getNum(); i++)
+										byte[] bytes = {(byte) ((b >> position) & 0x01)};
 
-			} else {	//字、字节类型数据解析同步
-				int typeSize = getSingleTypeSize(cfg.getType());
+										//同步数据备份
+										mValue.put(cfg.getElement() + addr, bytes);
+										//数据加入
+										write.writeBool(element, addr, bytes[0]);
+									}    //end of for (int i = 0; i < cfg.getNum(); i++)
 
-				//防止不存在的数据类型
-				if (typeSize <= 0){
-					return;
-				}
+								} else {    //字、字节类型数据解析同步
+									int typeSize = getSingleTypeSize(cfg.getType());
 
-				//KAWA 元件类型
-				SyncElement element = getElementValue(cfg.getElement());
+									//防止不存在的数据类型
+									if (typeSize <= 0) {
+										return;
+									}
 
-				//防止不支持的元件
-				if (element == null){
-					return;
-				}
+									//KAWA 元件类型
+									SyncElement element = getElementValue(cfg.getElement());
 
-				for (int i = 0; i < cfg.getNum(); i++){
-					switch (cfg.getType()){
-						case "WORD": {
-							int addr = cfg.getStartAddr() + i;
-							//读取西门子元件值
-							byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE()};
-							//同步数据备份
-							mValue.put(cfg.getElement() + addr, bytes);
-							//数据加入
-							write.writeWord(element, addr, bytes);
-							break;
-						}
+									//防止不支持的元件
+									if (element == null) {
+										return;
+									}
 
-						case "DWORD":{
-							int addr = cfg.getStartAddr() + i * 2;
-							byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE(),
-									(byte) dc.getBYTE(), (byte) dc.getBYTE()};
-							mValue.put(cfg.getElement() + (cfg.getNum() + i), bytes);
-							write.writeDWord(element, addr, bytes);
-							break;
-						}
+									for (int i = 0; i < cfg.getNum(); i++) {
+										switch (cfg.getType()) {
+											case "WORD": {
+												int addr = cfg.getStartAddr() + i;
+												//读取西门子元件值
+												byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE()};
+												//同步数据备份
+												mValue.put(cfg.getElement() + addr, bytes);
+												//数据加入
+												write.writeWord(element, addr, bytes);
+												break;
+											}
 
-						case "REAL": {
-							int addr = cfg.getStartAddr() + i * 2;
-							byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE(),
-									(byte) dc.getBYTE(), (byte) dc.getBYTE()};
-							mValue.put(cfg.getElement() + (cfg.getNum() + i), bytes);
-							write.writeReal(element, addr, bytes);
-							break;
-						}
-					}	//end of switch (cfg.getType())
-				}	//end of for (int i = 0; i < cfg.getNum(); i++)
-			}	//end of if (cfg.getType().equals("BOOL"))
+											case "DWORD": {
+												int addr = cfg.getStartAddr() + i * 2;
+												byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE(),
+														(byte) dc.getBYTE(), (byte) dc.getBYTE()};
+												mValue.put(cfg.getElement() + (cfg.getNum() + i), bytes);
+												write.writeDWord(element, addr, bytes);
+												break;
+											}
 
-			log("*********************** start sync ");
-			//开始同步(西门子数据写入KAWA)
-			write.build().start();
-		}	//end of for (PLCConfig cfg : mConfigs)
+											case "REAL": {
+												int addr = cfg.getStartAddr() + i * 2;
+												byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE(),
+														(byte) dc.getBYTE(), (byte) dc.getBYTE()};
+												mValue.put(cfg.getElement() + (cfg.getNum() + i), bytes);
+												write.writeReal(element, addr, bytes);
+												break;
+											}
+										}    //end of switch (cfg.getType())
+									}    //end of for (int i = 0; i < cfg.getNum(); i++)
+								}    //end of if (cfg.getType().equals("BOOL"))
+
+								log("----------------> write start");
+								//开始同步(西门子数据写入KAWA)
+								write.build().start();
+							})
+			);
+		}    //end of for (PLCConfig cfg : mConfigs)
 	}
 
 	/**
@@ -430,7 +486,7 @@ public class SiemensService extends Service {
 					mConfigs.add(config);
 				}
 			}
-			log("read assets = " + mConfigs.toString());
+//			log("read assets = " + mConfigs.toString());
 		} catch (Exception e) {
 			log("read and analy config list -----> " + e.toString());
 		}
@@ -439,12 +495,12 @@ public class SiemensService extends Service {
 	/**
 	 * 初始化同步缓存的数据
 	 */
-	private void initSyncValue(){
+	private void initSyncValue() {
 		mValue = null;
 		mValue = new HashMap<>();
 
 		//缓存同步数据
-		for (PLCConfig cfg : mConfigs){
+		for (PLCConfig cfg : mConfigs) {
 			for (int i = 0; i < cfg.getNum(); i++) {
 				switch (cfg.getType()) {
 					case "BOOL":
@@ -473,8 +529,8 @@ public class SiemensService extends Service {
 	 * @param area 西门子读写区域关键字
 	 * @return 西门子读写区域
 	 */
-	private int getAreaValue(String area){
-		switch (area){
+	private int getAreaValue(String area) {
+		switch (area) {
 			case "IN":
 				return Nodave.INPUTS;
 
@@ -516,11 +572,11 @@ public class SiemensService extends Service {
 	/**
 	 * 获取西门子读写起始位置
 	 *
-	 * @param type 元件类型，目前只支持 BOOL、WORD、DWORD、REAL
+	 * @param type  元件类型，目前只支持 BOOL、WORD、DWORD、REAL
 	 * @param start 西门子配置列表里的起始地址
 	 * @return 返回单个元件类型占用的字节数
 	 */
-	private int getSiemensStart(String type, int start){
+	private int getSiemensStart(String type, int start) {
 		switch (type) {
 			case "BOOL":
 				return (int) Math.ceil(start / 8F);
@@ -539,10 +595,10 @@ public class SiemensService extends Service {
 	 * 获取西门子读写 byte 个数
 	 *
 	 * @param type 元件类型，目前只支持 BOOL、WORD、DWORD、REAL
-	 * @param num 西门子配置列表里的数据个数
+	 * @param num  西门子配置列表里的数据个数
 	 * @return 返回单个元件类型占用的字节数
 	 */
-	private int getSiemensLength(String type, int num){
+	private int getSiemensLength(String type, int num) {
 		switch (type) {
 			case "BOOL":
 				return (int) Math.ceil(num / 8F);
@@ -565,8 +621,8 @@ public class SiemensService extends Service {
 	 * @param element KAWA 元件类型标志
 	 * @return KAWA 元件类型
 	 */
-	private SyncElement getElementValue(String element){
-		switch (element){
+	private SyncElement getElementValue(String element) {
+		switch (element) {
 			case "X":
 				return SyncElement.X;
 
@@ -617,11 +673,8 @@ public class SiemensService extends Service {
 
 	/**
 	 * 获取对于数据类型 KAWA 同步占用元件个数
-	 *
-	 * @param type
-	 * @return
 	 */
-	private int getKAWASingleTypeSize(String type){
+	private int getKAWASingleTypeSize(String type) {
 		int KAWASingleTypeSize = getSingleTypeSize(type) / 2;
 
 		if (KAWASingleTypeSize < 1) {
