@@ -175,7 +175,17 @@ public class SiemensService extends Service {
 		}
 
 		if (intent.getAction().equals(ACTION_HOST)) {
+			String host = intent.getStringExtra(HOST_KEY);
+			if (host.isEmpty()){
+				return;
+			}
+			mHost = host;
 		} else if (intent.getAction().equals(ACTION_CONFIG_PATH)) {
+			String path = intent.getStringExtra(CONFIG_KEY);
+			if (path.isEmpty()){
+				return;
+			}
+			mConfigPath = path;
 		} else if (intent.getAction().equals(ACTION_START)) {
 			start();
 		} else if (intent.getAction().equals(ACTION_STOP)) {
@@ -430,7 +440,7 @@ public class SiemensService extends Service {
 									}    //end of for (int i = 0; i < cfg.getNum(); i++)
 								}    //end of if (cfg.getType().equals("BOOL"))
 
-								log("----------------> write start");
+//								log("----------------> write start");
 								//开始同步(西门子数据写入KAWA)
 								write.build().start();
 							})
