@@ -61,8 +61,8 @@ public class PLCinterface {
 		this.protocol = protocol;
 		timeout=5000;
 		switch (protocol) {
-			case Nodave.PROTOCOL_ISOTCP:timeout=50000; break;
-			case Nodave.PROTOCOL_ISOTCP243:timeout=50000; break;
+			case Nodave.PROTOCOL_ISOTCP:timeout=5000; break;
+			case Nodave.PROTOCOL_ISOTCP243:timeout=5000; break;
 		}
 	}
 

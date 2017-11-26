@@ -1,5 +1,6 @@
 package com.kawakp.kp.kernel.plc.kawa
 
+import android.util.Log
 import com.kawakp.kp.kernel.utils.VerifyUtil
 
 /**
@@ -433,6 +434,8 @@ private constructor(
                     ((value[3].toLong()) and 0xff) or
                     ((value[0].toLong() shl 24) and 0xff000000) or
                     (value[1].toLong() shl 16 and 0xff0000)
+
+            Log.e(TAG, "${element.name}$addr = ${java.lang.Float.intBitsToFloat(real.toInt())}")
 
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
