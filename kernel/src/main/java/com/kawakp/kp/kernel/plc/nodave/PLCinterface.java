@@ -61,8 +61,8 @@ public class PLCinterface {
 		this.protocol = protocol;
 		timeout=5000;
 		switch (protocol) {
-			case Nodave.PROTOCOL_ISOTCP:timeout=5000; break;
-			case Nodave.PROTOCOL_ISOTCP243:timeout=5000; break;
+			case Nodave.PROTOCOL_ISOTCP:timeout=50000; break;
+			case Nodave.PROTOCOL_ISOTCP243:timeout=50000; break;
 		}
 	}
 
@@ -132,9 +132,9 @@ public class PLCinterface {
 			System.out.println("Interface.read");
 		try {
 			int retry = 0;
-			while ((in.available() <= 0) && (retry < 10)) {
+			while ((in.available() <= 0) && (retry < 100)) {
 				try {
-					if(retry>0) Thread.sleep(timeout / 200);
+					if(retry>0) Thread.sleep(timeout / 2000);
 					retry++;
 					if ((Nodave.Debug & Nodave.DEBUG_IFACE) != 0)
 						System.out.println("Interface.read delayed");
