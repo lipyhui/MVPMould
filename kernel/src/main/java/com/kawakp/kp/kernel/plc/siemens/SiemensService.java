@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -152,6 +153,10 @@ public class SiemensService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		//防止socket连接不稳
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 	}
 
 	@Override
@@ -346,8 +351,10 @@ public class SiemensService extends Service {
 							//防止连接掉线，掉线停止连接并重连
 							if (!socket.getInetAddress().isReachable(1000)) {
 								log("getInetAddress no connected");
+								//网络连接失败后重新连接
+//								connection(socket);
 //								stop();
-								return;
+//								return;
 							}
 
 							//需要读取西门子的 byte 数
@@ -738,7 +745,6 @@ public class SiemensService extends Service {
 
 	@Override
 	public void onDestroy() {
-		log("onDestroy");
 		stop();
 		super.onDestroy();
 	}
