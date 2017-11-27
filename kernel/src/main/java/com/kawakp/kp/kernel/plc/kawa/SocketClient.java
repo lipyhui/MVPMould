@@ -1,7 +1,5 @@
 package com.kawakp.kp.kernel.plc.kawa;
 
-import static java.net.SocketOptions.SO_TIMEOUT;
-
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.util.Log;
@@ -20,6 +18,7 @@ import java.io.InputStream;
  */
 public class SocketClient {
 	private static final String SOCKET_NAME = "plcd-apps";
+	private static final int TIMEOUT = 1000;
 
 	private SocketClient() {
 	}
@@ -64,7 +63,7 @@ public class SocketClient {
 			}
 
 			//设置读超时，防止一直阻塞
-			client.setSoTimeout(SO_TIMEOUT);
+			client.setSoTimeout(TIMEOUT);
 
 			//发送数据
 //					Log.e("socket_Test", "start write!");
@@ -122,4 +121,3 @@ public class SocketClient {
 		return bytes;*/
 	}
 }
-
