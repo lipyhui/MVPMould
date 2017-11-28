@@ -18,7 +18,7 @@ import java.io.InputStream;
  */
 public class SocketClient {
 	private static final String SOCKET_NAME = "plcd-apps";
-	private static final int TIMEOUT = 1000;
+	private static final int TIMEOUT = 2500;
 
 	private SocketClient() {
 	}
