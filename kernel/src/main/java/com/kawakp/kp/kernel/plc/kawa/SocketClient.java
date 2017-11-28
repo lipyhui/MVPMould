@@ -18,7 +18,7 @@ import java.io.InputStream;
  */
 public class SocketClient {
 	private static final String SOCKET_NAME = "plcd-apps";
-	private static final int TIMEOUT = 2500;
+	private static final int TIMEOUT = 5000;
 
 	private SocketClient() {
 	}
@@ -99,7 +99,7 @@ public class SocketClient {
 	 * @throws Exception 读取异常
 	 */
 	private static byte[] readStream(InputStream inStream) throws Exception {
-		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();""
+		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int len = -1;
 		while ((len = inStream.read(buffer)) != -1) {
