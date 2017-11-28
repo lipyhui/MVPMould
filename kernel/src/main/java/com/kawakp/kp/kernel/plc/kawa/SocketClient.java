@@ -40,7 +40,7 @@ public class SocketClient {
 		boolean isConnected = false;
 		int connectCount = 0;
 //					Log.e("socket_Test", "start connect!");
-		while (!isConnected && connectCount <= 10) {
+		while (!isConnected && connectCount < 10) {
 			try {
 				if (connectCount != 0) {
 					Thread.sleep(20);
@@ -99,7 +99,7 @@ public class SocketClient {
 	 * @throws Exception 读取异常
 	 */
 	private static byte[] readStream(InputStream inStream) throws Exception {
-		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();""
 		byte[] buffer = new byte[1024];
 		int len = -1;
 		while ((len = inStream.read(buffer)) != -1) {
