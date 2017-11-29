@@ -349,13 +349,13 @@ public class SiemensService extends Service {
 						.observeOn(Schedulers.single())
 						.subscribe(cfg -> {
 							//防止连接掉线，掉线停止连接并重连
-							if (!socket.getInetAddress().isReachable(1000)) {
+/*							if (!socket.getInetAddress().isReachable(1000)) {
 								log("getInetAddress no connected");
 								//网络连接失败后重新连接
 //								connection(socket);
 //								stop();
 //								return;
-							}
+							}*/
 
 							//需要读取西门子的 byte 数
 							int length = getSiemensLength(cfg.getType(), cfg.getNum());
