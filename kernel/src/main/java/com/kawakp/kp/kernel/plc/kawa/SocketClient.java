@@ -27,10 +27,9 @@ public class SocketClient {
 	 * 发送消息
 	 *
 	 * @param data   要发送的数据
-	 * @param verify 要发送的校验信息
 	 * @return 响应信息
 	 */
-	public static byte[] sendMsg(final byte[] data, final byte[] verify) {
+	public static byte[] sendMsg(final byte[] data) {
 		//创建socket
 		LocalSocket client = new LocalSocket();
 		LocalSocketAddress address = new LocalSocketAddress(SOCKET_NAME, LocalSocketAddress.Namespace
@@ -69,9 +68,6 @@ public class SocketClient {
 //					Log.e("socket_Test", "start write!");
 			if (data.length > 0) {
 				client.getOutputStream().write(data);
-			}
-			if (verify.length > 0) {
-				client.getOutputStream().write(verify);
 			}
 
 			//接收响应
