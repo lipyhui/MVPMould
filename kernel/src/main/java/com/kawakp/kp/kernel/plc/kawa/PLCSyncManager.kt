@@ -57,7 +57,8 @@ private constructor(
         }
 
         //读写元件并返回
-        return analysisResponse(SocketClient.sendMsg(mData, mVerify), mBitElementName, mWordElementName, mWordType)
+        val bytes = SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size))
+        return analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
     }
 
     /*****************************************************************************
@@ -113,7 +114,7 @@ private constructor(
          * @return 当前建造类
          */
         fun readBool(element: SyncElement, addr: Int): ReadBuilder {
-            if (element != SyncElement.X && element != SyncElement.Y && element != SyncElement.M){
+            if (element != SyncElement.X && element != SyncElement.Y && element != SyncElement.M) {
                 return this
             }
 
@@ -143,7 +144,7 @@ private constructor(
          * @return 当前建造类
          */
         fun readWord(element: SyncElement, addr: Int): ReadBuilder {
-            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R) {
                 return this
             }
 
@@ -173,7 +174,7 @@ private constructor(
          * @return 当前建造类
          */
         fun readDWord(element: SyncElement, addr: Int): ReadBuilder {
-            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R) {
                 return this
             }
 
@@ -208,7 +209,7 @@ private constructor(
          * @return 当前建造类
          */
         fun readReal(element: SyncElement, addr: Int): ReadBuilder {
-            if (element != SyncElement.D && element != SyncElement.R){
+            if (element != SyncElement.D && element != SyncElement.R) {
                 return this
             }
 
@@ -313,11 +314,11 @@ private constructor(
          * @return 当前建造类
          */
         fun writeBool(element: SyncElement, addr: Int, value: Byte): WriteBuilder {
-            if (element != SyncElement.X && element != SyncElement.Y && element != SyncElement.M){
+            if (element != SyncElement.X && element != SyncElement.Y && element != SyncElement.M) {
                 return this
             }
 
-            if (value < 0 || value > 1){
+            if (value < 0 || value > 1) {
                 return this
             }
 
@@ -348,7 +349,7 @@ private constructor(
          * @return 当前建造类
          */
         fun writeWord(element: SyncElement, addr: Int, value: ByteArray): WriteBuilder {
-            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R) {
                 return this
             }
 
@@ -382,7 +383,7 @@ private constructor(
          * @return 当前建造类
          */
         fun writeDWord(element: SyncElement, addr: Int, value: ByteArray): WriteBuilder {
-            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R){
+            if (element != SyncElement.D && element != SyncElement.SD && element != SyncElement.R) {
                 return this
             }
 
@@ -425,16 +426,16 @@ private constructor(
          * @return 当前建造类
          */
         fun writeReal(element: SyncElement, addr: Int, value: ByteArray): WriteBuilder {
-            if (element != SyncElement.D && element != SyncElement.R){
+            if (element != SyncElement.D && element != SyncElement.R) {
                 return this
             }
 
-       /*     val real = ((value[2].toLong() shl 8) and 0xff00) or
-                    ((value[3].toLong()) and 0xff) or
-                    ((value[0].toLong() shl 24) and 0xff000000) or
-                    (value[1].toLong() shl 16 and 0xff0000)
+            /*     val real = ((value[2].toLong() shl 8) and 0xff00) or
+                         ((value[3].toLong()) and 0xff) or
+                         ((value[0].toLong() shl 24) and 0xff000000) or
+                         (value[1].toLong() shl 16 and 0xff0000)
 
-            Log.e(TAG, "${element.name}$addr = ${java.lang.Float.intBitsToFloat(real.toInt())}")*/
+                 Log.e(TAG, "${element.name}$addr = ${java.lang.Float.intBitsToFloat(real.toInt())}")*/
 
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
@@ -567,7 +568,7 @@ private constructor(
 
             //校验错误
 //            if (response.respCode < 0) {
-            if (respCode < 0){
+            if (respCode < 0) {
 //                Log.e(TAG, response.toString())
                 return listOf()
             }
@@ -599,18 +600,18 @@ private constructor(
                         startPosition++
                     }
 
-                     var buff: ByteArray = byteArrayOf(0, 0)
+                    var buff: ByteArray = byteArrayOf(0, 0)
 
                     //解析WORD、DWORD、REAL类型数据
                     for (i in wordElementName.indices) {
-                     /*   Log.e(TAG,"i = $i, " + "name = ${wordElementName[i]}, " + "startPosition = $startPosition")*/
+                        /*   Log.e(TAG,"i = $i, " + "name = ${wordElementName[i]}, " + "startPosition = $startPosition")*/
                         when (wordType[i]) {
-                            //解析WORD
+                        //解析WORD
                             TYPE.WORD -> {
                                 startPosition += 2
                             }
 
-                            //解析DWORD
+                        //解析DWORD
                             TYPE.DWORD, TYPE.REAL -> {
                                 buff[0] = bytes[startPosition]
                                 buff[1] = bytes[startPosition + 1]
