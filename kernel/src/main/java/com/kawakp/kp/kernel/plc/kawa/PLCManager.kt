@@ -82,7 +82,7 @@ private constructor(
         return Observable.just(mData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .map { SocketClient.sendMsg(mData, mVerify) }
+                .map { SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size)) }
                 .map { bytes ->
                   /*  for (i in bytes.indices) {
                         Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
