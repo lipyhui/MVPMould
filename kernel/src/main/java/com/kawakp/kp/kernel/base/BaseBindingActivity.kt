@@ -34,6 +34,9 @@ abstract class BaseBindingActivity<T : BasePresenter<*>, B : ViewDataBinding> : 
             window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
 
+        //取消状态栏下拉显示消息等
+        window.addFlags(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY)
+
         mBinding = createViewDataBinding()
         mPresenter = PresenterFactory.createPresenter(this)
     }
