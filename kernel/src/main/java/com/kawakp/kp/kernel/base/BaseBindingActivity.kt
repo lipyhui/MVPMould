@@ -35,7 +35,7 @@ abstract class BaseBindingActivity<T : BasePresenter<*>, B : ViewDataBinding> : 
         }
 
         //取消状态栏下拉显示消息等
-        window.addFlags(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY)
+//        window.addFlags(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY)
 
         mBinding = createViewDataBinding()
         mPresenter = PresenterFactory.createPresenter(this)
