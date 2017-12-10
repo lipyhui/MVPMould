@@ -1,5 +1,7 @@
 package com.kawakp.kp.kernel.plc.siemens;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -28,10 +30,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -236,6 +235,22 @@ public class SiemensService extends Service {
 	}
 
 	/**
+	 * 重新启动西门子同步服务
+	 */
+	private void restart(){
+		//CONNECT_TIME ms 后再重新启动西门子后台同步服务
+		Intent i = new Intent();
+		i.setClass(this, SiemensService.class);
+		i.setAction(ACTION_START);
+		PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager alarmMgr = (AlarmManager)getSystemService(ALARM_SERVICE);
+		long now = System.currentTimeMillis();
+		alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, now, CONNECT_TIME, pi);
+
+		System.exit(0);
+	}
+
+	/**
 	 * 创建 socket
 	 *
 	 * @return 返回创建的 socket 对象
@@ -246,7 +261,7 @@ public class SiemensService extends Service {
 			socket = new Socket(mHost, 102);
 		} catch (IOException e) {
 			log("create socket error -----> " + e.toString());
-			System.exit(0);
+			restart();
 		}
 	}
 
@@ -264,13 +279,13 @@ public class SiemensService extends Service {
 				oStream = socket.getOutputStream();
 			} catch (IOException e) {
 				log("get outputStream error -----> " + e.toString());
-				System.exit(0);
+				restart();
 			}
 			try {
 				iStream = socket.getInputStream();
 			} catch (IOException e) {
 				log("get inputStream error -----> " + e.toString());
-				System.exit(0);
+				restart();
 			}
 			di = new PLCinterface(
 					oStream,
@@ -286,10 +301,10 @@ public class SiemensService extends Service {
 				log("connection info -----> Connection OK!");
 			} else {
 				log("connection info -----> No connection!");
-				System.exit(0);
+				restart();
 			}
 		} else {
-			System.exit(0);
+			restart();
 		}
 	}
 
@@ -311,7 +326,7 @@ public class SiemensService extends Service {
 		//防止未连接西门子或连接失败
 		if (dc == null || di == null || !mConnection) {
 //			stop();
-			System.exit(0);
+			restart();
 			return;
 		}
 
@@ -340,7 +355,7 @@ public class SiemensService extends Service {
 //								stop();
 //								return;
 
-								System.exit(0);
+								restart();
 
 								return;
 
@@ -357,7 +372,7 @@ public class SiemensService extends Service {
 							if (res != 0) {
 								readErrCount ++;
 								if (readErrCount >= 5){	//连续5次读西门子失败，重新连接
-									System.exit(0);
+									restart();
 								}
 								return;
 							}
@@ -741,35 +756,7 @@ public class SiemensService extends Service {
 	@Override
 	public void onDestroy() {
 		stop();
-
-		//CONNECT_TIME ms 后再重新启动西门子后台同步服务
-		Observable.timer(CONNECT_TIME, TimeUnit.MILLISECONDS)
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(Schedulers.newThread())
-				.subscribe(new Observer<Long>() {
-					private Disposable mDisposable = null;
-
-					@Override
-					public void onSubscribe(@NonNull Disposable d) {
-						mDisposable = d;
-					}
-
-					@Override
-					public void onNext(@NonNull Long aLong) {
-						actionStart(getApplicationContext());
-						mDisposable.dispose();
-					}
-
-					@Override
-					public void onError(@NonNull Throwable e) {
-
-					}
-
-					@Override
-					public void onComplete() {
-
-					}
-				});
+		restart();
 		super.onDestroy();
 	}
 
