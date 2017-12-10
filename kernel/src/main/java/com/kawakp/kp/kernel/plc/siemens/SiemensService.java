@@ -74,10 +74,12 @@ public class SiemensService extends Service {
 	private String mConfigPath = "config/SiemensConfig.json";
 
 	/** 西门子设备默认 HOST(IP) */
-	private String mHost = "192.168.0.1";
+	private String mHost = "192.168.8.10";
 
 	/** 西门子连接状态 */
 	private boolean mConnection = false;
+	/** 读写西门子连续失败计数 */
+	private int readErrCount = 0;
 
 	/** ISO TCP 读写配置 */
 	private Socket socket = null;
@@ -179,20 +181,20 @@ public class SiemensService extends Service {
 
 		if (intent.getAction().equals(ACTION_HOST)) {
 			String host = intent.getStringExtra(HOST_KEY);
-			if (host.isEmpty()){
+			if (host.isEmpty()) {
 				return;
 			}
 			mHost = host;
 		} else if (intent.getAction().equals(ACTION_CONFIG_PATH)) {
 			String path = intent.getStringExtra(CONFIG_KEY);
-			if (path.isEmpty()){
+			if (path.isEmpty()) {
 				return;
 			}
 			mConfigPath = path;
 		} else if (intent.getAction().equals(ACTION_START)) {
 			start();
 		} else if (intent.getAction().equals(ACTION_STOP)) {
-			log("action stop");
+//			log("action stop");
 			stop();
 		}
 	}
@@ -202,6 +204,8 @@ public class SiemensService extends Service {
 		if (mDisposables == null) {
 			return;
 		}
+
+//		log("start create connect!");
 
 		mDisposables.add(
 				Observable.just(0)
@@ -228,34 +232,7 @@ public class SiemensService extends Service {
 		dc = null;
 		di = null;
 
-		//CONNECT_TIME ms 后再重新启动西门子后台同步服务
-		Observable.timer(CONNECT_TIME, TimeUnit.MILLISECONDS)
-				.subscribeOn(Schedulers.newThread())
-				.observeOn(Schedulers.newThread())
-				.subscribe(new Observer<Long>() {
-					private Disposable mDisposable = null;
-
-					@Override
-					public void onSubscribe(@NonNull Disposable d) {
-						mDisposable = d;
-					}
-
-					@Override
-					public void onNext(@NonNull Long aLong) {
-						actionStart(getApplicationContext());
-						mDisposable.dispose();
-					}
-
-					@Override
-					public void onError(@NonNull Throwable e) {
-
-					}
-
-					@Override
-					public void onComplete() {
-
-					}
-				});
+		readErrCount = 0;
 	}
 
 	/**
@@ -269,6 +246,7 @@ public class SiemensService extends Service {
 			socket = new Socket(mHost, 102);
 		} catch (IOException e) {
 			log("create socket error -----> " + e.toString());
+			System.exit(0);
 		}
 	}
 
@@ -286,11 +264,13 @@ public class SiemensService extends Service {
 				oStream = socket.getOutputStream();
 			} catch (IOException e) {
 				log("get outputStream error -----> " + e.toString());
+				System.exit(0);
 			}
 			try {
 				iStream = socket.getInputStream();
 			} catch (IOException e) {
 				log("get inputStream error -----> " + e.toString());
+				System.exit(0);
 			}
 			di = new PLCinterface(
 					oStream,
@@ -306,7 +286,10 @@ public class SiemensService extends Service {
 				log("connection info -----> Connection OK!");
 			} else {
 				log("connection info -----> No connection!");
+				System.exit(0);
 			}
+		} else {
+			System.exit(0);
 		}
 	}
 
@@ -324,10 +307,11 @@ public class SiemensService extends Service {
 	/**
 	 * 西门子 PLC 于 KWAW PLC 数据同步
 	 */
-	private void sync() throws IOException{
+	private void sync() throws IOException {
 		//防止未连接西门子或连接失败
 		if (dc == null || di == null || !mConnection) {
 //			stop();
+			System.exit(0);
 			return;
 		}
 
@@ -349,13 +333,18 @@ public class SiemensService extends Service {
 						.observeOn(Schedulers.single())
 						.subscribe(cfg -> {
 							//防止连接掉线，掉线停止连接并重连
-/*							if (!socket.getInetAddress().isReachable(1000)) {
+							if (!socket.getInetAddress().isReachable(1000)) {
 								log("getInetAddress no connected");
 								//网络连接失败后重新连接
 //								connection(socket);
 //								stop();
 //								return;
-							}*/
+
+								System.exit(0);
+
+								return;
+
+							}
 
 							//需要读取西门子的 byte 数
 							int length = getSiemensLength(cfg.getType(), cfg.getNum());
@@ -365,9 +354,15 @@ public class SiemensService extends Service {
 									getSiemensStart(cfg.getType(), cfg.getStart()), length, by);
 
 							//防止西门子数据读取失败
-							if (res != 0){
+							if (res != 0) {
+								readErrCount ++;
+								if (readErrCount >= 5){	//连续5次读西门子失败，重新连接
+									System.exit(0);
+								}
 								return;
 							}
+
+							readErrCount = 0;
 
 							//KAWA 元件写数据控制器
 							PLCSyncManager.WriteBuilder write = new PLCSyncManager.WriteBuilder();
@@ -746,6 +741,35 @@ public class SiemensService extends Service {
 	@Override
 	public void onDestroy() {
 		stop();
+
+		//CONNECT_TIME ms 后再重新启动西门子后台同步服务
+		Observable.timer(CONNECT_TIME, TimeUnit.MILLISECONDS)
+				.subscribeOn(Schedulers.newThread())
+				.observeOn(Schedulers.newThread())
+				.subscribe(new Observer<Long>() {
+					private Disposable mDisposable = null;
+
+					@Override
+					public void onSubscribe(@NonNull Disposable d) {
+						mDisposable = d;
+					}
+
+					@Override
+					public void onNext(@NonNull Long aLong) {
+						actionStart(getApplicationContext());
+						mDisposable.dispose();
+					}
+
+					@Override
+					public void onError(@NonNull Throwable e) {
+
+					}
+
+					@Override
+					public void onComplete() {
+
+					}
+				});
 		super.onDestroy();
 	}
 
