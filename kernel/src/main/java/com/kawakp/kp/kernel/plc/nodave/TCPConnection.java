@@ -21,6 +21,7 @@
  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  
 */
 package com.kawakp.kp.kernel.plc.nodave;
+
 public class TCPConnection extends S7Connection {
 	int rack;
 	int slot;
@@ -73,7 +74,9 @@ public class TCPConnection extends S7Connection {
 		msgOut[6] = (byte)0x80;
 		sendISOPacket(3 + p1.hlen + p1.plen + p1.dlen);
 		res = readISOPacket();
-		return 0;
+//		Log.e("ReadPDU", "exchange readISOPacket res = " + res);
+		return res > 0 ? Nodave.RESULT_OK: Nodave.RESULT_UNKNOWN_ERROR;
+//		return 0;
 	}
 	/**
 	 * We have our own connectPLC(), but no disconnect()
