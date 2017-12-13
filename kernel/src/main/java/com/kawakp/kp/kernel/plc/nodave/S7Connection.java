@@ -188,6 +188,9 @@ public abstract class S7Connection {
 			semaphore.leave();
 			return res;
 		}
+
+//		Log.e("ReadPDU", "readBytes exchange true!");
+
 		PDU p2 = new PDU(msgIn, PDUstartIn);
 		res = p2.setupReceivedPDU();
 		if ((Nodave.Debug & Nodave.DEBUG_CONN) != 0)
