@@ -1,13 +1,20 @@
 package com.kawakp.kp.kernel.plc.siemens;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.kawakp.kp.kernel.plc.bean.PLCConfig;
@@ -32,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import io.realm.internal.Util;
 
 /**
  * 创建人: penghui.li
@@ -163,10 +171,22 @@ public class SiemensService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
+		if (!isServiceWork(getApplicationContext(), SiemensProtectService.class.getName())) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					startService(new Intent(SiemensService.this, SiemensProtectService.class));
+					SystemClock.sleep(1000);
+				}
+			}).start();
+		}
+		foreground();
+
 		mDisposables = new CompositeDisposable();
 		analyConfig();
 		initSyncValue();
 
+		flags = START_STICKY;
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -863,6 +883,69 @@ public class SiemensService extends Service {
 		outSteam.close();
 		inStream.close();
 		return outSteam.toString();
+	}
+
+	/**
+	 * 添加后台消息
+	 *
+	 * @return
+	 */
+	private Notification buildForegroundNotification() {
+		Notification.Builder builder = new Notification.Builder(this);
+
+		builder.setOngoing(true);
+
+		builder.setContentTitle("Siemens")
+				.setContentText("Siemens")
+				.setTicker("Siemens");
+		builder.setPriority(Notification.PRIORITY_MAX);
+		return builder.build();
+	}
+
+	/**
+	 * 后台长时间占用运行，保证服务正常运行
+	 */
+	private void foreground(){
+		WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+		View floatView = new View(getApplicationContext());
+		WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+		params.type = WindowManager.LayoutParams.TYPE_PHONE;
+		params.format = PixelFormat.RGBA_8888;
+		params.gravity = Gravity.LEFT | Gravity.TOP;
+		params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+		params.width = 150;
+		params.height = 150;
+		params.x = 0;
+		params.y = 0;
+		windowManager.addView(floatView, params);
+
+		startForeground(1, buildForegroundNotification());
+	}
+
+	/**
+	 * 判断某个服务是否正在运行的方法
+	 *
+	 * @param mContext
+	 * @param serviceName
+	 *            是包名+服务的类名（例如：net.loonggg.testbackstage.TestService）
+	 * @return true代表正在运行，false代表服务没有正在运行
+	 */
+	private boolean isServiceWork(Context mContext, String serviceName) {
+		boolean isWork = false;
+		ActivityManager myAM = (ActivityManager) mContext
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningServiceInfo> myList = myAM.getRunningServices(40);
+		if (myList.size() <= 0) {
+			return false;
+		}
+		for (int i = 0; i < myList.size(); i++) {
+			String mName = myList.get(i).service.getClassName().toString();
+			if (mName.equals(serviceName)) {
+				isWork = true;
+				break;
+			}
+		}
+		return isWork;
 	}
 
 	/**
