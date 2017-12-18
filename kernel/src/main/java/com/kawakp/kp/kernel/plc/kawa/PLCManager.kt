@@ -663,6 +663,10 @@ private constructor(
                 return PLCResponse(-1, "连接失败")
             }
 
+            if (length < 3){
+                return PLCResponse(-3, "响应接收失败")
+            }
+
             //crc16校验接收数据
             val crc = VerifyUtil.calcCrc16(bytes, 0, length - 2)
             if (crc[0] != bytes[length - 2] || crc[1] != bytes[length - 1]) {
