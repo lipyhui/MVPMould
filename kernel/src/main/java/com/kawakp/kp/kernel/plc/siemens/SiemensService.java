@@ -240,13 +240,13 @@ public class SiemensService extends Service {
 	/**
 	 * 重新启动西门子同步服务
 	 */
-	private void restart(){
+	private void restart() {
 		//CONNECT_TIME ms 后再重新启动西门子后台同步服务
 		Intent i = new Intent();
 		i.setClass(this, SiemensService.class);
 		i.setAction(ACTION_START);
 		PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager alarmMgr = (AlarmManager)getSystemService(ALARM_SERVICE);
+		AlarmManager alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
 		long now = System.currentTimeMillis();
 		alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, now, CONNECT_TIME, pi);
 
@@ -343,9 +343,146 @@ public class SiemensService extends Service {
 						.retryWhen(it -> it.delay(UPDATE_TIME, TimeUnit.MILLISECONDS))
 						.subscribeOn(Schedulers.single())
 						.observeOn(Schedulers.single())
-						.subscribe(cfg -> {
+						.map(cfg -> {	//云向下(西门子)控制
+
+							//KAWA 元件类型
+							SyncElement element = getElementValue(cfg.getElement());
+
+							//屏蔽 KAWA PLC 不存在的元件类型
+							if (element == null) {
+								return cfg;
+							}
+
+							//KAWA 元件写数据控制器
+							PLCSyncManager.ReadBuilder read = new PLCSyncManager.ReadBuilder();
+
+							for (int i = 0; i < cfg.getNum(); i++) {
+								switch (cfg.getType()) {
+									case "BOOL":
+										read.readBool(element, cfg.getStartAddr() + i);
+										break;
+
+									case "WORD":
+										read.readWord(element, cfg.getStartAddr() + i);
+										break;
+
+									case "DWORD":
+										read.readDWord(element, cfg.getStartAddr() + i * 2);
+										break;
+
+									case "REAL":
+										read.readReal(element, cfg.getStartAddr() + i * 2);
+										break;
+								}
+							}
+							List<Byte> bytes = read.build().start();
+
+							//没有读到数据直接返回
+							if (bytes.size() <= 0){
+								return cfg;
+							}
+
+							for (int i = 0; i < cfg.getNum(); i++) {
+								switch (cfg.getType()) {
+									case "BOOL":{
+										if (mValue.get(cfg.getElement() + (cfg.getStartAddr() + i)) == null){ 	//屏蔽第一次同步
+											break;
+										}
+
+										byte newValue = (byte) ((bytes.get(i / 8) >> (i % 8)) & 0x01);
+
+										if (mValue.get(cfg.getElement() + (cfg.getStartAddr() + i))[0] != newValue){
+											int startAddr = getSiemensStart(cfg.getType(), cfg.getStart() + i);
+
+											int res = dc.readBytes(getAreaValue(cfg.getArea()), cfg.getDbNum(),
+													startAddr, 1, by);
+
+											if (res != 0){	//数据读取失败
+												break;
+											}
+
+											byte[] writeValue = new byte[1];
+
+											int shl = (cfg.getStart() + i) % 8;	//需要左移位数
+											if (newValue > 0){
+												writeValue[0] = (byte) (dc.getBYTE() | (1 << shl));
+											} else {
+												writeValue[0] = (byte) (dc.getBYTE() & (1 << shl));
+											}
+
+											res = dc.writeBytes(getAreaValue(cfg.getArea()), cfg.getDbNum(),
+													startAddr, 1, writeValue);
+
+											if (res == 0){    //防止写入失败时更改换缓存数据
+												mValue.put(cfg.getElement() + (cfg.getStartAddr() + i), new byte[]{newValue});
+											}
+										}
+
+										break;
+									}
+
+									case "WORD": {
+										if (mValue.get(cfg.getElement() + (cfg.getStartAddr() + i)) == null){ 	//屏蔽第一次同步
+											break;
+										}
+
+										byte[] cacheBytes = mValue.get(cfg.getElement() + (cfg.getStartAddr() + i));
+										int start = i * 2;//读取 KAWA PLC 起始位置
+
+										if (cacheBytes[0] != bytes.get(start) ||
+												cacheBytes[1] != bytes.get(start + 1)) {
+
+											cacheBytes[0] = bytes.get(start);
+											cacheBytes[1] = bytes.get(start + 1);
+
+											int res = dc.writeBytes(getAreaValue(cfg.getArea()), cfg.getDbNum(),
+													getSiemensStart(cfg.getType(), cfg.getStart() + i * 2), 2,
+													cacheBytes);
+
+											if (res == 0) {    //防止写入失败时更改换缓存数据
+												mValue.put(cfg.getElement() + (cfg.getStartAddr() + i), cacheBytes);
+											}
+										}
+										break;
+									}
+
+									case "DWORD":
+									case "REAL": {
+										if (mValue.get(cfg.getElement() + (cfg.getStartAddr() + i * 2)) == null){ 	//屏蔽第一次同步
+											break;
+										}
+
+										byte[] cacheBytes = mValue.get(cfg.getElement() + (cfg.getStartAddr() + i * 2));
+										int start = i * 4; //读取 KAWA PLC 起始位置
+
+										if (cacheBytes[0] != bytes.get(start) ||
+												cacheBytes[1] != bytes.get(start + 1) ||
+												cacheBytes[2] != bytes.get(start + 2) ||
+												cacheBytes[3] != bytes.get(start + 3)) {
+
+											cacheBytes[0] = bytes.get(start);
+											cacheBytes[1] = bytes.get(start + 1);
+											cacheBytes[2] = bytes.get(start + 2);
+											cacheBytes[3] = bytes.get(start + 3);
+
+											int res = dc.writeBytes(getAreaValue(cfg.getArea()), cfg.getDbNum(),
+													getSiemensStart(cfg.getType(), cfg.getStart() + i * 4), 4,
+													cacheBytes);
+
+											if (res == 0) {    //防止写入失败时更改换缓存数据
+												mValue.put(cfg.getElement() + (cfg.getStartAddr() + i * 2), cacheBytes);
+											}
+										}
+										break;
+									}
+								}
+							}
+
+							return cfg;
+						})
+						.subscribe(cfg -> {	//同步数据到云
 							//防止连接掉线，掉线停止连接并重连(连续3次连接不上)
-							if (!socket.getInetAddress().isReachable(1000) && (siemensErr ++) >= 3) {
+							if (!socket.getInetAddress().isReachable(1000) && (siemensErr++) >= 3) {
 								log("getInetAddress no connected");
 								//网络连接失败后重新连接
 								restart();
@@ -365,8 +502,8 @@ public class SiemensService extends Service {
 
 							//防止西门子数据读取失败
 							if (res != 0) {
-								siemensErr ++;
-								if (siemensErr >= 3){	//连续3次读西门子失败，重新连接
+								siemensErr++;
+								if (siemensErr >= 3) {    //连续3次读西门子失败，重新连接
 									restart();
 								}
 								return;
@@ -439,7 +576,7 @@ public class SiemensService extends Service {
 											int addr = cfg.getStartAddr() + i * 2;
 											byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE(),
 													(byte) dc.getBYTE(), (byte) dc.getBYTE()};
-											mValue.put(cfg.getElement() + (cfg.getNum() + i), bytes);
+											mValue.put(cfg.getElement() + addr, bytes);
 											write.writeDWord(element, addr, bytes);
 											break;
 										}
@@ -448,7 +585,7 @@ public class SiemensService extends Service {
 											int addr = cfg.getStartAddr() + i * 2;
 											byte[] bytes = {(byte) dc.getBYTE(), (byte) dc.getBYTE(),
 													(byte) dc.getBYTE(), (byte) dc.getBYTE()};
-											mValue.put(cfg.getElement() + (cfg.getNum() + i), bytes);
+											mValue.put(cfg.getElement() + addr, bytes);
 											write.writeReal(element, addr, bytes);
 											break;
 										}
@@ -529,16 +666,16 @@ public class SiemensService extends Service {
 			for (int i = 0; i < cfg.getNum(); i++) {
 				switch (cfg.getType()) {
 					case "BOOL":
-						mValue.put(cfg.getElement() + cfg.getStartAddr() + i, new byte[]{0});
+						mValue.put(cfg.getElement() + (cfg.getStartAddr() + i), null);
 						break;
 
 					case "WORD":
-						mValue.put(cfg.getElement() + cfg.getStartAddr() + i, new byte[]{0, 0});
+						mValue.put(cfg.getElement() + (cfg.getStartAddr() + i), null);
 						break;
 
 					case "DWORD":
 					case "REAL":
-						mValue.put(cfg.getElement() + cfg.getStartAddr() + i, new byte[]{0, 0, 0, 0});
+						mValue.put(cfg.getElement() + (cfg.getStartAddr() + i * 2), null);
 						break;
 
 					default:
