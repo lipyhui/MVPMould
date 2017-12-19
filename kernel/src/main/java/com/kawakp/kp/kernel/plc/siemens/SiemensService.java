@@ -363,6 +363,13 @@ public class SiemensService extends Service {
 						.retryWhen(it -> it.delay(UPDATE_TIME, TimeUnit.MILLISECONDS))
 						.subscribeOn(Schedulers.single())
 						.observeOn(Schedulers.single())
+						.doOnError(it -> {
+							if ((siemensErr++) >= 3) {
+								log("more sync error!");
+								//防止连续三次同步出错
+								restart();
+							}
+						})
 						.map(cfg -> {	//云向下(西门子)控制
 
 							//KAWA 元件类型
@@ -399,6 +406,13 @@ public class SiemensService extends Service {
 
 							//没有读到数据直接返回
 							if (bytes.size() <= 0){
+
+								if ((siemensErr++) >= 10) {
+									log("more sync error!");
+									//防止连续十次读 KAWA PLC 数据失败
+									restart();
+								}
+
 								return cfg;
 							}
 
