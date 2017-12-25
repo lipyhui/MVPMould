@@ -1,7 +1,7 @@
 ext {
   //build
   compileSdkVersion = 26
-  buildToolsVersion = '26.0.1'
+  buildToolsVersion = '26.0.2'
   minSdkVersion = 17
   targetSdkVersion = 26
   versionCode = 1
@@ -31,8 +31,8 @@ ext {
   anko_version = "0.10.1"
 
   //kotlin and gradle plugin
-  kotlinVersion = "1.1.51"
-  androidPluginVersion = "2.3.3"
+  kotlinVersion = "1.2.10"
+  androidPluginVersion = "3.0.1"
   realm_version = '3.5.0'
 
   dependencies = [
