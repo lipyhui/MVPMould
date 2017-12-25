@@ -353,8 +353,8 @@ private constructor(
                 return this
             }
 
-            val real = ((value[0].toLong() shl 8) and 0xff00) or
-                    ((value[1].toLong()) and 0xff)
+        /*    val real = ((value[0].toLong() shl 8) and 0xff00) or
+                    ((value[1].toLong()) and 0xff)*/
 
             //防止数据超过缓冲大小
             if (bytesCount + singleWord > MAX_WORD_LEN) {
@@ -387,10 +387,10 @@ private constructor(
                 return this
             }
 
-            val real = ((value[2].toLong() shl 8) and 0xff00) or
+ /*           val real = ((value[2].toLong() shl 8) and 0xff00) or
                     ((value[3].toLong()) and 0xff) or
                     ((value[0].toLong() shl 24) and 0xff000000) or
-                    (value[1].toLong() shl 16 and 0xff0000)
+                    (value[1].toLong() shl 16 and 0xff0000)*/
 
             //防止数据超过缓冲大小
             if (bytesCount + singleWord * 2 > MAX_WORD_LEN) {
