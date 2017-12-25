@@ -9,16 +9,18 @@
         android:orientation="vertical"
         android:gravity="center">
 
-        <ImageView
+        <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gif_img_1"
             android:layout_width="100dp"
             android:layout_marginBottom="20dp"
-            android:layout_height="100dp" />
+            android:layout_height="100dp"
+            android:src="@drawable/loading_1"/>
 
-        <ImageView
+        <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gif_img_2"
             android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_height="100dp"
+            android:src="@drawable/loading_2"/>
     </LinearLayout>
 
 </layout>

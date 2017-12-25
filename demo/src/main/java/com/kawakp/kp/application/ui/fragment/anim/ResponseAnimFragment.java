@@ -2,7 +2,6 @@ package com.kawakp.kp.application.ui.fragment.anim;
 
 import android.util.Log;
 
-import com.bumptech.glide.Glide;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseFragment;
 import com.kawakp.kp.application.databinding.FragmentAnimResponseBinding;
@@ -50,7 +49,5 @@ public class ResponseAnimFragment extends BaseFragment<EmptyPresenter, FragmentA
     }
 
     private void init() {
-        Glide.with(getContext()).load(R.drawable.loading_1).into(mBinding.gifImg1);
-        Glide.with(getContext()).load(R.drawable.loading_2).into(mBinding.gifImg2);
     }
 }
