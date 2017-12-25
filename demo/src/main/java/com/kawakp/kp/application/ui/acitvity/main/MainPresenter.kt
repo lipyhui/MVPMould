@@ -34,7 +34,7 @@ class MainPresenter : BasePresenter<MainAble>(){
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
-                .subscribe { l ->
+                .subscribe {
                     //					hideLoading();
                     //					showContent();
 //                    view().showMessageFromNet("error", "This is other error!")
