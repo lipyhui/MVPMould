@@ -5,7 +5,6 @@ apply from: 'config/dependencies.gradle'
 buildscript {
 	ext.kotlin_version = '1.2.10'
 	ext.android_plugin_version = '3.0.1'
-	ext.lambda_version = '3.7.0'
 	ext.realm_version = '3.5.0'
 	repositories {
 		jcenter()
@@ -13,7 +12,6 @@ buildscript {
 	}
 	dependencies {
 		classpath "com.android.tools.build:gradle:$android_plugin_version"
-		classpath "me.tatarka:gradle-retrolambda:$lambda_version"
 		classpath "io.realm:realm-gradle-plugin:$realm_version"
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
