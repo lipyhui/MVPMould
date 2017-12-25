@@ -77,6 +77,8 @@ dependencies {
 	compile dependencies.gson
 
 	//Kotlin
+	compile dependencies.kotlinStdlib
+	compile dependencies.kotlinReflect
 	kapt dependencies.databindingCompiler
 	kapt dependencies.realmAnnotations
 	kapt dependencies.realmAnnotationsProcessor
