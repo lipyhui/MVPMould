@@ -16,7 +16,7 @@
 
 		<activity
 			android:configChanges="keyboardHidden|orientation|screenSize|locale|screenLayout|mcc|mnc"
-			android:name=".ui.acitvity.main.MainActivity">
+			android:name=".ui.activity.main.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 

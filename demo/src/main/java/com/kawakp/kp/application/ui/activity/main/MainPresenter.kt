@@ -1,4 +1,4 @@
-package com.kawakp.kp.application.ui.acitvity.main
+package com.kawakp.kp.application.ui.activity.main
 
 import android.os.Bundle
 import com.kawakp.kp.kernel.KernelJNI

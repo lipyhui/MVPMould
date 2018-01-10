@@ -1,4 +1,4 @@
-package com.kawakp.kp.application.ui.acitvity.main
+package com.kawakp.kp.application.ui.activity.main
 
 import com.kawakp.kp.kernel.base.interfaces.IView
 
