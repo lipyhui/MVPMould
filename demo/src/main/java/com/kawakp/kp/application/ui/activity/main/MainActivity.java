@@ -3,8 +3,6 @@ package com.kawakp.kp.application.ui.activity.main;
 import com.kawakp.kp.application.R;
 import com.kawakp.kp.application.base.BaseActivity;
 import com.kawakp.kp.application.databinding.ActivityMainBinding;
-import com.kawakp.kp.application.ui.acitvity.main.MainAble;
-import com.kawakp.kp.application.ui.acitvity.main.MainPresenter;
 
 public class MainActivity extends BaseActivity<MainPresenter, ActivityMainBinding> implements MainAble {
 
