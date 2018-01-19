@@ -98,6 +98,31 @@ private constructor(
                 }*/
     }
 
+    /**
+     * 同步发送数据并接收响应数据，未切换到I/O线程执行(与调用方法处于统一线程)
+     *
+     * @return 返回响应数据
+     */
+    fun startSync(): PLCResponse {
+        //屏蔽读写元件为 0、校验码为空的情况
+        if (mData.isEmpty() || mVerify.isEmpty()) {
+            return PLCResponse(-100, "未知原因失败")
+        }
+
+        //读写元件并返回
+        val bytes = SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size))
+        return analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
+
+        /*      val response = analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
+
+              Log.e("socket_Test_response", "code = ${response.respCode}, msg = ${response.respMsg}")
+              for ((key, value) in response.data) {
+                  Log.e("socket_Test_response", "key = $key, value = $value")
+              }
+
+              return response*/
+    }
+
     /*****************************************************************************
      * 读元件构造器
      * 一次最多读 338 个位/字(BOOL、WORD)元件
