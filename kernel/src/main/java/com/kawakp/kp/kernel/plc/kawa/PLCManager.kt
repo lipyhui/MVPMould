@@ -16,8 +16,8 @@ import io.reactivex.schedulers.Schedulers
  * 修改内容:
  *
  * 功能描述:KAWA PLC读写操作(超出缓冲区，默认丢失后加入的元件):
- * 1、读一次最多 338 个位/字(BOOL、WORD)元件、169 个双字(DWORD、REAL)元件
- * 2、写一次最多 253 个位(BOOL)元件、202 个字(WORD)元件、101 个双字(DWORD、REAL)元件
+ * 1、读一次最多 676 个位/字(BOOL、WORD)元件、338 个双字(DWORD、REAL)元件
+ * 2、写一次最多 506 个位(BOOL)元件、404 个字(WORD)元件、202 个双字(DWORD、REAL)元件
  */
 
 class PLCManager
@@ -100,8 +100,8 @@ private constructor(
 
     /*****************************************************************************
      * 读元件构造器
-     * 一次最多读 338 个位/字(BOOL、WORD)元件
-     * 一次最多读 169 个双字(DWORD、REAL)元件
+     * 一次最多读 676 个位/字(BOOL、WORD)元件
+     * 一次最多读 338 个双字(DWORD、REAL)元件
      *****************************************************************************/
     class ReadBuilder {
         /** 去除 2 字节的校验码长度，协议头部内容放入bits数组中  */
@@ -361,9 +361,9 @@ private constructor(
 
     /*****************************************************************************
      * 写元件构造器
-     * 一次最多写 253 个位(BOOL)元件
-     * 一次最多写 202 个字(WORD)元件
-     * 一次最多写 101 个双字(DWORD、REAL)元件
+     * 一次最多写 506 个位(BOOL)元件
+     * 一次最多写 404 个字(WORD)元件
+     * 一次最多写 202 个双字(DWORD、REAL)元件
      *****************************************************************************/
     class WriteBuilder {
         /** 去除 2 字节的校验码长度，协议头部内容放入bits数组中  */
@@ -646,7 +646,7 @@ private constructor(
         private val LOCAL_SUB_CODE: Byte = 0x0B
 
         /** 定义PLC读写最大缓存区大小  */
-        private val MAX_BUFF_LEN = 1024
+        private val MAX_BUFF_LEN = 2048
 
         /**
          * 校验响应数据
@@ -706,7 +706,7 @@ private constructor(
                 //根据长度判断接收响应数据是否正确
                 val length = ((bytes[3].toInt() shl 8) and 0xff00) or (bytes[4].toInt() and 0xff)
                 //响应数据总长度是 = 响应头部(5个字节) + 数据 + 校验码(2个字节)
-                if (bytes.size != (5 + 2 + length)) {
+                if (length <= 0 || bytes.size != (5 + 2 + length)) {
                     response.respCode = -3
                     response.respMsg = "响应接收失败"
                     return response
