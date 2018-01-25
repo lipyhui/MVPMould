@@ -74,14 +74,14 @@ private constructor(
         //屏蔽读写元件为 0、校验码为空的情况
         if (mData.isEmpty() || mVerify.isEmpty()) {
             return Observable.just(mData)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.single())
+                    .observeOn(Schedulers.single())
                     .map { PLCResponse(-100, "未知原因失败") }
         }
         //读写元件并返回
         return Observable.just(mData)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.single())
+                .observeOn(Schedulers.single())
                 .map { SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size)) }
                 .map { bytes ->
                   /*  for (i in bytes.indices) {
@@ -96,6 +96,31 @@ private constructor(
                     }
                     response
                 }*/
+    }
+
+    /**
+     * 同步发送数据并接收响应数据，未切换到后台线程执行(与调用方法处于统一线程，因尽量使用单线程读写 PLC)
+     *
+     * @return 返回响应数据
+     */
+    fun startSync(): PLCResponse {
+        //屏蔽读写元件为 0、校验码为空的情况
+        if (mData.isEmpty() || mVerify.isEmpty()) {
+            return PLCResponse(-100, "未知原因失败")
+        }
+
+        //读写元件并返回
+        val bytes = SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size))
+        return analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
+
+        /*      val response = analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
+
+              Log.e("socket_Test_response", "code = ${response.respCode}, msg = ${response.respMsg}")
+              for ((key, value) in response.data) {
+                  Log.e("socket_Test_response", "key = $key, value = $value")
+              }
+
+              return response*/
     }
 
     /*****************************************************************************

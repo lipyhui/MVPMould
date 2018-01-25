@@ -44,7 +44,7 @@ private constructor(
     }
 
     /**
-     * 开始发送数据并接收响应数据,以 rxJava 方式返回
+     * 开始发送数据并接收响应数据,因尽量使用后台单线程读写 PLC
      *
      * @return 返回响应数据
      */
@@ -353,7 +353,7 @@ private constructor(
                 return this
             }
 
-    /*        val real = ((value[0].toLong() shl 8) and 0xff00) or
+        /*    val real = ((value[0].toLong() shl 8) and 0xff00) or
                     ((value[1].toLong()) and 0xff)*/
 
             //防止数据超过缓冲大小
@@ -387,7 +387,7 @@ private constructor(
                 return this
             }
 
-        /*    val real = ((value[2].toLong() shl 8) and 0xff00) or
+ /*           val real = ((value[2].toLong() shl 8) and 0xff00) or
                     ((value[3].toLong()) and 0xff) or
                     ((value[0].toLong() shl 24) and 0xff000000) or
                     (value[1].toLong() shl 16 and 0xff0000)*/
