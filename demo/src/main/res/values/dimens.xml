@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!-- 顶部title -->
-	<dimen name="title_height">60dp</dimen>
-	<dimen name="title_text_size">16dp</dimen>
-	<dimen name="title_project_margin_left">20dp</dimen>
-	<dimen name="title_user_margin_right">10dp</dimen>
-	<dimen name="title_arrow_margin_right">30dp</dimen>
+	<dimen name="title_height">60px</dimen>
+	<dimen name="title_text_size">16px</dimen>
+	<dimen name="title_project_margin_left">20px</dimen>
+	<dimen name="title_user_margin_right">10px</dimen>
+	<dimen name="title_arrow_margin_right">30px</dimen>
 
 	<!-- 侧边栏 -->
 	<dimen name="side_width">160px</dimen>
@@ -18,13 +18,13 @@
 	<dimen name="side_item_height">50px</dimen>
 
 	<!-- 表格 -->
-	<dimen name="form_search_margin_top">26dp</dimen>
-	<dimen name="form_search_margin_left">114dp</dimen>
-	<dimen name="form_search_btn_margin_left">30dp</dimen>
-	<dimen name="form_search_space">8dp</dimen>
-	<dimen name="form_search_height">34dp</dimen>
-	<dimen name="form_search_width">118dp</dimen>
-	<dimen name="form_search_text_size">16dp</dimen>
-	<dimen name="form_title_margin_top">26dp</dimen>
+	<dimen name="form_search_margin_top">26px</dimen>
+	<dimen name="form_search_margin_left">114px</dimen>
+	<dimen name="form_search_btn_margin_left">30px</dimen>
+	<dimen name="form_search_space">8px</dimen>
+	<dimen name="form_search_height">34px</dimen>
+	<dimen name="form_search_width">118px</dimen>
+	<dimen name="form_search_text_size">16px</dimen>
+	<dimen name="form_title_margin_top">26px</dimen>
 
 </resources>
