@@ -1,7 +1,6 @@
 package com.kawakp.kp.kernel.plc.kawa
 
 import com.kawakp.kp.kernel.plc.bean.PLCResponse
-import com.kawakp.kp.kernel.plc.bean.PLCValue
 import com.kawakp.kp.kernel.plc.interfaces.OnPLCResponseListener
 import com.kawakp.kp.kernel.utils.VerifyUtil
 import com.kawakp.kp.kernel.utils.VerifyUtil.calcCrc16
@@ -84,18 +83,18 @@ private constructor(
                 .observeOn(Schedulers.single())
                 .map { SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size)) }
                 .map { bytes ->
-                  /*  for (i in bytes.indices) {
-                        Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
-                    }*/
+                    /*  for (i in bytes.indices) {
+                          Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
+                      }*/
                     analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
                 }
-             /*   .map { response ->
+        /*   .map { response ->
 //                    Log.e("socket_Test_response", "code = ${response.respCode}, msg = ${response.respMsg}")
-                    for ((key, value) in response.data) {
-                        Log.e("socket_Test_response", "key = $key, value = $value")
-                    }
-                    response
-                }*/
+               for ((key, value) in response.data) {
+                   Log.e("socket_Test_response", "key = $key, value = $value")
+               }
+               response
+           }*/
     }
 
     /**
@@ -740,7 +739,7 @@ private constructor(
                 //解析BOOL类型数据
                 for (i in bitElementName.indices) {
                     val status = (bytes[5 + i / 8].toInt() and (0x01 shl (i % 8))) > 0
-                    response.data.put(bitElementName[i], PLCValue(status))
+                    response.data.put(bitElementName[i], status)
                 }
 
                 //判断字类型数据是否可以正常解析
@@ -753,36 +752,35 @@ private constructor(
 
                     //解析WORD、DWORD、REAL类型数据
                     for (i in wordElementName.indices) {
-                     /*   Log.e("socket_Test_response",
-                                "i = $i, " + "name = ${wordElementName[i]}, " +
-                                        "startPosition = $startPosition")*/
+                        /*   Log.e("socket_Test_response",
+                                   "i = $i, " + "name = ${wordElementName[i]}, " +
+                                           "startPosition = $startPosition")*/
                         when (wordType[i]) {
-                            //解析WORD
+                        //解析WORD
                             TYPE.WORD -> {
                                 val value = ((bytes[startPosition].toInt() shl 8) and 0xff00) or
                                         (bytes[startPosition + 1].toInt() and 0xff)
-                                response.data.put(wordElementName[i], PLCValue(false, value))
+                                response.data.put(wordElementName[i], value)
                                 startPosition += 2
                             }
 
-                            //解析DWORD
+                        //解析DWORD
                             TYPE.DWORD -> {
                                 val value = ((bytes[startPosition].toLong() shl 8) and 0xff00) or
                                         ((bytes[startPosition + 1].toLong()) and 0xff) or
                                         ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
                                         (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
-                                response.data.put(wordElementName[i], PLCValue(false, 0, value.toInt()))
+                                response.data.put(wordElementName[i], value.toInt())
                                 startPosition += 4
                             }
 
-                            //解析REAL
+                        //解析REAL
                             TYPE.REAL -> {
                                 val value = ((bytes[startPosition].toLong() shl 8) and 0xff00) or
                                         ((bytes[startPosition + 1].toLong()) and 0xff) or
                                         ((bytes[startPosition + 2].toLong() shl 24) and 0xff000000) or
                                         (bytes[startPosition + 3].toLong() shl 16 and 0xff0000)
-                                response.data.put(wordElementName[i], PLCValue(false, 0, 0,
-                                        java.lang.Float.intBitsToFloat(value.toInt())))
+                                response.data.put(wordElementName[i], java.lang.Float.intBitsToFloat(value.toInt()))
                                 startPosition += 4
                             }
                         }

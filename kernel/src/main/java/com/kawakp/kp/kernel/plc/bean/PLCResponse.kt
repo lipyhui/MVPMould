@@ -17,8 +17,8 @@ package com.kawakp.kp.kernel.plc.bean
  *                   -5：数据解析失败
  *                   -100：未知原因失败
  *         respMsg: 响应提示消息
- *         data: 返回数据，默认长度为 0
+ *         data: 返回数据，默认长度为 0,类型为对应数据类型(BOOL - Boolean, WORD、DWORD - Int, REAL - Float)
  */
 data class PLCResponse constructor(var respCode: Int = -100,
                                    var respMsg: String = "未知原因失败",
-                                   val data: HashMap<String, PLCValue> = HashMap())
+                                   val data: HashMap<String, Any> = HashMap())
