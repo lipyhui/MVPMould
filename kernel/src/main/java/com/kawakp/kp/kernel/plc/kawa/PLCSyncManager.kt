@@ -123,11 +123,17 @@ private constructor(
                 return this
             }
 
+            //转换为十进制地址
+            var  addrDec = addr
+            if (element == SyncElement.X || element == SyncElement.Y) {
+                addrDec = "$addr".toInt(8)
+            }
+
             //从协议头部后开始接收位元件
             val start = bitCount * singleBit + 8
             bits[start] = element.code
-            bits[start + 1] = addr.toByte()
-            bits[start + 2] = (addr shr 8).toByte()
+            bits[start + 1] = addrDec.toByte()
+            bits[start + 2] = (addrDec shr 8).toByte()
 
             //统计
             bitElementName.add(element.name + addr)
@@ -327,11 +333,17 @@ private constructor(
                 return this
             }
 
+            //转换为十进制地址
+            var  addrDec = addr
+            if (element == SyncElement.X || element == SyncElement.Y) {
+                addrDec = "$addr".toInt(8)
+            }
+
             //从协议头部后开始接收位元件
             val start = bitCount * singleBit + 8
             bits[start] = element.code
-            bits[start + 1] = addr.toByte()
-            bits[start + 2] = (addr shr 8).toByte()
+            bits[start + 1] = addrDec.toByte()
+            bits[start + 2] = (addrDec shr 8).toByte()
             bits[start + 3] = value
 
             //统计
