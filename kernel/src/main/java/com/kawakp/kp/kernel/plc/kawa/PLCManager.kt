@@ -77,24 +77,34 @@ private constructor(
                     .observeOn(Schedulers.single())
                     .map { PLCResponse(-100, "未知原因失败") }
         }
+//        var log = ""
+//        for (bytes in mData) {
+//            log += "${Integer.toHexString(bytes.toInt() and 0xff)} "
+//        }
+//        Log.e("socket_Test_response", "mData is $log")
+
         //读写元件并返回
         return Observable.just(mData)
                 .subscribeOn(Schedulers.single())
                 .observeOn(Schedulers.single())
                 .map { SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size)) }
                 .map { bytes ->
-                    /*  for (i in bytes.indices) {
-                          Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
-                      }*/
+//                    var rec = ""
+//                    for (i in bytes.indices) {
+//                        rec += "${Integer.toHexString(bytes[i].toInt() and 0xff)} "
+////                          Log.e("socket_Test_response", "byte[$i] = ${Integer.toHexString(bytes[i].toInt() and 0xff)}")
+//                    }
+//                    Log.e("socket_Test_response", "recv = $rec")
+
                     analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
                 }
-        /*   .map { response ->
+//                .map { response ->
 //                    Log.e("socket_Test_response", "code = ${response.respCode}, msg = ${response.respMsg}")
-               for ((key, value) in response.data) {
-                   Log.e("socket_Test_response", "key = $key, value = $value")
-               }
-               response
-           }*/
+//                    for ((key, value) in response.data) {
+//                        Log.e("socket_Test_response", "key = $key, value = $value")
+//                    }
+//                    response
+//                }
     }
 
     /**
@@ -180,11 +190,17 @@ private constructor(
                 return this
             }
 
+            //转换为十进制地址
+            var  addrDec = addr
+            if (element == Element.BOOL.X || element == Element.BOOL.Y) {
+                addrDec = "$addr".toInt(8)
+            }
+
             //从协议头部后开始接收位元件
             val start = bitCount * singleBit + 8
             bits[start] = element.code
-            bits[start + 1] = addr.toByte()
-            bits[start + 2] = (addr shr 8).toByte()
+            bits[start + 1] = addrDec.toByte()
+            bits[start + 2] = (addrDec shr 8).toByte()
 
             //统计
             bitElementName.add(element.name + addr)
@@ -432,11 +448,17 @@ private constructor(
                 return this
             }
 
+            //转换为十进制地址
+            var  addrDec = addr
+            if (element == Element.BOOL.X || element == Element.BOOL.Y) {
+                addrDec = "$addr".toInt(8)
+            }
+
             //从协议头部后开始接收位元件
             val start = bitCount * singleBit + 8
             bits[start] = element.code
-            bits[start + 1] = addr.toByte()
-            bits[start + 2] = (addr shr 8).toByte()
+            bits[start + 1] = addrDec.toByte()
+            bits[start + 2] = (addrDec shr 8).toByte()
             bits[start + 3] = (if (value) 1 else 0).toByte()
 
             //统计
@@ -687,7 +709,7 @@ private constructor(
                 return PLCResponse(-1, "连接失败")
             }
 
-            if (length < 3){
+            if (length < 3) {
                 return PLCResponse(-3, "响应接收失败")
             }
 
