@@ -87,7 +87,7 @@ private constructor(
         return Observable.just(mData)
                 .subscribeOn(Schedulers.single())
                 .observeOn(Schedulers.single())
-                .map { SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size)) }
+                .map { RWClientManager.rwPlc(addBytes(mData, mData.size, mVerify, mVerify.size)) }
                 .map { bytes ->
 //                    var rec = ""
 //                    for (i in bytes.indices) {
@@ -119,7 +119,7 @@ private constructor(
         }
 
         //读写元件并返回
-        val bytes = SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size))
+        val bytes = RWClientManager.rwPlc(addBytes(mData, mData.size, mVerify, mVerify.size))
         return analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
 
         /*      val response = analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
