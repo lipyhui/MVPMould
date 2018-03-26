@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.kawakp.kp.application.ui.StartActivity;
+import com.kawakp.kp.kernel.plc.kawa.RWClientManager;
 
 /**
  * 创建人: penghui.li
@@ -52,6 +53,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 			intent.putExtra("crash", true);
 			PendingIntent restartIntent = PendingIntent.getActivity(mAppContext, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1000, restartIntent); // 1秒钟后重启应用
+
+			RWClientManager.INSTANCE.unregister();
 
 			android.os.Process.killProcess(android.os.Process.myPid());
 			System.exit(0);

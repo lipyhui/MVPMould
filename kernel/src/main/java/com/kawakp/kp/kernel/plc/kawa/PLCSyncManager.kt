@@ -57,7 +57,7 @@ private constructor(
         }
 
         //读写元件并返回
-        val bytes = SocketClient.sendMsg(addBytes(mData, mData.size, mVerify, mVerify.size))
+        val bytes = RWClientManager.rwPlc(addBytes(mData, mData.size, mVerify, mVerify.size))
         return analysisResponse(bytes, mBitElementName, mWordElementName, mWordType)
     }
 
