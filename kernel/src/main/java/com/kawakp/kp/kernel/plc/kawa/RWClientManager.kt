@@ -9,6 +9,9 @@ import android.os.RemoteException
 import com.kawakp.kp.kernel.KpApplication
 import com.kawakp.kp.kernel.utils.Logger
 import com.kawakp.sys.plcd.IAppAidlInterface
+import com.kawakp.sys.plcd.bean.PLCResponse
+import com.kawakp.sys.plcd.bean.ReadPLCRequest
+import com.kawakp.sys.plcd.bean.WritePLCRequest
 
 /**
  * 创建人: penghui.li
@@ -48,39 +51,67 @@ object RWClientManager {
     }
 
     /**
-     * 读写 PLC,需要到 RXJava 的单线程中操作
+     * 读 PLC,需要到 RXJava 的单线程中操作
      *
      * @param data 发送数据
      * @return 返回数据
      */
-    fun rwPlc(data: ByteArray): ByteArray {
+    fun readPlc(data: ReadPLCRequest): PLCResponse {
         if (!isBind) {
-            Logger.d(DEBUG, TAG, "first bind plc service!!")
+            Logger.d(DEBUG, TAG, "read first bind plc service!!")
             register()
         }
 
         if (!isBind) {
-            Logger.e(DEBUG, TAG, "plc service unbinding err !!")
-            return ByteArray(0)
+            Logger.e(DEBUG, TAG, "read plc service unbinding err !!")
+            return PLCResponse(-1, "连接失败")
         }
 
         if (mAppAidlInterface == null) {
-            Logger.e(DEBUG, TAG, "plc service no connect err !!")
-            return ByteArray(0)
+            Logger.e(DEBUG, TAG, "read plc service no connect err !!")
+            return PLCResponse(-1, "连接失败")
         }
 
         try {
-            Logger.eByteArray(DEBUG, TAG, "send buff", data)
-            val recvBuff = mAppAidlInterface!!.rwPLC(data)
-            Logger.eByteArray(DEBUG, TAG, "recv buff is", recvBuff)
-            return recvBuff
-
+            return  mAppAidlInterface!!.readPlc(data)
         } catch (e: RemoteException) {
-            Logger.e(DEBUG, TAG, "plc err, e is $e")
+            Logger.e(DEBUG, TAG, "read plc err, e is $e")
         }
 
         //正常运行不到这里
-        return ByteArray(0)
+        return PLCResponse()
+    }
+
+    /**
+     * 写 PLC,需要到 RXJava 的单线程中操作
+     *
+     * @param data 发送数据
+     * @return 返回数据
+     */
+    fun writePlc(data: WritePLCRequest): PLCResponse {
+        if (!isBind) {
+            Logger.d(DEBUG, TAG, "write first bind plc service!!")
+            register()
+        }
+
+        if (!isBind) {
+            Logger.e(DEBUG, TAG, "write plc service unbinding err !!")
+            return PLCResponse(-1, "连接失败")
+        }
+
+        if (mAppAidlInterface == null) {
+            Logger.e(DEBUG, TAG, "write plc service no connect err !!")
+            return PLCResponse(-1, "连接失败")
+        }
+
+        try {
+            return  mAppAidlInterface!!.writePlc(data)
+        } catch (e: RemoteException) {
+            Logger.e(DEBUG, TAG, "write plc err, e is $e")
+        }
+
+        //正常运行不到这里
+        return PLCResponse()
     }
 
     /**

@@ -11,7 +11,8 @@ package com.kawakp.kp.kernel.plc.kawa
  */
 class Element private constructor() {
     /**
-     * 布尔类型元件：
+     * 布尔类型元件:BOOL
+     *
      * 元件X
      * 元件Y
      * 元件M
@@ -23,7 +24,8 @@ class Element private constructor() {
     }
 
     /**
-     * 字节类型元件:
+     * 字节类型元件:WORD
+     *
      * 元件D
      * 元件SD
      * 元件R
@@ -35,7 +37,8 @@ class Element private constructor() {
     }
 
     /**
-     * 双字节类型元件:
+     * 双字节类型元件:DWORD
+     *
      * 元件D
      * 元件SD
      * 元件R
@@ -47,7 +50,34 @@ class Element private constructor() {
     }
 
     /**
+     * 字节类型元件:INT
+     *
+     * 元件D
+     * 元件SD
+     * 元件R
+     */
+    enum class INT(val code: Byte) {
+        D(0x09),
+        SD(0x0c),
+        R(0x0d)
+    }
+
+    /**
+     * 双字节类型元件:DINT
+     *
+     * 元件D
+     * 元件SD
+     * 元件R
+     */
+    enum class DINT(val code: Byte) {
+        D(0x09),
+        SD(0x0c),
+        R(0x0d)
+    }
+
+    /**
      * REAL类型元件:
+     *
      * 元件D
      * 元件R
      */
@@ -56,7 +86,7 @@ class Element private constructor() {
         R(0x0d)
     }
 
-    /** 创建PLC BOOL 元件 */
+    /** 创建 PLC BOOL 元件 */
     class ElementBOOL {
         var element: BOOL = BOOL.X
         var addr: Int = 0
@@ -74,7 +104,7 @@ class Element private constructor() {
         }
     }
 
-    /** 创建PLC WORD 元件 */
+    /** 创建 PLC WORD 元件 */
     class ElementWORD {
         var element: WORD = WORD.D
         var addr: Int = 0
@@ -92,7 +122,7 @@ class Element private constructor() {
         }
     }
 
-    /** 创建PLC DWORD 元件 */
+    /** 创建 PLC DWORD 元件 */
     class ElementDWORD {
         var element: DWORD = DWORD.D
         var addr: Int = 0
@@ -110,7 +140,43 @@ class Element private constructor() {
         }
     }
 
-    /** 创建PLC REAL 元件 */
+    /** 创建 PLC INT 元件 */
+    class ElementINT {
+        var element: INT = INT.D
+        var addr: Int = 0
+        var value: Int = 0
+
+        constructor(element: INT = INT.D, addr: Int = 0) {
+            this.element = element
+            this.addr = addr
+        }
+
+        constructor(element: INT = INT.D, addr: Int = 0, value: Int = 0) {
+            this.element = element
+            this.addr = addr
+            this.value = value
+        }
+    }
+
+    /** 创建 PLC DINT元件 */
+    class ElementDINT {
+        var element: DINT = DINT.D
+        var addr: Int = 0
+        var value: Int = 0
+
+        constructor(element: DINT = DINT.D, addr: Int = 0) {
+            this.element = element
+            this.addr = addr
+        }
+
+        constructor(element: DINT = DINT.D, addr: Int = 0, value: Int = 0) {
+            this.element = element
+            this.addr = addr
+            this.value = value
+        }
+    }
+
+    /** 创建 PLC REAL 元件 */
     class ElementREAL {
         var element: REAL = REAL.D
         var addr: Int = 0
