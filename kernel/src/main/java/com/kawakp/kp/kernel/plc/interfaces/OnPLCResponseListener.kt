@@ -1,6 +1,6 @@
 package com.kawakp.kp.kernel.plc.interfaces
 
-import com.kawakp.kp.kernel.plc.bean.PLCResponse
+import com.kawakp.sys.plcd.bean.PLCResponse
 
 /**
  * 创建人: penghui.li
