@@ -150,7 +150,7 @@ private constructor(
          */
         fun readWord(element: Element.WORD, addr: Int): ReadBuilder {
             val key = "${element.name}$addr"
-            if (mReadData.WORD.contains(key)) {
+            if (!mReadData.WORD.contains(key)) {
                 mReadData.WORD.add(key)
             }
             return this
@@ -165,7 +165,7 @@ private constructor(
          */
         fun readDWord(element: Element.DWORD, addr: Int): ReadBuilder {
             val key = "${element.name}$addr"
-            if (mReadData.DWORD.contains(key)) {
+            if (!mReadData.DWORD.contains(key)) {
                 mReadData.DWORD.add(key)
             }
             return this
@@ -180,7 +180,7 @@ private constructor(
          */
         fun readInt(element: Element.INT, addr: Int): ReadBuilder {
             val key = "${element.name}$addr"
-            if (mReadData.INT.contains(key)) {
+            if (!mReadData.INT.contains(key)) {
                 mReadData.INT.add(key)
             }
             return this
@@ -195,7 +195,7 @@ private constructor(
          */
         fun readDInt(element: Element.DINT, addr: Int): ReadBuilder {
             val key = "${element.name}$addr"
-            if (mReadData.DINT.contains(key)) {
+            if (!mReadData.DINT.contains(key)) {
                 mReadData.DINT.add("${element.name}$addr")
             }
             return this
@@ -210,7 +210,7 @@ private constructor(
          */
         fun readReal(element: Element.REAL, addr: Int): ReadBuilder {
             val key = "${element.name}$addr"
-            if (mReadData.REAL.contains(key)) {
+            if (!mReadData.REAL.contains(key)) {
                 mReadData.REAL.add("${element.name}$addr")
             }
             return this
