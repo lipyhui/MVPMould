@@ -134,7 +134,10 @@ private constructor(
          * @return 当前建造类
          */
         fun readBool(element: Element.BOOL, addr: Int): ReadBuilder {
-            mReadData.BOOL.add("${element.name}$addr")
+            val key = "${element.name}$addr"
+            if (!mReadData.BOOL.contains(key)) {
+                mReadData.BOOL.add(key)
+            }
             return this
         }
 
@@ -146,7 +149,10 @@ private constructor(
          * @return 当前建造类
          */
         fun readWord(element: Element.WORD, addr: Int): ReadBuilder {
-            mReadData.WORD.add("${element.name}$addr")
+            val key = "${element.name}$addr"
+            if (mReadData.WORD.contains(key)) {
+                mReadData.WORD.add(key)
+            }
             return this
         }
 
@@ -158,7 +164,10 @@ private constructor(
          * @return 当前建造类
          */
         fun readDWord(element: Element.DWORD, addr: Int): ReadBuilder {
-            mReadData.DWORD.add("${element.name}$addr")
+            val key = "${element.name}$addr"
+            if (mReadData.DWORD.contains(key)) {
+                mReadData.DWORD.add(key)
+            }
             return this
         }
 
@@ -170,7 +179,10 @@ private constructor(
          * @return 当前建造类
          */
         fun readInt(element: Element.INT, addr: Int): ReadBuilder {
-            mReadData.INT.add("${element.name}$addr")
+            val key = "${element.name}$addr"
+            if (mReadData.INT.contains(key)) {
+                mReadData.INT.add(key)
+            }
             return this
         }
 
@@ -182,7 +194,10 @@ private constructor(
          * @return 当前建造类
          */
         fun readDInt(element: Element.DINT, addr: Int): ReadBuilder {
-            mReadData.DINT.add("${element.name}$addr")
+            val key = "${element.name}$addr"
+            if (mReadData.DINT.contains(key)) {
+                mReadData.DINT.add("${element.name}$addr")
+            }
             return this
         }
 
@@ -194,7 +209,10 @@ private constructor(
          * @return 当前建造类
          */
         fun readReal(element: Element.REAL, addr: Int): ReadBuilder {
-            mReadData.REAL.add("${element.name}$addr")
+            val key = "${element.name}$addr"
+            if (mReadData.REAL.contains(key)) {
+                mReadData.REAL.add("${element.name}$addr")
+            }
             return this
         }
 
