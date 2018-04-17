@@ -27,10 +27,9 @@ abstract class BaseBindingFragment<T : BasePresenter<*>, B: ViewDataBinding>: Ba
      * 实现Layout和Presenter和绑定
      */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        mBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        mBinding = DataBindingUtil.inflate(inflater!!, getLayoutId(), container, false)
         mPresenter = PresenterFactory.createPresenter(this)
         return mBinding.root
-
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

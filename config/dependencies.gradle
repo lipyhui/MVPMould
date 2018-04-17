@@ -31,8 +31,8 @@ ext {
   anko_version = "0.10.1"
 
   //kotlin and gradle plugin
-  kotlinVersion = "1.2.10"
-  androidPluginVersion = "3.0.1"
+  kotlinVersion = "1.2.31"
+  androidPluginVersion = "3.1.1"
   realm_version = '3.5.0'
 
   dependencies = [
