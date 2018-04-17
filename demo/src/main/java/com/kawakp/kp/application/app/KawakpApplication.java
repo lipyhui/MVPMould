@@ -1,7 +1,6 @@
 package com.kawakp.kp.application.app;
 
 import com.kawakp.kp.kernel.KpApplication;
-import com.kawakp.kp.kernel.plc.siemens.SiemensService;
 
 /**
  * 创建人: penghui.li
@@ -20,8 +19,5 @@ public class KawakpApplication extends KpApplication {
 		//异常捕获初始化
 		CrashHandler.getInstance().initCrashHandler(this); // 一定要先初始化
 		Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance());
-
-		//开启西门子同步服务
-		SiemensService.actionStart(getContext());
 	}
 }
