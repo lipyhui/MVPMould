@@ -4,11 +4,12 @@ apply from: 'config/dependencies.gradle'
 
 buildscript {
 	ext.kotlin_version = '1.2.31'
-	ext.android_plugin_version = '3.1.1'
-	ext.realm_version = '3.5.0'
+	ext.android_plugin_version = '3.1.2'
+	ext.realm_version = '5.0.1'
 	repositories {
 		jcenter()
 		mavenCentral()
+		google()
 	}
 	dependencies {
 		classpath "com.android.tools.build:gradle:$android_plugin_version"
@@ -26,6 +27,7 @@ allprojects {
 
 		maven { url "https://jitpack.io" }
 		maven { url 'https://dl.google.com/dl/android/maven2/'}
+		google()
 	}
 }
 
