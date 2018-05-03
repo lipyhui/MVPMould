@@ -32,8 +32,8 @@ ext {
 
   //kotlin and gradle plugin
   kotlinVersion = "1.2.31"
-  androidPluginVersion = "3.1.1"
-  realm_version = '3.5.0'
+  androidPluginVersion = "3.1.2"
+  realm_version = '5.0.1'
 
   dependencies = [
           // support
