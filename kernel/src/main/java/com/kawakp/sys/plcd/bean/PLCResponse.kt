@@ -2,6 +2,7 @@ package com.kawakp.sys.plcd.bean
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.kawakp.kp.kernel.plc.kawa.Element
 
 /**
  * 创建人: penghui.li
@@ -52,5 +53,101 @@ data class PLCResponse constructor(var respCode: Int = -100,
         override fun newArray(size: Int): Array<PLCResponse?> {
             return arrayOfNulls(size)
         }
+    }
+
+    /**
+     * 获取布尔(BOOL)元件的值
+     *
+     * @param element 布尔(BOOL)元件类型
+     * @param addr    元件地址
+     * @return 布尔(BOOL)元件值，默认 false
+     */
+    fun getBool(element: Element.BOOL, addr: Int): Boolean {
+        val key = "${element.name}$addr"
+        if (data.containsKey(key) && data[key] is Boolean) {
+            return data[key].toString().toBoolean()
+        }
+
+        return false
+    }
+
+    /**
+     * 获取字(WORD)元件的值
+     *
+     * @param element 字(WORD)元件类型
+     * @param addr    元件地址
+     * @return 字(WORD)元件值，默认 0
+     */
+    fun getWord(element: Element.WORD, addr: Int): Int {
+        val key = "${element.name}$addr"
+        if (data.containsKey(key) && data[key] is Int) {
+            return data[key].toString().toInt()
+        }
+
+        return 0
+    }
+
+    /**
+     * 获取双字(DWORD)元件的值
+     *
+     * @param element 双字(DWORD)元件类型
+     * @param addr    元件地址
+     * @return 双字(DWORD)元件值，默认 0
+     */
+    fun getDWord(element: Element.DWORD, addr: Int): Long {
+        val key = "${element.name}$addr"
+        if (data.containsKey(key) && data[key] is Long) {
+            return data[key].toString().toLong()
+        }
+
+        return 0
+    }
+
+    /**
+     * 获取字(INT)元件的值
+     *
+     * @param element 字(INT)元件类型
+     * @param addr    元件地址
+     * @return 字(INT)元件值，默认 0
+     */
+    fun getInt(element: Element.INT, addr: Int): Int {
+        val key = "${element.name}$addr"
+        if (data.containsKey(key) && data[key] is Int) {
+            return data[key].toString().toInt()
+        }
+
+        return 0
+    }
+
+    /**
+     * 获取双字(DINT)元件的值
+     *
+     * @param element 双字(DINT)元件类型
+     * @param addr    元件地址
+     * @return 双字(DINT)元件值，默认 0
+     */
+    fun getDInt(element: Element.DINT, addr: Int): Long {
+        val key = "${element.name}$addr"
+        if (data.containsKey(key) && data[key] is Long) {
+            return data[key].toString().toLong()
+        }
+
+        return 0
+    }
+
+    /**
+     * 获取双字(REAL)元件的值
+     *
+     * @param element 双字(REAL)元件类型
+     * @param addr    元件地址
+     * @return 双字(REAL)元件值，默认 0
+     */
+    fun getReal(element: Element.REAL, addr: Int): Float {
+        val key = "${element.name}$addr"
+        if (data.containsKey(key) && data[key] is Float) {
+            return data[key].toString().toFloat()
+        }
+
+        return 0F
     }
 }
