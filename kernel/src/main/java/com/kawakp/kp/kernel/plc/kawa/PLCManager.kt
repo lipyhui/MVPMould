@@ -57,6 +57,7 @@ private constructor(
      *
      * @return 返回响应数据
      */
+    @Synchronized
     fun start(): Observable<PLCResponse> {
         //防止 PLC 读数据为空
         mReadData?.let {
@@ -96,6 +97,7 @@ private constructor(
      *
      * @return 返回响应数据
      */
+    @Synchronized
     fun startSync(): PLCResponse {
         //防止 PLC 读数据为空
         mReadData?.let {

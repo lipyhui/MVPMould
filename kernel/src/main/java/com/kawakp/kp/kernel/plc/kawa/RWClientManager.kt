@@ -56,6 +56,7 @@ object RWClientManager {
      * @param data 发送数据
      * @return 返回数据
      */
+    @Synchronized
     fun readPlc(data: ReadPLCRequest): PLCResponse {
         if (!isBind) {
             Logger.d(DEBUG, TAG, "read first bind plc service!!")
@@ -88,6 +89,7 @@ object RWClientManager {
      * @param data 发送数据
      * @return 返回数据
      */
+    @Synchronized
     fun writePlc(data: WritePLCRequest): PLCResponse {
         if (!isBind) {
             Logger.d(DEBUG, TAG, "write first bind plc service!!")
