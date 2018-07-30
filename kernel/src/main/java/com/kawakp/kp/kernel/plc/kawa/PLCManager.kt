@@ -129,6 +129,41 @@ private constructor(
         private val mReadData = ReadPLCRequest()
 
         /**
+         * 读 PLC 元件，如果参数错误可能会抛出异常
+         *
+         * @param dataType 数据类型
+         * @param elementType 元件类型
+         * @param addr 元件地址
+         * @return 当前建造类
+         */
+        fun read(dataType: Element.DATA_TYPE, elementType: Element.ELEMENT_TYPE, addr: Int): ReadBuilder {
+            when (dataType) {
+            //读 BOOL 类型元件
+                Element.DATA_TYPE.BOOL -> readBool(Element.BOOL.valueOf(elementType.name), addr)
+
+            //读 WORD 类型元件
+                Element.DATA_TYPE.WORD -> readWord(Element.WORD.valueOf(elementType.name), addr)
+
+            //读 DWORD 类型元件
+                Element.DATA_TYPE.DWORD -> readDWord(Element.DWORD.valueOf(elementType.name), addr)
+
+            //读 INT 类型元件
+                Element.DATA_TYPE.INT -> readInt(Element.INT.valueOf(elementType.name), addr)
+
+            //读 DINT 类型元件
+                Element.DATA_TYPE.DINT -> readDInt(Element.DINT.valueOf(elementType.name), addr)
+
+            //读 REAL 类型元件
+                Element.DATA_TYPE.REAL -> readReal(Element.REAL.valueOf(elementType.name), addr)
+
+                else -> {
+                }
+            }
+
+            return this
+        }
+
+        /**
          * 读布尔(BOOL)数据
          *
          * @param element 布尔(BOOL)元件类型
@@ -334,6 +369,68 @@ private constructor(
     class WriteBuilder {
         /** 写请求数据类  */
         private val mWriteRequest = WritePLCRequest()
+
+        /**
+         * 写 PLC BOOL 类型元件，如果参数错误可能会抛出异常
+         *
+         * @param dataType 数据类型
+         * @param elementType 元件类型
+         * @param addr 元件地址
+         * @param value 要写入元件的值
+         * @return 当前建造类
+         */
+        fun write(dataType: Element.DATA_TYPE, elementType: Element.ELEMENT_TYPE, addr: Int, value: Boolean): WriteBuilder {
+            if (dataType == Element.DATA_TYPE.BOOL) {
+                writeBool(Element.BOOL.valueOf(elementType.name), addr, value)
+            }
+            return this
+        }
+
+        /**
+         * 写 PLC WORD、DWORD、INT、DINT 类型元件，如果参数错误可能会抛出异常
+         *
+         * @param dataType 数据类型
+         * @param elementType 元件类型
+         * @param addr 元件地址
+         * @param value 要写入元件的值
+         * @return 当前建造类
+         */
+        fun write(dataType: Element.DATA_TYPE, elementType: Element.ELEMENT_TYPE, addr: Int, value: Int): WriteBuilder {
+            when (dataType) {
+            //写 WORD 类型元件
+                Element.DATA_TYPE.WORD -> writeWord(Element.WORD.valueOf(elementType.name), addr, value)
+
+            //写 DWORD 类型元件
+                Element.DATA_TYPE.DWORD -> writeDWord(Element.DWORD.valueOf(elementType.name), addr, value)
+
+            //写 INT 类型元件
+                Element.DATA_TYPE.INT -> writeInt(Element.INT.valueOf(elementType.name), addr, value)
+
+            //写 DINT 类型元件
+                Element.DATA_TYPE.DINT -> writeDInt(Element.DINT.valueOf(elementType.name), addr, value)
+
+                else -> {
+                }
+            }
+
+            return this
+        }
+
+        /**
+         * 写 PLC REAL 类型元件，如果参数错误可能会抛出异常
+         *
+         * @param dataType 数据类型
+         * @param elementType 元件类型
+         * @param addr 元件地址
+         * @param value 要写入元件的值
+         * @return 当前建造类
+         */
+        fun write(dataType: Element.DATA_TYPE, elementType: Element.ELEMENT_TYPE, addr: Int, value: Float): WriteBuilder {
+            if (dataType == Element.DATA_TYPE.REAL) {
+                writeReal(Element.REAL.valueOf(elementType.name), addr, value)
+            }
+            return this
+        }
 
         /**
          * 写一个布尔(BOOL)类型元件
