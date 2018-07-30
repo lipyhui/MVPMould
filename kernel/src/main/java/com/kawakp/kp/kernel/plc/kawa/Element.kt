@@ -11,6 +11,30 @@ package com.kawakp.kp.kernel.plc.kawa
  */
 class Element private constructor() {
     /**
+     * 元件类型
+     */
+    enum class ELEMENT_TYPE(val code: Byte) {
+        X(0x01),
+        Y(0x02),
+        M(0x03),
+        D(0x09),
+        SD(0x0c),
+        R(0x0d)
+    }
+
+    /**
+     * 数据类型
+     */
+    enum class DATA_TYPE {
+        BOOL,
+        WORD,
+        DWORD,
+        INT,
+        DINT,
+        REAL
+    }
+
+    /**
      * 布尔类型元件:BOOL
      *
      * 元件X
