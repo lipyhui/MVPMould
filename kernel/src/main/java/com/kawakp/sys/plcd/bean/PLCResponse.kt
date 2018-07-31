@@ -56,6 +56,40 @@ data class PLCResponse constructor(var respCode: Int = -100,
     }
 
     /**
+     * 获取元件数据，如果参数错误可能会抛出异常
+     *
+     * @param dataType 数据类型
+     * @param elementType 元件类型
+     * @param addr 元件地址
+     * @return PLC 元件值
+     */
+    fun getValue(dataType: Element.DATA_TYPE, elementType: Element.ELEMENT_TYPE, addr: Int): Any {
+        return when (dataType) {
+        //获取 BOOL 类型元件数据
+            Element.DATA_TYPE.BOOL -> getBool(Element.BOOL.valueOf(elementType.name), addr)
+
+        //获取 WORD 类型元件数据
+            Element.DATA_TYPE.WORD -> getWord(Element.WORD.valueOf(elementType.name), addr)
+
+        //获取 DWORD 类型元件数据
+            Element.DATA_TYPE.DWORD -> getDWord(Element.DWORD.valueOf(elementType.name), addr)
+
+        //获取 INT 类型元件数据
+            Element.DATA_TYPE.INT -> getInt(Element.INT.valueOf(elementType.name), addr)
+
+        //获取 DINT 类型元件数据
+            Element.DATA_TYPE.DINT -> getDInt(Element.DINT.valueOf(elementType.name), addr)
+
+        //获取 REAL 类型元件数据
+            Element.DATA_TYPE.REAL -> getReal(Element.REAL.valueOf(elementType.name), addr)
+
+            else -> {
+                0
+            }
+        }
+    }
+
+    /**
      * 获取布尔(BOOL)元件的值
      *
      * @param element 布尔(BOOL)元件类型
