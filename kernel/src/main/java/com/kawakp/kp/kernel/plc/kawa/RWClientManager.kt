@@ -1,17 +1,20 @@
 package com.kawakp.kp.kernel.plc.kawa
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.RemoteException
-import com.kawakp.kp.kernel.KpApplication
 import com.kawakp.kp.kernel.utils.Logger
+import com.kawakp.kp.kernel.utils.ReflectUtils
 import com.kawakp.sys.plcd.IAppAidlInterface
 import com.kawakp.sys.plcd.bean.PLCResponse
 import com.kawakp.sys.plcd.bean.ReadPLCRequest
 import com.kawakp.sys.plcd.bean.WritePLCRequest
+
 
 /**
  * 创建人: penghui.li
@@ -22,6 +25,7 @@ import com.kawakp.sys.plcd.bean.WritePLCRequest
  *
  * 功能描述:PLC 数据交互单例,需要到 RXJava 的单线程中操作
  */
+@SuppressLint("StaticFieldLeak")
 object RWClientManager {
     private val TAG = "RWClientManager"
 
@@ -31,6 +35,9 @@ object RWClientManager {
     private val REGISTER_DELAY = 50L
     //PLC 读写服务注册延时计数 10 次
     private val REGISTER_DELAY_COUNT = 10
+
+    //应用上下文
+    private var mContext: Context? = null
 
     private var mAppAidlInterface: IAppAidlInterface? = null
     private var isBind = false
@@ -74,7 +81,7 @@ object RWClientManager {
         }
 
         try {
-            return  mAppAidlInterface!!.readPlc(data)
+            return mAppAidlInterface!!.readPlc(data)
         } catch (e: RemoteException) {
             Logger.e(DEBUG, TAG, "read plc err, e is $e")
         }
@@ -107,7 +114,7 @@ object RWClientManager {
         }
 
         try {
-            return  mAppAidlInterface!!.writePlc(data)
+            return mAppAidlInterface!!.writePlc(data)
         } catch (e: RemoteException) {
             Logger.e(DEBUG, TAG, "write plc err, e is $e")
         }
@@ -122,7 +129,7 @@ object RWClientManager {
     fun unregister() {
         Logger.d(DEBUG, TAG, "unbinding service !!")
         if (isBind) {
-            KpApplication.getContext().unbindService(mConnection)
+            mContext?.unbindService(mConnection)
             changeBindStatus(false)
         }
     }
@@ -132,14 +139,22 @@ object RWClientManager {
      */
     private fun register() {
         Logger.d(DEBUG, TAG, "start binding service !!")
+
+        //防止重复绑定 APP 通信服务
         if (isBind) {
             Logger.d(DEBUG, TAG, "service is bind !!")
             return
         }
 
+        //防止 Context 初始化失败
+        if (!initContext()) {
+            Logger.d(DEBUG, TAG, "init context err !!")
+            return
+        }
+
         val intent = Intent()
         intent.setClassName("com.kawakp.sys.plcd", "com.kawakp.sys.plcd.service.AppService")
-        KpApplication.getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        mContext?.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
 
         Logger.d(DEBUG, TAG, "wait binding service...")
 
@@ -151,6 +166,27 @@ object RWClientManager {
         }
 
         Logger.d(DEBUG, TAG, "binding service end !!! isBind = $isBind")
+    }
+
+    /**
+     * 初始化 Context
+     *
+     * @return true：初始化成功  false：初始化失败
+     */
+    private fun initContext(): Boolean {
+        return try {
+            mContext = ReflectUtils.reflect(null, "android.app.ActivityThread#currentApplication()") as Application
+            Logger.e(DEBUG, TAG, "initContext success !!")
+
+            //返回成功
+            true
+        } catch (e: Exception) {
+            Logger.e(DEBUG, TAG, "initContext err !! $e")
+            mContext = null
+
+            //返回失败
+            false
+        }
     }
 
     /**
