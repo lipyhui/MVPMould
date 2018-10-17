@@ -26,6 +26,7 @@
 		</activity>
 		<activity
 			android:configChanges="keyboardHidden|orientation|screenSize|locale|screenLayout|mcc|mnc"
+			android:launchMode="singleTask"
 			android:name=".ui.MainActivity"/>
 	</application>
 
